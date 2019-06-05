@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>中本硕人员信息栏</title>
+</head>
+<body>
+    <div id="app1">
+      <img src="src/assets/logo.png">
+      <img src="src/assets/tst.png"> 
+      
+      <table>
+        <tr>
+            <th v-for='item in columnList'>{{item.column_name}}</th> 
+        </tr>
+        <tr v-for='item in inforList'>
+            <td v-for='it in columnList'>{{item[it.column_name]}}</td> 
+        </tr>
+      </table>
+    </div>
+
+    
+    <!-- built files will be auto injected -->
+    <script>
+window.onload=function(){
+  new Vue({
+    el: '#app1',
+    //  router,
+    // components: { App },
+    // template: '<App/>',
+     data: {
+        columnList: ['userId', 'userName', 'userTel', 'userEmail', 'userMessage', 'inTime'],    //字段
+        inforList: [{'userId': '2', 'userName': '大华', 'userTel': '12345678', 'userEmail': null, 'userMessage': '哈哈','inTime': '2017-10-17 17:07:03'}]}
+  })
+}
+  </script>
+
+
+  </body>
+</html>
