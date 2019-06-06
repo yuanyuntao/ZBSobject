@@ -118,7 +118,8 @@ export default {
     var _this = this;
     _this.userId = this.$route.query.userId;
     _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
+    // _this.isAdministrator = this.$route.query.isAdministrator;
+    _this.isAdministrator = true;
 
     // console.log("用户名" + _this.userName);
   },

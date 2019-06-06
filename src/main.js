@@ -195,10 +195,9 @@ Vue.prototype.getSERVER_PORT_MAIN = function (){
     return  year + "-" + month + "-" +day +" " + hours + ":" + minutes + ":" +seconds
   } else if (type == 4) {
     return year + "-" + month + "-" + day;
-  }else if(type == 5){
+  } else if(type == 5){
     return year +"-" +month +"-" +day +" " +"  " +week +"   " +hours +":" +minutes +":" +seconds
-  }
-  else if(type == 6){
+  } else if(type == 6){
     return year + "年" + month + "月" + day + "日 " + hours + ":" + minutes + ":" + seconds
   }
 }

@@ -4,7 +4,6 @@
       <tabbarman :userId="userId" :isAdministrator="isAdministrator" :userName="userName"></tabbarman>
     </div>
     <div class="appfeaturlists">
-      
       <div class="appfeaturlist" ref="appfeaturlist1">
         <div class="icon" @click="changePage('/notificationpage')">
           <span>
@@ -12,7 +11,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>考勤设置</span>
+            <span>考勤设置</span>
           </div>
         </div>
         <div class="icon" @click="changePage('/leaveRequestpage')">
@@ -21,7 +20,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>发布通知</span>
+            <span>发布通知</span>
           </div>
         </div>
         <div class="icon" @click="changePage('/overtimeRequestpage')">
@@ -30,7 +29,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>休假审批</span>
+            <span>休假审批</span>
           </div>
         </div>
       </div>
@@ -42,7 +41,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>加班审批</span>
+            <span>加班审批</span>
           </div>
         </div>
         <div class="icon" @click="changePage('/travelRequestpage')">
@@ -51,7 +50,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>外出审批</span>
+            <span>外出审批</span>
           </div>
         </div>
         <div class="icon" @click="changePage('/')">
@@ -60,7 +59,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>出差审批</span>
+            <span>出差审批</span>
           </div>
         </div>
       </div>
@@ -71,7 +70,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>考勤补卡</span>
+            <span>考勤补卡</span>
           </div>
         </div>
         <div class="icon">
@@ -80,7 +79,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>发布问卷</span>
+            <span>发布问卷</span>
           </div>
         </div>
         <div class="icon">
@@ -89,7 +88,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>会议管理</span>
+            <span>会议管理</span>
           </div>
         </div>
       </div>
@@ -101,7 +100,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>共享文件</span>
+            <span>共享文件</span>
           </div>
         </div>
         <div class="icon" @click="changePage('/')">
@@ -110,7 +109,7 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>员工管理</span>
+            <span>员工管理</span>
           </div>
         </div>
         <div class="icon">
@@ -119,34 +118,32 @@
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>员工照片</span>
+            <span>员工照片</span>
           </div>
         </div>
       </div>
-      <div class="appfeaturlist"  ref="appfeaturlist5">
-        <div class="icon">
+      <div class="appfeaturlist" ref="appfeaturlist5">
+        <div class="icon" style="border-bottom: 1px solid #eee;">
           <span>
             <img class="imgs" src="../../assets/usedimg/mingpianjia.png">
           </span>
           <br>
           <div style="padding-bottom:20px;">
-          <span>员工名片</span>
-          </div>
-        </div>
-        <div class="iconNone" >
-          <span>
-          </span>
-          <br>
-          <div style="padding-bottom:20px;">
-          <span></span>
+            <span>员工名片</span>
           </div>
         </div>
         <div class="iconNone">
-          <span>
-          </span>
+          <span></span>
           <br>
           <div style="padding-bottom:20px;">
+            <span></span>
+          </div>
+        </div>
+        <div class="iconNone">
           <span></span>
+          <br>
+          <div style="padding-bottom:20px;">
+            <span></span>
           </div>
         </div>
       </div>
@@ -166,18 +163,18 @@ export default {
       userName: "",
       isAdministrator: "",
       userId: "",
-      clientHeight:"",
+      clientHeight: ""
     };
   },
-   methods: {
-    goBack(){
+  methods: {
+    goBack() {
       this.$router.push({
         path: "/homepage",
         query: {
-        pagename: "application",
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
+          pagename: "application",
+          userId: this.userId,
+          isAdministrator: this.isAdministrator,
+          userName: this.userName
         }
       });
     },
@@ -186,7 +183,7 @@ export default {
       this.$router.push({
         path: page,
         query: {
-          pagename:"application",
+          pagename: "application",
           userId: this.userId,
           isAdministrator: this.isAdministrator,
           userName: this.userName
@@ -203,7 +200,7 @@ export default {
       this.$refs.appfeaturlist3.style.height = height + "px";
       this.$refs.appfeaturlist4.style.height = height + "px";
       this.$refs.appfeaturlist5.style.height = height + "px";
-    },
+    }
   },
   mounted() {
     this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
@@ -211,20 +208,18 @@ export default {
     window.onresize = function temp() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
     };
-
-
     if (window.history && window.history.pushState) {
-      history.pushState(null, null, document.URL);    
-      window.addEventListener('popstate', this.goBack, false);  
-      }
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", this.goBack, false);
+    }
   },
-  destroyed(){
-  window.removeEventListener('popstate', this.goBack, false);
+  destroyed() {
+    window.removeEventListener("popstate", this.goBack, false);
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
-      this.changeFixed((this.clientHeight-50)/5);
+      this.changeFixed((this.clientHeight - 50) / 5);
     }
   },
   created: function() {
@@ -233,8 +228,7 @@ export default {
     _this.userName = this.$route.query.userName;
     _this.isAdministrator = this.$route.query.isAdministrator;
     // console.log("用户名" + _this.userName);
-  },
-
+  }
 };
 </script>
 <style scoped>
@@ -246,7 +240,7 @@ export default {
 }
 .appfeaturlist {
   width: 100%;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
   background: #fff;
   display: flex;
   align-items: center;
