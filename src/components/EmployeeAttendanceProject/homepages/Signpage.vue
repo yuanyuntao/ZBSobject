@@ -7,7 +7,7 @@
       style="font-size:15px;padding-left:10px;color: #fff;text-align: left"
     >{{this.getTIME(nowtime,1)}}</div>
     <div class="attendance">
-      <div class="history" type="primary" round  @click="attendanceHistory">
+      <div class="history" type="primary" round @click="attendanceHistory">
         <img class="imge" src="../../../assets/littleimg/icon_attendance_history.png" alt>
         <span style="vertical-align:middle">考勤记录</span>
       </div>
@@ -117,6 +117,7 @@
 </template>
 <script>
 import { MP } from "../../js/Map.js";
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   name: "signpage",
   components: {},
@@ -133,7 +134,8 @@ export default {
       psOut: "",
       userId: "",
       userName: "", //用户名
-      isAdministrator: "", //密码
+      company_id: "", //公司
+      isAdministrator: "", //是否是管理员
 
       ifInOk: false, //可以签到判断
       ifOutOk: false, //可以签退判断
@@ -145,6 +147,8 @@ export default {
       isOut: false, //是都已签退
       isInNormal: true, //是都签到正常
       isOutNormal: true, //是都签退正常
+
+      serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
 
       signWords: {
         user_id: "",
@@ -178,11 +182,13 @@ export default {
           pagename: "signpage",
           userId: this.userId,
           isAdministrator: this.isAdministrator,
-          userName: this.userName
+          userName: this.userName,
+          company_id: this.company_id,
+
         }
       });
     },
-    attendanceHistory(){
+    attendanceHistory() {
       this.$router.push({
         path: "/calendar",
         query: {
@@ -192,22 +198,17 @@ export default {
           userName: this.userName
         }
       });
-      
     },
     /**获取地图定位*/
     getLocations() {
-      console.log("0:");
       var _this = this;
       if (typeof BMap != "undefined") {
-        console.log("1:");
         MP(_this.ak).then(BMap => {
-          console.log("2:");
           _this.getmap(_this);
           return;
         });
         _this.getmap(_this);
       } else {
-        console.log("3:");
         MP(_this.ak).then(BMap => {
           _this.getmap(_this);
         });
@@ -219,7 +220,6 @@ export default {
      */
     getmap(_this) {
       // 百度地图API功能
-      console.log("4:");
       var map = new BMap.Map("allmap");
       var point = new BMap.Point(120.54406, 31.281494);
       map.centerAndZoom(point, 12);
@@ -246,25 +246,65 @@ export default {
               // _this.location = location
             }
           });
-          _this.$http
-            .get(
-              // "http://192.168.5.236:8080/ZBSAttendance/user/searchAttendanceRules.do?manager=0"
-              "http://" +
-                _this.getSERVER_HOST_MAIN() +
-                ":" +
-                _this.getSERVER_PORT_MAIN() +
-                "/ZBSAttendance/user/searchAttendanceRulesAndRecord.do?userId=" +
-                _this.userId +
-                "&startTime=" +
-                _this.getTIME(_this.nowtime, 4) +
-                "%2000%3A00%3A00&endTime=" +
-                _this.getTIME(_this.nowtime, 4) +
-                "%2023%3A59%3A59"
-            )
+          var content = {
+            userId: _this.userId,
+            startTime: _this.getTIME(_this.nowtime, 4),
+            endTime: _this.getTIME(_this.nowtime, 4),
+            companyId: _this.company_id
+          };
+          var contentData = JSON.stringify(content);
+          var headerAndBody = _this.getHeaderAndBody(
+            contentData,
+            _this.serverPublicKey
+          );
+          let url =
+            "http://" +
+            _this.getSERVER_HOST_MAIN() +
+            ":" +
+            _this.getSERVER_PORT_MAIN() +
+            "/" +
+            _this.getPROJECT_MAIN() +
+            "/user/searchAttendanceRulesAndRecord.do";
+
+          // _this.$http
+          //   .get(
+          // "http://" +
+          //   _this.getSERVER_HOST_MAIN() +
+          //   ":" +
+          //   _this.getSERVER_PORT_MAIN() +
+          //   "/" +
+          //   _this.getPROJECT_MAIN() +
+          //   "/user/searchAttendanceRulesAndRecord.do
+          //   ?userId=" +
+          //   _this.userId +
+          //   "&startTime=" +
+          //   _this.getTIME(_this.nowtime, 4) +
+          //   "%2000%3A00%3A00&endTime=" +
+          //   _this.getTIME(_this.nowtime, 4) +
+          //   "%2023%3A59%3A59"
+          //   url,
+          // )
+          _this.$ajax
+            .post(url, headerAndBody.contentDataByKey, {
+              headers: {
+                appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+                appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+                appPublicKey: headerAndBody.appPublicKey,
+                serverPublicKey: headerAndBody.serverPublicKey
+              }
+            })
             .then(function(response) {
-              console.log("开始" + response);
-              _this.ruledata = response.data.attendanceRule;
-              var record = response.data.attendanceRecord;
+              var returnKey = _this.RSAdecrypt(
+                response.headers.serverencryptedkey,
+                _this.appPrivateKey
+              );
+              let returnResponseData = response.data;
+              let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+              var returnData = decrypt(encrypt, returnKey, _this.getIV());
+              var returnData = JSON.parse(returnData);
+
+              _this.ruledata = returnData.data.attendanceRule;
+              var record = returnData.data.attendanceRecord;
               if (record.length > 0) {
                 for (let i = 0; i < record.length; i++) {
                   if (record[i].attendance_type == 1) {
@@ -386,7 +426,6 @@ export default {
               } else {
                 _this.ifOutOk = false;
               }
-              console.log("_this.rule_id:" + _this.rule_id);
             });
         } else {
           alert("failed" + this.getStatus());
@@ -399,15 +438,28 @@ export default {
     signin() {
       var _this = this;
       var attendanceRecord = _this.getAttendanceRecord(1);
-      _this.$http
-        .get(
-          // "http://192.168.5.236:8080/ZBSAttendance/user/searchAttendanceRules.do?manager=0"
-          "http://" +
+      
+      var url ="http://" +
             this.getSERVER_HOST_MAIN() +
             ":" +
             this.getSERVER_PORT_MAIN() +
-            "/ZBSAttendance/user/addAttendanceRecord.do?attendanceRecord=" +
-            attendanceRecord
+            "/" +
+            this.getPROJECT_MAIN() +
+            "/user/addAttendanceRecord.do" 
+
+      _this.$ajax
+        .post(
+          url,
+          headerAndBody.contentDataByKey,
+          {
+            headers: {
+              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+              appPublicKey: headerAndBody.appPublicKey,
+              serverPublicKey: headerAndBody.serverPublicKey
+            },
+            
+          }
         )
         .then(function(response) {
           location.reload();
@@ -427,7 +479,9 @@ export default {
             this.getSERVER_HOST_MAIN() +
             ":" +
             this.getSERVER_PORT_MAIN() +
-            "/ZBSAttendance/user/addAttendanceRecord.do?attendanceRecord=" +
+            "/" +
+            this.getPROJECT_MAIN() +
+            "/user/addAttendanceRecord.do?attendanceRecord=" +
             attendanceRecord
         )
         .then(function(response) {
@@ -522,9 +576,18 @@ export default {
      * 查看签到规则
      */
     lookrule() {
-      this.$router.push("/rulespage");
+       this.$router.push({
+        path: "/rulespage",
+        query: {
+        userId: this.userId,
+        isAdministrator: this.isAdministrator,
+        userName: this.userName,
+        company_id: this.company_id,
+        serverPublicKey: this.serverPublicKey,
+        }
+      });
     },
-    
+
     /**
      * 动态获取高度改变样式
      */
@@ -567,6 +630,12 @@ export default {
     _this.userId = this.$route.query.userId;
     _this.isAdministrator = this.$route.query.isAdministrator;
     _this.userName = this.$route.query.userName;
+    _this.company_id = this.$route.query.company_id;
+    _this.appPrivateKey = this.getPrivatekey();
+
+    this.getServerPublicKey().then(function(response) {
+      _this.serverPublicKey = response;
+    });
     this.getLocations();
   },
 

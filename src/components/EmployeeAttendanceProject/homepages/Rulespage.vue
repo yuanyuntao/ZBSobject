@@ -27,6 +27,7 @@
 
 <script>
 import Divtool from "../toolsComponent/Divtool.vue";
+import { encrypt, decrypt } from "../../js/utils.js";
 
 export default {
     name: 'rulespage',
@@ -35,22 +36,75 @@ export default {
        },
     data() {
     return {
+      userId:"",
+      isAdministrator:"",
+      userName:"",
+      company_id:"",
+      appPrivateKey:"",
+      serverPublicKey:"",
       ruledata:[],
     };
   },
 
  methods: {
- 
- },
-  created: function() {
-    console.log("开始");
-    var _this = this;
-    _this.$http
-      .get(
-        "http://"+this.getSERVER_HOST_MAIN()+":" + this.getSERVER_PORT_MAIN()+"/ZBSAttendance/user/searchAttendanceRules.do?manager=0"
-      )
-      .then(function(response) {
-        var total = response.data.attendanceRule
+   //监听返回按钮
+    goBack(){
+      this.$router.push({
+        path: "/signpage",
+        query: {
+        pagename: "outsignpage",
+        userId: this.userId,
+        isAdministrator: this.isAdministrator,
+        userName: this.userName,
+        company_id:this.company_id,
+        serverPublicKey:this.serverPublicKey,
+        }
+      });
+    },
+    creatData(_this){
+      var content = {
+        manager: this.isAdministrator? 1 : 0,
+        companyId: this.company_id,
+      };
+      var contentData = JSON.stringify(content)
+      var headerAndBody = this.getHeaderAndBody(contentData,_this.serverPublicKey)
+let url = "http://" +
+        this.getSERVER_HOST_MAIN()+
+        ":" + 
+        this.getSERVER_PORT_MAIN()+
+        "/"+
+        this.getPROJECT_MAIN() +
+        "/user/searchAttendanceRules.do"
+
+       _this.$ajax
+        .post(
+          url,
+          headerAndBody.contentDataByKey,
+          {
+            headers: {
+              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+              appPublicKey: headerAndBody.appPublicKey,
+              serverPublicKey: headerAndBody.serverPublicKey
+            }
+            
+          }
+        ).then(function(response) {
+          var returnKey = _this.RSAdecrypt(
+                response.headers.serverencryptedkey,
+                _this.appPrivateKey
+              );
+              let returnResponseData = response.data;
+              let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+              var returnData = decrypt(encrypt, returnKey, _this.getIV());
+              var returnData = JSON.parse(returnData);
+
+
+
+
+
+
+        var total = returnData.data.attendanceRule
         for (let i = 0; i < total.length; i++) {
               _this.ruledata.push({
                 rule_name: total[i].rule_name,
@@ -62,9 +116,41 @@ export default {
           
         
       });
-
-    console.log("结束");
+    }
+ 
+ },
+  created: function() {
+    var _this = this;
+    _this.userId = this.$route.query.userId;
+    _this.isAdministrator = this.$route.query.isAdministrator;
+    _this.userName = this.$route.query.userName;
+    _this.company_id = this.$route.query.company_id;
+    _this.serverPublicKey = this.$route.query.serverPublicKey;
+    _this.appPrivateKey = this.getPrivatekey();
+    _this.creatData(_this)
   },
+
+ mounted() {
+   
+    if (window.history && window.history.pushState) {   
+      history.pushState(null, null, document.URL);    
+      window.addEventListener('popstate', this.goBack, false);  
+      }
+  },
+  destroyed(){
+  window.removeEventListener('popstate', this.goBack, false);
+},
+  watch: {
+    // 如果 `clientHeight` 发生改变，这个函数就会运行
+    clientHeight: function() {
+      this.totalHeight = this.$refs.outsignpage.offsetHeight
+      if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
+      this.changeFixed(this.clientHeight);
+    }
+  },
+
 
 
 

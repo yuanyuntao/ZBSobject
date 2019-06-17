@@ -427,7 +427,6 @@ export default {
           .get(
             "http://192.168.2.200:8080/ZBSAttendance/user/searchUserStatus.do"
             // ,
-            // {},
             // {
             //   headers: {},
             //   emulateJSON: true

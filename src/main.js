@@ -18,6 +18,10 @@ import VueResource from 'vue-resource'
 import datePicker from 'multifunctional-datepicker'
 //Userlogin
 import Userlogin from "./components/EmployeeAttendanceProject/userlogin"
+import axios from 'axios'
+axios.defaults.timeout = 10000;
+Vue.prototype.$ajax= axios
+
 
 
 //homepage
@@ -51,10 +55,76 @@ import Dynamic from "./components/EmployeeAttendanceProject/dynamic"
 import Myinfor from "./components/EmployeeAttendanceProject/myinfor"
 import Accountinformation from "./components/EmployeeAttendanceProject/myinfor/accountinformation"
 
+import JsEncrypt from 'jsencrypt'
+import Jsrsasign from 'jsrsasign'
+import { getRandom , encrypt ,decrypt} from "./components/js/utils.js";
+
+Vue.prototype.$jsEncrypt = JsEncrypt
+
+// Vue.prototype.$RSA = Jsrsasign
+
+
+/**
+ * 公钥和私钥
+ */
+Vue.prototype.getPublicKey = function () {
+let publickey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNtgJEtTkXVxw7bQlCD4Xb0UZi4KNqZV28MQGhH0BHnQqO2czme9LHwZz48qYw31Gu9/Djr4yWI5EIJZCQKcu37SvWhNZ0jj28pT2PtWVhc4MtzRk/NqcEyBlCNFA97Li/q3O+7hopTvaOZNOyM1qexbJJLY9NhwruwDXdMMhTQwIDAQAB"
+  return publickey
+}
+Vue.prototype.getPrivatekey = function () {
+  let privatekey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAI22AkS1ORdXHDttCUIPhdvRRmLgo2plXbwxAaEfQEedCo7ZzOZ70sfBnPjypjDfUa738OOvjJYjkQglkJApy7ftK9aE1nSOPbylPY+1ZWFzgy3NGT82pwTIGUI0UD3suL+rc77uGilO9o5k07IzWp7Fskktj02HCu7ANd0wyFNDAgMBAAECgYEAgjN2RhaTi+RXZio6VV3ZySuwlex7eKgFxYDpVFZYQvQA3VszrZibAznatciL9V9Zt37K7wc+DjxDZs7M0gf0yXpymNj7uXf+ZYvubOAloJK0DsdZq/wUgJmG5WhbbEwPOP/laOlsP7SQ9GAkpt72CwPSUkBobutJxWmjmC+7A6ECQQDVeBmio8XXpL2yBEfLcGilEUMn/1qN9tXBl6B6hSDPibm1KqX5K8+HA83Lq02P+3PpmWTA98eimwPSS95KqBSZAkEAqfHqMHuTqpm4ec0K77hGPeza8UCM+hxmB/8deSIN3syWhoDW+nhXWIFK8ADMftsf1Pl7W6JMl32UPDbFJBC0OwJAcIE3oYwG/TwJ7gRrgkDgJf8PEcl3BFMPHVS4c1oujLLdeSndB5GbcmEC2VCTNEsmL/t0Km9se7qPLQpnQZmMIQI/Go2yCeFFMWLTcDSZgNtKHmLj0s5DONE3IAi8kjC/+g/9dQaskHY9L5cEHnwBd9DFKIHSxH6XeRQmFUJ5iykRAkAQPyw9kFQbek6IQvJOT3w5bnrn+Ug+loQfLqQLoAbMWJmsD75VXYV1b2GQR9r7HWWw5rxECXERDhGHSoAkBJc7"
+  
+
+  return privatekey
+}
 
 
 
+Vue.prototype.jsEncrypt = function (PublicKey,AESkey) {
+  let encrypt = new JsEncrypt()
+  encrypt.setPublicKey(PublicKey)
+  return encrypt.encrypt(AESkey)
+}
+//加密方法
+Vue.prototype.RSAencrypt = function (pas,publicKey){
+  let jse = this.$jsEncrypt
+    jse.prototype.setPublicKey(publicKey)
+    let encrypted = jse.prototype.encrypt(pas)
+    // console.log(encrypted)
+    return encrypted;
+}
 
+//解密方法
+Vue.prototype.RSAdecrypt = function(pas,privateKey){
+  let jse = this.$jsEncrypt
+  // 私钥
+  // console.log('解密：'+privateKey)
+  jse.prototype.setPrivateKey(privateKey)
+  // console.log('解密：'+jse.decrypt(pas))
+  let prototype = jse.prototype.decrypt(pas);
+  return prototype;
+}
+
+
+
+Vue.prototype.getSignsig = function (signData,privateKey) {
+  let rsa = new Jsrsasign.RSAKey()
+  rsa = Jsrsasign.KEYUTIL.getKey("-----BEGIN PRIVATE KEY-----" + privateKey + "-----END PRIVATE KEY-----")
+  let sig = new Jsrsasign.KJUR.crypto.Signature({"alg":"MD5withRSA"})
+  sig.init(rsa)
+  sig.updateString(signData)
+  return Jsrsasign.hextob64(sig.sign())
+  // return sig.sign()
+}
+// Vue.prototype.getSignsig = function (privateKey) {
+// let signature = this.$RSA.KJUR.crypto.Signature({"alg":"SHA256withRSA"})
+// let sig = this.$RSA.RSAKey()
+// sig = this.$RSA.KEYUTIL.getKey(privateKey)
+// signature.init(sig);
+// signature.updateString(privateKey);  //signData是待加密数据
+// let signsig = signature.sign()          //signsig是最后加密完的数据
+// return signsig
+// }
 
 
 
@@ -63,13 +133,13 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 // Vue.use(Moment)
 
-Vue.filter('dateformat', function(data) {
-  if (data==1) {
+Vue.filter('dateformat', function (data) {
+  if (data == 1) {
     return 11
-  }else{
+  } else {
     return 22
   }
-  
+
 })
 
 Vue.config.productionTip = false
@@ -81,45 +151,45 @@ const router = new VueRouter({
   routes: [
     { path: "/", component: Userlogin },
     //首页
-    { path: "/homepage", component: Homepage , meta: { title: '首页'} },
-    { path: "/signpage", component: Signpage , meta: { title: '考勤打卡'} },
-    { path:"/rulespage",component:Rulespage , meta: { title: '考勤规则'} },
-    { path: "/outsignpage", component: Outsignpage , meta: { title: '外勤打卡'} },
-    { path: "/contactpage", component: Contactpage , meta: { title: '公司通讯录'} },
-    { path: "/personal_inforpage", component: Personal_inforpage ,meta: { title: '详细信息'} },
-    { path: "/selectApproverpage", component: SelectApproverpage , meta: { title: '选择审批人'} },
-    { path: "/selectCCpage", component: SelectCCpage ,meta: { title: '选择抄送人'} },
-    { path: "/agencyMatters", component: AgencyMatters ,meta: { title: '待办事项'} },
-    { path: "/calendar", component: Calendar ,meta: { title: '考勤记录'} },
+    { path: "/homepage", component: Homepage, meta: { title: '首页' } },
+    { path: "/signpage", component: Signpage, meta: { title: '考勤打卡' } },
+    { path: "/rulespage", component: Rulespage, meta: { title: '考勤规则' } },
+    { path: "/outsignpage", component: Outsignpage, meta: { title: '外勤打卡' } },
+    { path: "/contactpage", component: Contactpage, meta: { title: '公司通讯录' } },
+    { path: "/personal_inforpage", component: Personal_inforpage, meta: { title: '详细信息' } },
+    { path: "/selectApproverpage", component: SelectApproverpage, meta: { title: '选择审批人' } },
+    { path: "/selectCCpage", component: SelectCCpage, meta: { title: '选择抄送人' } },
+    { path: "/agencyMatters", component: AgencyMatters, meta: { title: '待办事项' } },
+    { path: "/calendar", component: Calendar, meta: { title: '考勤记录' } },
 
     //应用中心
-    { path: "/application", component: Application , meta: { title: '应用中心'} },
-    { path: "/notificationpage", component: Notificationpage ,meta: { title: '公告通知'} },
-    { path: "/leaveRequestpage", component: LeaveRequestpage ,meta: { title: '休假申请'} },
-    { path: "/overtimeRequestpage", component: OvertimeRequestpage ,meta: { title: '加班申请'} },
-    { path: "/outRequestpage", component: OutRequestpage ,meta: { title: '外出申请'} },
-    { path: "/travelRequestpage", component: TravelRequestpage ,meta: { title: '出差申请'} },
-    
-    //管理
-    { path: "/management", component: Management , meta: { title: '管理'} },
-    
-    //动态
-    { path: "/dynamic", component: Dynamic , meta: { title: '动态'} },
-    
-    //个人中心
-    { path: "/myinfor", component: Myinfor , meta: { title: '个人中心'} },
-    { path: "/accountinformation", component: Accountinformation ,meta: { title: '账号信息'} },
+    { path: "/application", component: Application, meta: { title: '应用中心' } },
+    { path: "/notificationpage", component: Notificationpage, meta: { title: '公告通知' } },
+    { path: "/leaveRequestpage", component: LeaveRequestpage, meta: { title: '休假申请' } },
+    { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
+    { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
+    { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
 
-    
+    //管理
+    { path: "/management", component: Management, meta: { title: '管理' } },
+
+    //动态
+    { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
+
+    //个人中心
+    { path: "/myinfor", component: Myinfor, meta: { title: '个人中心' } },
+    { path: "/accountinformation", component: Accountinformation, meta: { title: '账号信息' } },
+
+
 
     //测试用
-    
+
     // { path: "/simpleindex", component: Simpleindex ,meta: { title: '日历测试2'} },
     // { path: "/listTest", component: ListTest , meta: { title: '测试用'} },
 
-    
-    
-    
+
+
+
 
   ]
 })
@@ -127,16 +197,16 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   /* 路由发生变化修改页面title */
- 
+
   if (to.meta.title) {
- 
-  document.title = to.meta.title;
- 
+
+    document.title = to.meta.title;
+
   }
- 
+
   next();
- 
- })
+
+})
 
 Vue.http.interceptors.push((request, next) => {
   let timeout;
@@ -155,20 +225,93 @@ Vue.http.interceptors.push((request, next) => {
   })
 })
 
-Vue.prototype.getSERVER_HOST_MAIN = function (){
-//  return  "47.99.72.90"
- return  "192.168.5.236"
-// return  "192.168.2.200"
+
+/**
+ * 获取header和body
+ */
+Vue.prototype.getHeaderAndBody = function (contentData,serverPublicKey) {
+	let iv = this.getIV()
+	let AESKey = getRandom(32);
+	let contentDataByKey = encrypt(contentData, AESKey, iv);
+	let appPublicKey = this.getPublicKey();
+	let appEncryptedKey = this.RSAencrypt(AESKey, this.serverPublicKey);
+	let appSignature = this.getSignsig(contentData, this.appPrivateKey);
+	let returnData = {
+		appEncryptedKey: appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+        appSignature: appSignature, //APP使用RSA密钥对请求体的签名
+        appPublicKey: appPublicKey,
+		serverPublicKey: serverPublicKey,
+		contentDataByKey:contentDataByKey,
+	}
+	return returnData;
+}
+
+
+
+
+Vue.prototype.getSERVER_HOST_MAIN = function () {
+  //  return  "47.99.72.90"
+  return "192.168.5.236"
+  // return  "192.168.2.200"
 
 }
-Vue.prototype.getSERVER_PORT_MAIN = function (){
-  return  "8080"
- }
- Vue.prototype.getPROJECT_MAIN = function (){
-  return  "ZBSAttendance"
- }
+Vue.prototype.getSERVER_PORT_MAIN = function () {
+  return "8080"
+}
+Vue.prototype.getPROJECT_MAIN = function () {
+  return "ZBSAttendance_v1"
+}
+
+
+Vue.prototype.getIV = function () {
+  return "1234567890987654"
+}
+
+
+
+Vue.prototype.getServerPublicKey = function () {
+  return new Promise((resolve, reject) => {
+    let url =
+      "http://" +
+      this.getSERVER_HOST_MAIN() + ":" +
+      this.getSERVER_PORT_MAIN() + "/" +
+      this.getPROJECT_MAIN() + "/user/rsaPublicKey.do"
+      this.$ajax.get(
+    // this.$http
+    //   .get(
+        url, {
+          headers: {
+
+          },
+          params: {},
+          _timeout: 10000,
+          onTimeout: request => {
+            alert("请求超时");
+          }
+        }
+      )
+      .then(function (response) {
+        // console.log(response.data.data.rsaPublicKey)
+        resolve(response.data.data.rsaPublicKey);
+        // resolve(response.body.data.data.rsaPublicKey);
+      }).catch(async (err) => {
+        reject(err);
+      });
+  })
+
+}
+
+
+
+
+
+
+
+
+
+
 //格式化时间
- Vue.prototype.getTIME = function(time, type) {
+Vue.prototype.getTIME = function (time, type) {
   var date = new Date(time);
   var year = date.getFullYear();
   /* 在日期格式中，月份是从0开始的，因此要加0
@@ -192,12 +335,12 @@ Vue.prototype.getSERVER_PORT_MAIN = function (){
   } else if (type == 2) {
     return hours + ":" + minutes + ":" + seconds;
   } else if (type == 3) {
-    return  year + "-" + month + "-" +day +" " + hours + ":" + minutes + ":" +seconds
+    return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds
   } else if (type == 4) {
     return year + "-" + month + "-" + day;
-  } else if(type == 5){
-    return year +"-" +month +"-" +day +" " +"  " +week +"   " +hours +":" +minutes +":" +seconds
-  } else if(type == 6){
+  } else if (type == 5) {
+    return year + "-" + month + "-" + day + " " + "  " + week + "   " + hours + ":" + minutes + ":" + seconds
+  } else if (type == 6) {
     return year + "年" + month + "月" + day + "日 " + hours + ":" + minutes + ":" + seconds
   }
 }

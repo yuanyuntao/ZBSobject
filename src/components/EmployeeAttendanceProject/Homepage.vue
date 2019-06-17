@@ -91,6 +91,7 @@ export default {
       userName: "",
       userId: "",
       isAdministrator:"",
+      company_id:"",
     };
   },
   methods: {
@@ -102,7 +103,8 @@ export default {
         query: {
         userId: _this.userId,
         isAdministrator: _this.isAdministrator,
-        userName: _this.userName
+        userName: _this.userName,
+        company_id: _this.company_id,
         }
       });
     }
@@ -118,8 +120,9 @@ export default {
     var _this = this;
     _this.userId = this.$route.query.userId;
     _this.userName = this.$route.query.userName;
-    // _this.isAdministrator = this.$route.query.isAdministrator;
-    _this.isAdministrator = true;
+    _this.isAdministrator = this.$route.query.isAdministrator;
+    // _this.isAdministrator = true;
+    _this.company_id = this.$route.query.company_id;
 
     // console.log("用户名" + _this.userName);
   },
