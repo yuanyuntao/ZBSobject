@@ -145,6 +145,16 @@ export default {
             this.$defines.setIsAdministrator(isAdministrator)
             this.$defines.setCompanyId(returnData.data.user.company_id)
             this.$defines.setServerPublicKey(this.serverPublicKey)
+
+            localStorage.setItem("userId", returnData.data.user.user_id)
+            localStorage.setItem("userName", returnData.data.user.user_name)
+            localStorage.setItem("isAdministrator", isAdministrator)
+            localStorage.setItem("company_id", returnData.data.user.company_id)
+            localStorage.setItem("serverPublicKey", this.serverPublicKey)
+
+
+
+
             this.$router.push("/homepage");
           } else if (returnData.code == 1014) {
             alert("用户名或密码不正确！");

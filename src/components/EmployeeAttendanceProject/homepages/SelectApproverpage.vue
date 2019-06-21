@@ -309,28 +309,16 @@ export default {
       _this.sheetListsCC = this.$route.query.sheetListsCC;
     }
 
-
-
-
-
-    // _this.choseList = this.$route.query.choseListApprove;
-    // if(typeof _this.choseList == "undefined"){
-    //   _this.choseList = []
-    // }
-    // _this.choseListCC = this.$route.query.choseListCC;
-    // if(typeof _this.choseListCC == "undefined"){
-    //   _this.choseListCC = []
-    // }
-    // _this.sheetListsCC = this.$route.query.sheetListsCC;
-    // if(typeof _this.sheetListsCC == "undefined"){
-    //   _this.sheetListsCC = []
-    // }
-
-    _this.userId = this.$defines.userId;
-    _this.userName = this.$defines.userName;
-    _this.isAdministrator = this.$defines.isAdministrator;
-    _this.company_id = this.$defines.companyId;
-    _this.serverPublicKey = this.$defines.serverPublicKey;
+    // _this.userId = this.$defines.userId;
+    // _this.userName = this.$defines.userName;
+    // _this.isAdministrator = this.$defines.isAdministrator;
+    // _this.company_id = this.$defines.companyId;
+    // _this.serverPublicKey = this.$defines.serverPublicKey;
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
     
     
     if (_this.from == "outsignpage") {

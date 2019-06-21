@@ -312,27 +312,16 @@ destroyed(){
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
     }
-
-
-
-
-    // _this.choseList = this.$route.query.choseListCC;
-    //  if(typeof _this.choseList == "undefined"){
-    //   _this.choseList = []
-    // }
-    // _this.choseListApprove = this.$route.query.choseListApprove;
-    //  if(typeof _this.choseListApprove == "undefined"){
-    //   _this.choseListApprove = []
-    // }
-    // _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-    //  if(typeof _this.sheetListsApprove == "undefined"){
-    //   _this.sheetListsApprove = []
-    // }
-    _this.userId = this.$defines.userId;
-    _this.userName = this.$defines.userName;
-    _this.isAdministrator = this.$defines.isAdministrator;
-    _this.company_id = this.$defines.companyId;
-    _this.serverPublicKey = this.$defines.serverPublicKey;
+    // _this.userId = this.$defines.userId;
+    // _this.userName = this.$defines.userName;
+    // _this.isAdministrator = this.$defines.isAdministrator;
+    // _this.company_id = this.$defines.companyId;
+    // _this.serverPublicKey = this.$defines.serverPublicKey;
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
     
     if ( _this.from == "outsignpage" ) {
       _this.address = this.$route.query.address;

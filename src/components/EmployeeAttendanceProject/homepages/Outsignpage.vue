@@ -249,7 +249,7 @@ export default {
         console.log("event:"+event)
         content = event.target.result;
         current.imgs.push(content); //获取图片base64代码
-        this.$defines.setImges(this.imgs);
+        current.$defines.setImges(current.imgs);
 
       };
       reader.onerror = function(event) {
@@ -387,7 +387,7 @@ export default {
             _this.goBack()
           } else {
             if (_this.defaultparam == 1) {
-              alert("签退失败，请检查网络！");
+              alert("签到失败，请检查网络！");
             }else if(_this.defaultparam == 2){
               alert("签退失败，请检查网络！");
             }else{
@@ -436,13 +436,22 @@ destroyed(){
   },
   created: function() {
     console.log("开始");
+    debugger
     var _this = this;
-    _this.userId = this.$defines.userId;
-    _this.userName = this.$defines.userName;
-    _this.isAdministrator = this.$defines.isAdministrator;
-    _this.company_id = this.$defines.companyId;
-    _this.serverPublicKey = this.$defines.serverPublicKey;
+    // _this.userId = this.$defines.userId;
+    // _this.userName = this.$defines.userName;
+    // _this.isAdministrator = this.$defines.isAdministrator;
+    // _this.company_id = this.$defines.companyId;
+    // _this.serverPublicKey = this.$defines.serverPublicKey;
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+
+
     _this.fileData = this.$defines.fileData;
+    _this.imgs = this.$defines.imges;
 
     _this.attendance_longitude= this.$route.query.attendance_longitude;
     _this.attendance_latitude= this.$route.query.attendance_latitude;
@@ -457,7 +466,7 @@ destroyed(){
       _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.outReasons = this.$route.query.outReasons;
-      _this.imgs = this.$defines.imges;
+      
     } else if (this.$route.query.pagename == "selectCCpage") {
       
       _this.choseListApprove = this.$route.query.choseListApprove;
@@ -465,7 +474,6 @@ destroyed(){
       _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.outReasons = this.$route.query.outReasons;
-      _this.imgs = this.$defines.imges;
     }
   }
 };

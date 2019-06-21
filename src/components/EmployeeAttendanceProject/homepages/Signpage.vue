@@ -610,19 +610,38 @@ export default {
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
-    clientHeight: function() {
+     clientHeight: function() {
+      this.totalHeight = this.$refs.sign_page.offsetHeight
+      if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
       this.changeFixed(this.clientHeight);
     }
   },
 
   created: function() {
     // console.log("开始");
+    debugger
     var _this = this;
-    _this.userId = this.$defines.userId;
-    _this.userName = this.$defines.userName;
-    _this.isAdministrator = this.$defines.isAdministrator;
-    _this.company_id = this.$defines.companyId;
-    _this.serverPublicKey = this.$defines.serverPublicKey;
+    // _this.userId = this.$defines.userId;
+    // if (_this.userId == "") {
+    //   let a = localStorage.getItem("userId")
+    // }
+    // localStorage.setItem("userId", _this.userId)
+    // this.$defines.setUserId(_this.userId)
+    
+
+    // _this.userName = this.$defines.userName;
+    // _this.isAdministrator = this.$defines.isAdministrator;
+    // _this.company_id = this.$defines.companyId;
+    // _this.serverPublicKey = this.$defines.serverPublicKey;
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+
+
     _this.appPrivateKey = this.getPrivatekey();
     this.getLocations();
   },
