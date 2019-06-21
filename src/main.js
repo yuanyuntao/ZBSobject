@@ -24,6 +24,7 @@ Vue.prototype.$ajax= axios
 
 
 
+
 //homepage
 import Homepage from "./components/EmployeeAttendanceProject/homepage"
 import Signpage from "./components/EmployeeAttendanceProject/homepages/signpage"
@@ -60,6 +61,10 @@ import Jsrsasign from 'jsrsasign'
 import { getRandom , encrypt ,decrypt} from "./components/js/utils.js";
 
 Vue.prototype.$jsEncrypt = JsEncrypt
+
+import defines from './components/js/Parameters.js'
+Vue.prototype.$defines = defines
+
 
 // Vue.prototype.$RSA = Jsrsasign
 
@@ -276,21 +281,31 @@ Vue.prototype.getServerPublicKey = function () {
       this.getSERVER_HOST_MAIN() + ":" +
       this.getSERVER_PORT_MAIN() + "/" +
       this.getPROJECT_MAIN() + "/user/rsaPublicKey.do"
-      this.$ajax.get(
-    // this.$http
-    //   .get(
-        url, {
-          headers: {
+      // this.$ajax.get(
+    // // this.$http
+    // //   .get(
+    //     url, {
+    //       headers: {
 
-          },
-          params: {},
-          _timeout: 10000,
-          onTimeout: request => {
-            alert("请求超时");
-          }
-        }
-      )
+    //       },
+    //       params: {},
+    //       _timeout: 10000,
+    //       onTimeout: request => {
+    //         alert("请求超时");
+    //       }
+    //     }
+    //   )
+    this.$http.get(
+      url,
+      {_timeout: 10000,
+        onTimeout: request => {
+          alert("请求超时");
+          location.reload()
+        }}
+      
+    )
       .then(function (response) {
+        alert("请输入用户名和密码")
         // console.log(response.data.data.rsaPublicKey)
         resolve(response.data.data.rsaPublicKey);
         // resolve(response.body.data.data.rsaPublicKey);
