@@ -121,11 +121,11 @@ let url = "http://" +
  },
   created: function() {
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    _this.userName = this.$route.query.userName;
-    _this.company_id = this.$route.query.company_id;
-    _this.serverPublicKey = this.$route.query.serverPublicKey;
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.appPrivateKey = this.getPrivatekey();
     _this.creatData(_this)
   },

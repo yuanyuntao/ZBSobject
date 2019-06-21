@@ -82,7 +82,7 @@ export default {
     },
     //向右的小图标动画
     ischose: function(item) {
-      this.$emit("change",item.user_name)
+      this.$emit("change",item.user_id,item.user_name)
     },
     toggleSheet: function(index) {
       // console.log(this.$refs);

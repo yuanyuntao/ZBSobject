@@ -46,8 +46,8 @@
       <div class="sl" style="display:flex;margin-top:10px;overflow: auto">
         <div v-for="item in choseList" :key="item.id" style="display:flex;padding-right:15px">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
 
           <!-- <img
@@ -64,6 +64,7 @@
 
 <script>
 import ApproveAndCCList from "../toolsComponent/ApproveAndCCList.vue";
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   name: "selectCCpage",
   components: {
@@ -74,6 +75,10 @@ export default {
       userId: "",
       isAdministrator: "",
       userName: "",
+      company_id: "",
+      serverPublicKey:"",
+      attendance_longitude: "",
+      attendance_latitude: "",
 
       searchsth: "",
       shownone: false,
@@ -114,9 +119,10 @@ export default {
         path: this.from,
         query: {
           pagename: "selectCCpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+
+
           choseListCC: this.choseList,
           sheetListsCC:this.sheetLists,
           choseListApprove: this.choseListApprove,
@@ -124,7 +130,6 @@ export default {
           address: this.address,
           outReasons:this.outReasons,
           defaultparam:this.defaultparam,
-          imgs:this.imgs,
 
           defaultType:this.defaultType,
           leaveReasons:this.leaveReasons,
@@ -138,10 +143,10 @@ export default {
       });
     },
     //修改选中状态
-    getVal: function(res) {
+    getVal: function(res,resname) {
       for (let j = 0; j < this.sheetLists.length; j++) {
         for (let f = 0; f < this.sheetLists[j].users.length; f++) {
-          if (this.sheetLists[j].users[f].user_name == res) {
+          if (this.sheetLists[j].users[f].user_id == res) {
             this.sheetLists[j].users[f].chose = !this.sheetLists[j].users[f]
               .chose;
           }
@@ -150,13 +155,13 @@ export default {
 
       var have = false;
       for (let i = 0; i < this.choseList.length; i++) {
-        if (this.choseList[i] == res) {
+        if (this.choseList[i].userId == res) {
           this.choseList.splice(i, 1);
           have = true;
         }
       }
       if (!have) {
-        this.choseList.push(res);
+        this.choseList.push({"userId":res,"userName":resname});
       }
       this.selectednum = this.choseList.length;
       if (this.selectednum > 0) {
@@ -183,9 +188,10 @@ export default {
         path: this.from,
         query: {
           pagename: "selectCCpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+
+
           choseListCC: this.choseList,
           sheetListsCC:this.sheetLists,
           choseListApprove: this.choseListApprove,
@@ -193,7 +199,6 @@ export default {
           address: this.address,
           outReasons:this.outReasons,
           defaultparam:this.defaultparam,
-          imgs:this.imgs,
 
           defaultType:this.defaultType,
           leaveReasons:this.leaveReasons,
@@ -207,7 +212,6 @@ export default {
     },
     dosearch: function() {
       if (this.searchsth == "") {
-        console.log("我没变");
         this.displaysheetList = this.sheetLists;
         this.shownone = false;
         this.showList = false;
@@ -249,8 +253,7 @@ export default {
                         position: this.sheetLists[i].users[j].position, //职位
                         phone_number: this.sheetLists[i].users[j].phone_number, //电话
                         mail_address: this.sheetLists[i].users[j].mail_address, //邮箱
-                        contact_address: this.sheetLists[i].users[j]
-                          .contact_address, //联系地址
+                        contact_address: this.sheetLists[i].users[j].contact_address, //联系地址
                         icon_url: this.sheetLists[i].users[j].icon_url, //头像
                         haveicon: this.sheetLists[i].users[j].haveicon, //是否有头像
                         icon_word: this.sheetLists[i].users[j].icon_word, //取代头像的字段
@@ -292,18 +295,52 @@ destroyed(){
     // console.log("开始");
     var _this = this;
     // this.getcontactlist();
-    _this.choseList = this.$route.query.choseListCC;
-    _this.choseListApprove = this.$route.query.choseListApprove;
-    _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-    _this.userId = this.$route.query.userId;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    _this.userName = this.$route.query.userName;
+    
     _this.from = this.$route.query.pagename;
+
+    var isRefresh = false
+    if (typeof this.$route.query.sheetListsCC[0] == "string") {
+      isRefresh = true
+    }
+
+    if (isRefresh) {
+      _this.choseList = []
+      _this.choseListApprove = []
+      _this.sheetListsApprove = []
+    }else{
+      _this.choseList = this.$route.query.choseListCC;
+      _this.choseListApprove = this.$route.query.choseListApprove;
+      _this.sheetListsApprove = this.$route.query.sheetListsApprove;
+    }
+
+
+
+
+    // _this.choseList = this.$route.query.choseListCC;
+    //  if(typeof _this.choseList == "undefined"){
+    //   _this.choseList = []
+    // }
+    // _this.choseListApprove = this.$route.query.choseListApprove;
+    //  if(typeof _this.choseListApprove == "undefined"){
+    //   _this.choseListApprove = []
+    // }
+    // _this.sheetListsApprove = this.$route.query.sheetListsApprove;
+    //  if(typeof _this.sheetListsApprove == "undefined"){
+    //   _this.sheetListsApprove = []
+    // }
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
+    
     if ( _this.from == "outsignpage" ) {
       _this.address = this.$route.query.address;
       _this.outReasons = this.$route.query.outReasons;
       _this.defaultparam = this.$route.query.defaultparam
       _this.imgs = this.$route.query.imgs;
+      _this.attendance_latitude = this.$route.query.attendance_latitude;
+      _this.attendance_longitude = this.$route.query.attendance_longitude;
     }else if ( _this.from == "leaveRequestpage" || _this.from == "overtimeRequestpage") {
       _this.defaultType = this.$route.query.defaultType;
       _this.leaveReasons = this.$route.query.leaveReasons;
@@ -330,18 +367,39 @@ destroyed(){
       _this.sheetLists=this.$route.query.sheetListsCC;
     } else {
       this.ifshowselected = false;
-    _this.$http
-      .get(
-        "http://" + this.getSERVER_HOST_MAIN() + ":" + this.getSERVER_PORT_MAIN() + "/ZBSAttendance/user/searchAllUser.do",
-        {
-          _timeout: 10000,
-          onTimeout: request => {
-            alert("请求超时");
+
+      var url = "http://" +
+            this.getSERVER_HOST_MAIN() +
+            ":" +
+            this.getSERVER_PORT_MAIN() +
+            "/"+
+            this.getPROJECT_MAIN() +"/user/searchAllUser.do"
+      var content = {
+        companyId: _this.company_id,
+        authority: ""
+      };
+      var contentData = JSON.stringify(content)
+      _this.appPrivateKey = this.getPrivatekey();
+      var headerAndBody = this.getHeaderAndBody(contentData,_this.serverPublicKey)      
+    _this.$ajax
+        .post(url,headerAndBody.contentDataByKey,
+          {
+            headers: {
+              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+              appPublicKey: headerAndBody.appPublicKey,
+              serverPublicKey: headerAndBody.serverPublicKey
+            },
           }
-        }
       )
       .then(function(response) {
-        var resultdata = response.data.departmentList;
+        var returnKey = _this.RSAdecrypt(response.headers.serverencryptedkey, _this.appPrivateKey)
+          let returnResponseData = response.data
+          let encrypt = returnResponseData.replace(/[\r\n]/g,"")
+          var returnData = decrypt(encrypt,returnKey,_this.getIV())
+
+          var returnData = JSON.parse(returnData);
+        var resultdata = returnData.data.departmentList;
         for (let i = 0; i < resultdata.length; i++) {
           _this.sheetLists.push({
             department_id: resultdata[i].department_id,
@@ -358,9 +416,9 @@ destroyed(){
             } else {
               icon_url = (
                 "http://" +
-                this.getSERVER_HOST_MAIN() +
+                _this.getSERVER_HOST_MAIN() +
                 ":" +
-                this.getSERVER_PORT_MAIN() +
+                _this.getSERVER_PORT_MAIN() +
                 icon_url
               ).replace(new RegExp(/(\\)/g), "/");
             }
@@ -368,8 +426,8 @@ destroyed(){
             _this.sheetLists[i].users.push({
               user_id: resultdata[i].users[j].user_id, //姓名
               user_name: resultdata[i].users[j].user_name, //姓名
-              department: resultdata[i].users[j].relationship[0].department, //部门
-              position: resultdata[i].users[j].relationship[0].position, //职位
+              department: resultdata[i].users[j].department, //部门
+              position: resultdata[i].users[j].position, //职位
               phone_number: resultdata[i].users[j].phone_number, //电话
               mail_address: resultdata[i].users[j].mail_address, //邮箱
               contact_address: resultdata[i].users[j].contact_address, //联系地址

@@ -39,6 +39,7 @@
 
 <script>
 import Contactlist from "../toolsComponent/Contactlist.vue";
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   name: "contactpage",
   components: {
@@ -49,6 +50,9 @@ export default {
       userName: "",
       isAdministrator: "",
       userId: "",
+      company_id: "",
+      serverPublicKey:"",
+
       searchsth: "",
       shownone:false,
       showList:false,
@@ -64,14 +68,7 @@ export default {
   methods: {
     //监听返回按钮
     goBack(){
-      this.$router.push({
-        path: "/homepage",
-        query: {
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
-        }
-      });
+      this.$router.push( "/homepage");
     },
     //清除搜索框
     inputClear() {
@@ -170,18 +167,48 @@ export default {
   created: function() {
     // console.log("开始");
      var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.$http
-        .get("http://"+this.getSERVER_HOST_MAIN()+":" + this.getSERVER_PORT_MAIN()+"/ZBSAttendance/user/searchAllUser.do", {
-          _timeout: 10000,
-          onTimeout: request => {
-            alert("请求超时");
+     _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
+
+
+    var url = "http://" +
+            this.getSERVER_HOST_MAIN() +
+            ":" +
+            this.getSERVER_PORT_MAIN() +
+            "/"+
+            this.getPROJECT_MAIN() +"/user/searchAllUser.do"
+
+      var content = {
+        companyId: _this.company_id,
+        authority: ""
+      };
+      var contentData = JSON.stringify(content)
+      _this.appPrivateKey = this.getPrivatekey();
+      var headerAndBody = this.getHeaderAndBody(contentData,_this.serverPublicKey)
+      _this.$ajax
+        .post(url,headerAndBody.contentDataByKey,
+          {
+            headers: {
+              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+              appPublicKey: headerAndBody.appPublicKey,
+              serverPublicKey: headerAndBody.serverPublicKey
+            },
           }
-        })
+        )
         .then(function(response) {
-            var resultdata = response.data.departmentList
+          var returnKey = _this.RSAdecrypt(response.headers.serverencryptedkey, _this.appPrivateKey)
+          let returnResponseData = response.data
+          let encrypt = returnResponseData.replace(/[\r\n]/g,"")
+          var returnData = decrypt(encrypt,returnKey,_this.getIV())
+
+          var returnData = JSON.parse(returnData);
+          debugger
+
+            var resultdata = returnData.data.departmentList
             for (let i = 0; i < resultdata.length; i++) {
                _this.sheetLists.push({
                    department_id:resultdata[i].department_id,
@@ -196,15 +223,15 @@ export default {
                    if (icon_url=="") {
                        haveicon = false
                    }else{
-                       icon_url = ("http://" + this.getSERVER_HOST_MAIN() + ":" + this.getSERVER_PORT_MAIN() + icon_url).replace(new RegExp(/(\\)/g),'/') ;
+                       icon_url = ("http://" + _this.getSERVER_HOST_MAIN() + ":" + _this.getSERVER_PORT_MAIN() + icon_url).replace(new RegExp(/(\\)/g),'/') ;
 
                    }
 
                    _this.sheetLists[i].users.push({
                    user_id:resultdata[i].users[j].user_id,//姓名    
                    user_name:resultdata[i].users[j].user_name,//姓名
-                   department:resultdata[i].users[j].relationship[0].department,//部门
-                   position:resultdata[i].users[j].relationship[0].position,//职位
+                   department:resultdata[i].users[j].department,//部门
+                   position:resultdata[i].users[j].position,//职位
                    phone_number:resultdata[i].users[j].phone_number,//电话
                    mail_address:resultdata[i].users[j].mail_address,//邮箱
                    contact_address:resultdata[i].users[j].contact_address,//联系地址

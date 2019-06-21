@@ -56,6 +56,7 @@ export default {
   methods: {
     gotoPersonalInfor: function(i) {
       //点击跳转对应的页面
+      debugger
       this.$router.push({
               path: "/personal_inforpage",
 
@@ -69,10 +70,6 @@ export default {
                 phone_number:i.phone_number,
                 mail_address:i.mail_address,
                 contact_address:i.contact_address,
-
-                userId: this.userId,
-                isAdministrator: this.isAdministrator,
-                userName: this.userName,
               }
             });
     },

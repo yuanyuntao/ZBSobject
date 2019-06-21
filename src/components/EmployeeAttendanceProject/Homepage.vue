@@ -92,21 +92,15 @@ export default {
       userId: "",
       isAdministrator:"",
       company_id:"",
+      serverPublicKey:"",
+
     };
   },
   methods: {
     changePage: function(page) {
       //点击跳转对应的页面
       var _this = this;
-      this.$router.push({
-        path: page,
-        query: {
-        userId: _this.userId,
-        isAdministrator: _this.isAdministrator,
-        userName: _this.userName,
-        company_id: _this.company_id,
-        }
-      });
+      this.$router.push( page);
     }
   },
 
@@ -118,13 +112,12 @@ export default {
   },
   created: function() {
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    // _this.isAdministrator = true;
-    _this.company_id = this.$route.query.company_id;
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
 
-    // console.log("用户名" + _this.userName);
   },
   beforeDestroy() {
     if (this.timer) {

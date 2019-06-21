@@ -129,8 +129,8 @@
       <div class="showApproveAndCC" v-show="choseListApprove.length>0">
         <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
 
           <img
@@ -161,8 +161,8 @@
       <div class="showApproveAndCC" v-show="choseListCC.length > 0">
         <div v-for="item in choseListCC" :key="item.id" style="display:flex;padding-right:15px">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
         </div>
       </div>
@@ -180,6 +180,13 @@ export default {
       userId: "",
       isAdministrator: "",
       userName: "",
+      company_id:"",
+      serverPublicKey:"",
+      attendance_longitude: "",
+      attendance_latitude: "",
+
+
+
       clientHeight: "", //屏幕高度
       totalHeight:"",//总的高度
       nowtime: new Date(), //现在时间
@@ -193,7 +200,9 @@ export default {
       sheetListsApprove: [], //审批人选择列表
       choseListCC: [], //抄送人
       sheetListsCC: [], //抄送人选择列表
-      imgs: [] //上传的图片列表
+      imgs: [], //上传的图片列表
+      fileData:[],
+      
     };
   },
   methods: {
@@ -206,42 +215,57 @@ export default {
         userId: this.userId,
         isAdministrator: this.isAdministrator,
         userName: this.userName,
+        company_id: this.company_id,
+        serverPublicKey:this.serverPublicKey,
         }
       });
     },
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
+      this.fileData.splice(index, 1);
+      
+      this.$defines.setImges(this.imgs);
+      this.$defines.setFileData(this.fileData);
     },
     //图片click
     imgClick: function() {
       document.getElementById("uploadFile").click();
     },
+    // uploadFile
     //点击选中图片
     readLocalFile: function() {
+      var local = document.getElementById("uploadFile");
       var localFile = document.getElementById("uploadFile").files[0];
+
+      this.fileData.push(local)
+      this.$defines.setFileData(this.fileData);
+    //   debugger
+      var current = this;
       var reader = new FileReader();
       var content;
-      var current = this;
       reader.onload = function(event) {
+        debugger
+        console.log("event:"+event)
         content = event.target.result;
         current.imgs.push(content); //获取图片base64代码
+        this.$defines.setImges(this.imgs);
+
       };
       reader.onerror = function(event) {
         alert("error");
       };
+      
       content = reader.readAsDataURL(localFile, "UTF-8");
       var sss = document.getElementById("uploadFile").value;
-      console.log(sss);
+      var dd = document.getElementById("uploadFile").files[0]
+    //   console.log(sss);
     },
     selectApprover() {
       this.$router.push({
         path: "/selectApproverpage",
         query: {
           pagename:"outsignpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
@@ -249,7 +273,10 @@ export default {
           address: this.address,
           outReasons: this.outReasons,
           defaultparam: this.defaultparam,
-          imgs: this.imgs
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+
+
         }
       });
     },
@@ -259,9 +286,6 @@ export default {
         path: "/selectCCpage",
         query: {
           pagename: "outsignpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
@@ -269,11 +293,113 @@ export default {
           address: this.address,
           outReasons: this.outReasons,
           defaultparam: this.defaultparam,
-          imgs: this.imgs
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
         }
       });
     },
-    sure() {},
+    
+    getAttendanceRecord() {
+    var choseListApproveData = []
+    var choseListCCData = []
+      if (this.choseListApprove.length == 0) {
+            alert("审批人不能为空！");
+            return;
+      }else{
+        for (let i = 0; i < this.choseListApprove.length; i++) {
+         choseListApproveData.push(this.choseListApprove[i].userId.toString()) 
+        }
+      }
+      if (this.choseListCC.length > 0) {
+        for (let i = 0; i < this.choseListCC.length; i++) {
+         choseListCCData.push((this.choseListCC[i].userId).toString()) 
+        }
+      }
+
+
+
+      let signWords = {
+        user_id: parseInt(this.userId),
+        user_name: this.userName,
+        attendance_type: this.defaultparam,
+        attendance_longitude: parseFloat(this.attendance_longitude),
+        attendance_latitude: parseFloat(this.attendance_latitude),
+        attendance_address: this.address,
+        attendance_time: this.getTIME(this.nowtime, 3),
+        out_attendance: 1,
+        audit_user:choseListApproveData,
+        copy_user:choseListCCData,
+      };
+      let fileFormData = new FormData()
+      fileFormData.append("information", JSON.stringify(signWords));
+      debugger
+      
+      for (let i = 0; i < this.$defines.fileData.length; i++) {
+
+        // let file = this.imgs[i].file
+        let file = this.$defines.fileData[i].files[0]
+        // console.log(file.size())
+        fileFormData.append("picture", file,file.name);
+      }
+      // var _this = this
+      //   for (let i = 0; i < _this.fileData.length; i++) {
+      //       let file = _this.fileData[i]
+      //       _this.fileFormData.append("picture", file,file.name);
+      //   }
+      // debugger
+      return fileFormData;
+    },
+  //   dataURLtoBlob(dataurl) {
+	// 	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+  //       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+	// 	while(n--){
+	// 		u8arr[n] = bstr.charCodeAt(n);
+	// 	}
+	// 	return new Blob([u8arr], {type:mime});
+	// },
+    sure() {
+
+      var _this = this;
+      var information = _this.getAttendanceRecord();
+      var url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/addAttendanceRecord.do";
+
+      _this.$ajax
+        .post(url, information, {
+          headers: { "Content-type": "multipart/form-data" }
+        })
+        .then(function(response) {
+          debugger
+          if (response.data.code == 1001) {
+            if (_this.defaultparam == 1) {
+              alert("签到成功！");
+            }else if(_this.defaultparam == 2){
+              alert("签退成功！");
+            }else{
+              alert("错误！");
+            }
+            _this.goBack()
+          } else {
+            if (_this.defaultparam == 1) {
+              alert("签退失败，请检查网络！");
+            }else if(_this.defaultparam == 2){
+              alert("签退失败，请检查网络！");
+            }else{
+              alert("错误！");
+            }
+            
+            return;
+          }
+        });
+
+
+    },
     changeFixed(clientHeight) {
       //动态修改样式
       this.$refs.outsignpage.style.height = clientHeight + "px";
@@ -311,38 +437,35 @@ destroyed(){
   created: function() {
     console.log("开始");
     var _this = this;
-    if (this.$route.query.pagename == "signpage") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
-      _this.address = this.$route.query.address;
-      _this.defaultparam = this.$route.query.defaultparam;
-      _this.attendanceType = this.$route.query.type;
-      // console.log("地址是：" + _this.address+_this.attendanceType);
-    } else if (this.$route.query.pagename == "selectApproverpage") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
+    _this.fileData = this.$defines.fileData;
+
+    _this.attendance_longitude= this.$route.query.attendance_longitude;
+    _this.attendance_latitude= this.$route.query.attendance_latitude;
+    _this.address = this.$route.query.address;
+    _this.defaultparam = this.$route.query.defaultparam;
+    _this.attendanceType = this.$route.query.type;
+
+    if (this.$route.query.pagename == "selectApproverpage") {
+      
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
-      _this.address = this.$route.query.address;
       _this.outReasons = this.$route.query.outReasons;
-      _this.defaultparam = this.$route.query.defaultparam;
-      _this.imgs = this.$route.query.imgs;
+      _this.imgs = this.$defines.imges;
     } else if (this.$route.query.pagename == "selectCCpage") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
+      
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
-      _this.address = this.$route.query.address;
       _this.outReasons = this.$route.query.outReasons;
-      _this.defaultparam = this.$route.query.defaultparam;
-      _this.imgs = this.$route.query.imgs;
+      _this.imgs = this.$defines.imges;
     }
   }
 };

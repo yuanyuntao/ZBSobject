@@ -101,14 +101,7 @@ export default {
   methods: {
     //监听返回按钮
     goBack(){
-      this.$router.push({
-        path: "/contactpage",
-        query: {
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
-        }
-      });
+      this.$router.push( "/contactpage");
     },
       callPhone(type){
           switch (type) {
@@ -147,10 +140,6 @@ export default {
     _this.phone_number = this.$route.query.phone_number;
     _this.mail_address = this.$route.query.mail_address;
     _this.contact_address = this.$route.query.contact_address;
-
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
 
     console.log("开始" + _this.position + _this.phone_number);
   }

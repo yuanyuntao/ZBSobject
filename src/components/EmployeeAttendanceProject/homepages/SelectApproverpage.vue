@@ -46,11 +46,9 @@
       <div class="sl" style="display:flex;margin-top:10px;overflow: auto">
         <div v-for="(item,index) in choseList" :key="item.id" style="display:flex">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            
-              <p v-text="item" style="font-size: 12px;margin:5px;"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
 
-            
+            <p v-text="item.userName" style="font-size: 12px;margin:5px;"></p>
           </div>
 
           <img
@@ -67,6 +65,7 @@
 
 <script>
 import ApproveAndCCList from "../toolsComponent/ApproveAndCCList.vue";
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   name: "selectApproverpage",
   components: {
@@ -77,6 +76,10 @@ export default {
       userId: "",
       isAdministrator: "",
       userName: "",
+      company_id: "",
+      serverPublicKey:"",
+      attendance_longitude: "",
+      attendance_latitude: "",
 
       searchsth: "",
       shownone: false,
@@ -86,78 +89,76 @@ export default {
       sheetLists: [],
       displaysheetList: [],
       choseList: [],
-      choseListCC:[],
-      sheetListsCC:[],
+      choseListCC: [],
+      sheetListsCC: [],
       address: "", //打卡地点
       outReasons: "", //外出事由
-      defaultparam:0,//打卡类型
-      imgs:[],//图片
-      from:"",//来自哪个页面
+      defaultparam: 0, //打卡类型
+      from: "", //来自哪个页面
 
       //休假
-      defaultType: "",//休假类型
-      startTime: "",//开始时间
-      endTime: "",//结束时间
-      leaveDays:"",//请假天数
-      leaveHours:"",//请假小时数
-      leaveReasons: "",//休假原因
+      defaultType: "", //休假类型
+      startTime: "", //开始时间
+      endTime: "", //结束时间
+      leaveDays: "", //请假天数
+      leaveHours: "", //请假小时数
+      leaveReasons: "", //休假原因
 
-      outAddress: "",//外出/出差
-
-
+      outAddress: "" //外出/出差
     };
   },
   computed: {},
   methods: {
     //监听返回按钮
-    goBack(){
+    goBack() {
       this.$router.push({
         path: this.from,
         query: {
           pagename: "selectApproverpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
-          choseListApprove: this.choseList,
-          sheetListsApprove:this.sheetLists,
-          choseListCC: this.choseListCC,
-          sheetListsCC:this.sheetListsCC,
-          address: this.address,
-          outReasons:this.outReasons,
-          defaultparam:this.defaultparam,
-          imgs:this.imgs,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
 
-          defaultType:this.defaultType,
-          leaveReasons:this.leaveReasons,
+
+          choseListApprove: this.choseList,
+          sheetListsApprove: this.sheetLists,
+          choseListCC: this.choseListCC,
+          sheetListsCC: this.sheetListsCC,
+          address: this.address,
+          outReasons: this.outReasons,
+          defaultparam: this.defaultparam,
+
+          defaultType: this.defaultType,
+          leaveReasons: this.leaveReasons,
           startTime: this.startTime,
           endTime: this.endTime,
-          leaveDays:this.leaveDays,
-          leaveHours:this.leaveHours,
-          outAddress:this.outAddress,
+          leaveDays: this.leaveDays,
+          leaveHours: this.leaveHours,
+          outAddress: this.outAddress
         }
       });
-  },
+    },
     //修改选中状态
-    getVal: function(res) {
+    getVal: function(res,resname) {
+      
       for (let j = 0; j < this.sheetLists.length; j++) {
         for (let f = 0; f < this.sheetLists[j].users.length; f++) {
-          if (this.sheetLists[j].users[f].user_name == res) {
+          if (this.sheetLists[j].users[f].user_id == res) {
             this.sheetLists[j].users[f].chose = !this.sheetLists[j].users[f]
               .chose;
           }
         }
       }
-
       var have = false;
       for (let i = 0; i < this.choseList.length; i++) {
-        if (this.choseList[i] == res) {
+        if (this.choseList[i].userId == res) {
           this.choseList.splice(i, 1);
           have = true;
         }
       }
       if (!have) {
-        this.choseList.push(res);
+        this.choseList.push({"userId":res,"userName":resname});
       }
+      
       this.selectednum = this.choseList.length;
       if (this.selectednum > 0) {
         this.ifshowselected = true;
@@ -165,7 +166,7 @@ export default {
         this.ifshowselected = false;
       }
       if (this.searchsth != "") {
-        this.dosearch()
+        this.dosearch();
       }
     },
     //清除搜索框
@@ -178,30 +179,30 @@ export default {
     },
     //获取联系人列表
     sureclick() {
-
+      
       this.$router.push({
         path: this.from,
         query: {
           pagename: "selectApproverpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
-          choseListApprove: this.choseList,
-          sheetListsApprove:this.sheetLists,
-          choseListCC: this.choseListCC,
-          sheetListsCC:this.sheetListsCC,
-          address: this.address,
-          outReasons:this.outReasons,
-          defaultparam:this.defaultparam,
-          imgs:this.imgs,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
 
-          defaultType:this.defaultType,
-          leaveReasons:this.leaveReasons,
+
+          choseListApprove: this.choseList,
+          sheetListsApprove: this.sheetLists,
+          choseListCC: this.choseListCC,
+          sheetListsCC: this.sheetListsCC,
+          address: this.address,
+          outReasons: this.outReasons,
+          defaultparam: this.defaultparam,
+
+          defaultType: this.defaultType,
+          leaveReasons: this.leaveReasons,
           startTime: this.startTime,
           endTime: this.endTime,
-          leaveDays:this.leaveDays,
-          leaveHours:this.leaveHours,
-          outAddress:this.outAddress,
+          leaveDays: this.leaveDays,
+          leaveHours: this.leaveHours,
+          outAddress: this.outAddress
         }
       });
     },
@@ -278,117 +279,172 @@ export default {
   },
 
   mounted() {
-    if (window.history && window.history.pushState) {   
-      history.pushState(null, null, document.URL);    
-      window.addEventListener('popstate', this.goBack, false);  
-      }
-
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", this.goBack, false);
+    }
   },
-  
-destroyed(){
-  window.removeEventListener('popstate', this.goBack, false);
-},
+
+  destroyed() {
+    window.removeEventListener("popstate", this.goBack, false);
+  },
 
   created: function() {
     // console.log("开始");
     var _this = this;
     // this.getcontactlist();
-    _this.choseList = this.$route.query.choseListApprove;
-    _this.choseListCC = this.$route.query.choseListCC;
-    _this.sheetListsCC = this.$route.query.sheetListsCC;
-    _this.userId = this.$route.query.userId;
-    console.log("id"+_this.userId);
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    _this.userName = this.$route.query.userName;
     _this.from = this.$route.query.pagename;
-    if ( _this.from == "outsignpage" ) {
+   var isRefresh = false
+    if (typeof this.$route.query.sheetListsApprove[0] == "string") {
+      isRefresh = true
+    }
+
+    if (isRefresh) {
+      _this.choseList = []
+      _this.choseListCC = []
+      _this.sheetListsCC = []
+    }else{
+      _this.choseList = this.$route.query.choseListApprove;
+      _this.choseListCC = this.$route.query.choseListCC;
+      _this.sheetListsCC = this.$route.query.sheetListsCC;
+    }
+
+
+
+
+
+    // _this.choseList = this.$route.query.choseListApprove;
+    // if(typeof _this.choseList == "undefined"){
+    //   _this.choseList = []
+    // }
+    // _this.choseListCC = this.$route.query.choseListCC;
+    // if(typeof _this.choseListCC == "undefined"){
+    //   _this.choseListCC = []
+    // }
+    // _this.sheetListsCC = this.$route.query.sheetListsCC;
+    // if(typeof _this.sheetListsCC == "undefined"){
+    //   _this.sheetListsCC = []
+    // }
+
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
+    
+    
+    if (_this.from == "outsignpage") {
       _this.address = this.$route.query.address;
       _this.outReasons = this.$route.query.outReasons;
-      _this.defaultparam = this.$route.query.defaultparam
+      _this.defaultparam = this.$route.query.defaultparam;
       _this.imgs = this.$route.query.imgs;
-    }else if ( _this.from == "leaveRequestpage" || _this.from == "overtimeRequestpage" ) {
+      _this.attendance_longitude= this.$route.query.attendance_longitude;
+      _this.attendance_latitude= this.$route.query.attendance_latitude;
+
+    } else if (
+      _this.from == "leaveRequestpage" ||
+      _this.from == "overtimeRequestpage"
+    ) {
       _this.defaultType = this.$route.query.defaultType;
       _this.leaveReasons = this.$route.query.leaveReasons;
-      _this.startTime = this.$route.query.startTime
+      _this.startTime = this.$route.query.startTime;
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-    }else if ( _this.from == "outRequestpage" || _this.from == "travelRequestpage" ) {
+    } else if (
+      _this.from == "outRequestpage" ||
+      _this.from == "travelRequestpage"
+    ) {
       _this.defaultType = this.$route.query.defaultType;
       _this.leaveReasons = this.$route.query.leaveReasons;
-      _this.startTime = this.$route.query.startTime
+      _this.startTime = this.$route.query.startTime;
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
       _this.outAddress = this.$route.query.outAddress;
-
     }
+    this.selectednum = _this.choseList.length;
 
     
-
-    this.selectednum = _this.choseList.length;
     if (this.selectednum > 0) {
       this.ifshowselected = true;
-      _this.sheetLists=this.$route.query.sheetListsApprove;
-
-      
+      _this.sheetLists = this.$route.query.sheetListsApprove;
     } else {
       this.ifshowselected = false;
-    _this.$http
-      .get(
-        "http://" +
-          this.getSERVER_HOST_MAIN() +
-          ":" +
-          this.getSERVER_PORT_MAIN() +
-          "/ZBSAttendance/user/searchAllUser.do",
-        {
-          _timeout: 10000,
-          onTimeout: request => {
-            alert("请求超时");
-          }
-        }
-      )
-      .then(function(response) {
-        var resultdata = response.data.departmentList;
-        for (let i = 0; i < resultdata.length; i++) {
-          _this.sheetLists.push({
-            department_id: resultdata[i].department_id,
-            department: resultdata[i].department, //部门
-            num: resultdata[i].users.length, //人数
-            users: []
-          });
-          for (let j = 0; j < resultdata[i].users.length; j++) {
-            var icon_word = resultdata[i].users[j].user_name;
-            var icon_url = resultdata[i].users[j].icon_url;
-            var haveicon = true;
-            if (icon_url == "") {
-              haveicon = false;
-            } else {
-              icon_url = (
-                "http://" +
-                this.getSERVER_HOST_MAIN() +
-                ":" +
-                this.getSERVER_PORT_MAIN() +
-                icon_url
-              ).replace(new RegExp(/(\\)/g), "/");
-            }
+      var url = "http://" +
+            this.getSERVER_HOST_MAIN() +
+            ":" +
+            this.getSERVER_PORT_MAIN() +
+            "/"+
+            this.getPROJECT_MAIN() +"/user/searchAllUser.do"
 
-            _this.sheetLists[i].users.push({
-              user_id: resultdata[i].users[j].user_id, //姓名
-              user_name: resultdata[i].users[j].user_name, //姓名
-              department: resultdata[i].users[j].relationship[0].department, //部门
-              position: resultdata[i].users[j].relationship[0].position, //职位
-              phone_number: resultdata[i].users[j].phone_number, //电话
-              mail_address: resultdata[i].users[j].mail_address, //邮箱
-              contact_address: resultdata[i].users[j].contact_address, //联系地址
-              icon_url: icon_url, //头像
-              haveicon: haveicon, //是否有头像
-              icon_word: icon_word.substr(icon_word.length - 1, 1), //取代头像的字段
-              chose: false
-            });
+      var content = {
+        companyId: _this.company_id,
+        authority: "外出外勤审批"
+      };
+      var contentData = JSON.stringify(content)
+      _this.appPrivateKey = this.getPrivatekey();
+      var headerAndBody = this.getHeaderAndBody(contentData,_this.serverPublicKey)
+      _this.$ajax
+        .post(url,headerAndBody.contentDataByKey,
+          {
+            headers: {
+              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+              appPublicKey: headerAndBody.appPublicKey,
+              serverPublicKey: headerAndBody.serverPublicKey
+            },
           }
-        }
-      });
+        )
+        .then(function(response) {
+          
+          var returnKey = _this.RSAdecrypt(response.headers.serverencryptedkey, _this.appPrivateKey)
+          let returnResponseData = response.data
+          let encrypt = returnResponseData.replace(/[\r\n]/g,"")
+          var returnData = decrypt(encrypt,returnKey,_this.getIV())
+
+          var returnData = JSON.parse(returnData);
+
+          
+          var resultdata = returnData.data.departmentList;
+          for (let i = 0; i < resultdata.length; i++) {
+            _this.sheetLists.push({
+              department_id: resultdata[i].department_id,
+              department: resultdata[i].department, //部门
+              num: resultdata[i].users.length, //人数
+              users: []
+            });
+            for (let j = 0; j < resultdata[i].users.length; j++) {
+              var icon_word = resultdata[i].users[j].user_name;
+              var icon_url = resultdata[i].users[j].icon_url;
+              var haveicon = true;
+              if (icon_url == "") {
+                haveicon = false;
+              } else {
+                icon_url = (
+                  "http://" +
+                  _this.getSERVER_HOST_MAIN() +
+                  ":" +
+                  _this.getSERVER_PORT_MAIN() +
+                  icon_url
+                ).replace(new RegExp(/(\\)/g), "/");
+              }
+              _this.sheetLists[i].users.push({
+                user_id: resultdata[i].users[j].user_id, //姓名
+                user_name: resultdata[i].users[j].user_name, //姓名
+                department: resultdata[i].users[j].department, //部门
+                position: resultdata[i].users[j].position, //职位
+                phone_number: resultdata[i].users[j].phone_number, //电话
+                mail_address: resultdata[i].users[j].mail_address, //邮箱
+                contact_address: resultdata[i].users[j].contact_address, //联系地址
+                icon_url: icon_url, //头像
+                haveicon: haveicon, //是否有头像
+                icon_word: icon_word.substr(icon_word.length - 1, 1), //取代头像的字段
+                chose: false
+              });
+            }
+          }
+        });
     }
 
     this.displaysheetList = _this.sheetLists;

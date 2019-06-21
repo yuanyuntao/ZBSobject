@@ -48,6 +48,7 @@ export default {
 
     this.getServerPublicKey().then(function(response) {
       _this.serverPublicKey = response;
+
       // console.log("serverPublicKey:"+ _this.serverPublicKey)
     });
     // if (
@@ -80,6 +81,11 @@ export default {
       };
       var contentData = JSON.stringify(content)
       var headerAndBody = this.getHeaderAndBody(contentData,this.serverPublicKey)
+      // this.getServerPublicKey().then(function(response) {
+      // _this.serverPublicKey = response;
+      //  alert(response);
+      // console.log("serverPublicKey:"+ _this.serverPublicKey)
+    // });
 
 
 
@@ -89,7 +95,6 @@ export default {
       // this.appPublicKey = this.getPublicKey();
       // this.appEncryptedKey = this.RSAencrypt(AESKey, this.serverPublicKey);
       // this.appSignature = this.getSignsig(contentData, this.appPrivateKey);
-
       let url =
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -135,19 +140,17 @@ export default {
             if (returnData.data.user.company_id == 0 || returnData.data.user.role == 1) {
               isAdministrator = true;
             }
-            this.$router.push({
-              path: "/homepage",
-              query: {
-                userId: returnData.data.user.user_id,
-                userName: returnData.data.user.user_name,
-                isAdministrator: isAdministrator,
-                company_id:returnData.data.user.company_id,
-              }
-            });
+            this.$defines.setUserId(returnData.data.user.user_id)
+            this.$defines.setUserName(returnData.data.user.user_name)
+            this.$defines.setIsAdministrator(isAdministrator)
+            this.$defines.setCompanyId(returnData.data.user.company_id)
+            this.$defines.setServerPublicKey(this.serverPublicKey)
+            this.$router.push("/homepage");
           } else if (returnData.code == 1014) {
             alert("用户名或密码不正确！");
+          
           } else {
-            alert("连接错误！");
+            alert("连接错误,请检查网络！");
           }
         })
         .catch(reason => {

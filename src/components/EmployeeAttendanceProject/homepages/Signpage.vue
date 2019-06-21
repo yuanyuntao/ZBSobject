@@ -180,11 +180,6 @@ export default {
         path: "/homepage",
         query: {
           pagename: "signpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
-          company_id: this.company_id,
-
         }
       });
     },
@@ -302,6 +297,10 @@ export default {
               let encrypt = returnResponseData.replace(/[\r\n]/g, "");
               var returnData = decrypt(encrypt, returnKey, _this.getIV());
               var returnData = JSON.parse(returnData);
+              if (returnData.code != 1001) {
+                alert("连接错误，请检查网络！")
+                return
+              }
 
               _this.ruledata = returnData.data.attendanceRule;
               var record = returnData.data.attendanceRecord;
@@ -437,56 +436,58 @@ export default {
      */
     signin() {
       var _this = this;
-      var attendanceRecord = _this.getAttendanceRecord(1);
-      
-      var url ="http://" +
-            this.getSERVER_HOST_MAIN() +
-            ":" +
-            this.getSERVER_PORT_MAIN() +
-            "/" +
-            this.getPROJECT_MAIN() +
-            "/user/addAttendanceRecord.do" 
+      var information = _this.getAttendanceRecord(1);
+      var url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/addAttendanceRecord.do";
 
       _this.$ajax
-        .post(
-          url,
-          headerAndBody.contentDataByKey,
-          {
-            headers: {
-              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
-              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
-              appPublicKey: headerAndBody.appPublicKey,
-              serverPublicKey: headerAndBody.serverPublicKey
-            },
-            
-          }
-        )
+        .post(url, information, {
+          headers: { "Content-type": "multipart/form-data" }
+        })
         .then(function(response) {
-          location.reload();
-          alert("签到成功！");
+          if (response.data.code == 1001) {
+            location.reload();
+            alert("签到成功！");
+          } else {
+            alert("签到失败，请检查网络！");
+            location.reload();
+          }
         });
     },
+
     /**
      * 签退
      */
     signout() {
       var _this = this;
-      var attendanceRecord = _this.getAttendanceRecord(2);
+      var information = _this.getAttendanceRecord(2);
+      var url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/addAttendanceRecord.do";
+
       _this.$http
-        .get(
-          // "http://192.168.5.236:8080/ZBSAttendance/user/searchAttendanceRules.do?manager=0"
-          "http://" +
-            this.getSERVER_HOST_MAIN() +
-            ":" +
-            this.getSERVER_PORT_MAIN() +
-            "/" +
-            this.getPROJECT_MAIN() +
-            "/user/addAttendanceRecord.do?attendanceRecord=" +
-            attendanceRecord
-        )
+        .post(url, information, {
+          headers: { "Content-type": "multipart/form-data" }
+        })
         .then(function(response) {
-          location.reload();
-          alert("签退成功！");
+          if (response.data.code == 1001) {
+            location.reload();
+            alert("签退成功！");
+          } else {
+            alert("签退失败，请检查网络！");
+            location.reload();
+          }
         });
     },
     /**
@@ -498,12 +499,11 @@ export default {
         path: "/outsignpage",
         query: {
           pagename: "signpage",
-          userId: _this.userId,
-          isAdministrator: _this.isAdministrator,
-          userName: _this.userName,
           address: _this.attendance_address,
           defaultparam: 1,
-          type: 0
+          type: 0,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
         }
       });
       // if (_this.ifInOk && _this.ifOutOk) {
@@ -513,9 +513,11 @@ export default {
       //     userId: _this.userId,
       //     isAdministrator: _this.isAdministrator,
       //     userName: _this.userName,
+      //     company_id: _this.company_id,
       //     address:_this.address,
       //     defaultparam:1,
-      //     type:0
+      //     type:0,
+      // serverPublicKey: this.serverPublicKey
       //   }
       // });
       // }else if (_this.ifInOk && !_this.ifOutOk) {
@@ -525,9 +527,11 @@ export default {
       //     userId: _this.userId,
       //     isAdministrator: _this.isAdministrator,
       //     userName: _this.userName,
+      //     company_id: _this.company_id,
       //     address:_this.address,
       //     defaultparam:1,
-      //     type:1
+      //     type:1,
+      // serverPublicKey: this.serverPublicKey
       //   }
       // });
       // }else if (!_this.ifInOk && _this.ifOutOk) {
@@ -537,9 +541,11 @@ export default {
       //     userId: _this.userId,
       //     isAdministrator: _this.isAdministrator,
       //     userName: _this.userName,
+      //     company_id: _this.company_id,
       //     address:_this.address,
       //     defaultparam:2,
-      //     type:2
+      //     type:2,
+      // serverPublicKey: this.serverPublicKey
       //   }
       // });
       // }else{
@@ -550,42 +556,27 @@ export default {
      * 获取接口json数据
      */
     getAttendanceRecord(type) {
-      var _this = this;
-
-      (_this.signWords.user_id = parseInt(_this.userId)),
-        (_this.signWords.user_name = _this.userName),
-        (_this.signWords.attendance_type = type),
-        (_this.signWords.attendance_longitude = parseFloat(
-          _this.attendance_longitude
-        )),
-        (_this.signWords.attendance_latitude = parseFloat(
-          _this.attendance_latitude
-        )),
-        (_this.signWords.attendance_address = _this.attendance_address),
-        (_this.signWords.attendance_time = this.getTIME(_this.nowtime, 3)),
-        (_this.signWords.out_attendance = 0),
-        (_this.signWords.out_attendance_id = 0),
-        (_this.signWords.rule_id = _this.rule_id);
-
-      var attendanceRecord = encodeURIComponent(
-        JSON.stringify(_this.signWords)
-      );
-      return attendanceRecord;
+      let signWords = {
+        user_id: parseInt(this.userId),
+        user_name: this.userName,
+        attendance_type: type,
+        attendance_longitude: parseFloat(this.attendance_longitude),
+        attendance_latitude: parseFloat(this.attendance_latitude),
+        attendance_address: this.attendance_address,
+        attendance_time: this.getTIME(this.nowtime, 3),
+        out_attendance: 0,
+        out_attendance_id: 0,
+        rule_id: this.rule_id
+      };
+      let fileFormData = new FormData();
+      fileFormData.append("information", JSON.stringify(signWords));
+      return fileFormData;
     },
     /**
      * 查看签到规则
      */
     lookrule() {
-       this.$router.push({
-        path: "/rulespage",
-        query: {
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
-        company_id: this.company_id,
-        serverPublicKey: this.serverPublicKey,
-        }
-      });
+      this.$router.push( "/rulespage");
     },
 
     /**
@@ -627,15 +618,12 @@ export default {
   created: function() {
     // console.log("开始");
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    _this.userName = this.$route.query.userName;
-    _this.company_id = this.$route.query.company_id;
+    _this.userId = this.$defines.userId;
+    _this.userName = this.$defines.userName;
+    _this.isAdministrator = this.$defines.isAdministrator;
+    _this.company_id = this.$defines.companyId;
+    _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.appPrivateKey = this.getPrivatekey();
-
-    this.getServerPublicKey().then(function(response) {
-      _this.serverPublicKey = response;
-    });
     this.getLocations();
   },
 
