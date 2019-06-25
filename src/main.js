@@ -290,7 +290,7 @@ Vue.prototype.getServerPublicKey = function () {
     //   )
     this.$http.get(
       url,
-      {_timeout: 10000,
+      {_timeout: 5000,
         onTimeout: request => {
           alert("请求超时");
           this.getServerPublicKey()
@@ -298,10 +298,7 @@ Vue.prototype.getServerPublicKey = function () {
       
     )
       .then(function (response) {
-        alert("请输入用户名和密码")
-        // console.log(response.data.data.rsaPublicKey)
         resolve(response.data.data.rsaPublicKey);
-        // resolve(response.body.data.data.rsaPublicKey);
       }).catch(async (err) => {
         reject(err);
       });

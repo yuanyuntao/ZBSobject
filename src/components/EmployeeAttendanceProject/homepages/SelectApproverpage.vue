@@ -293,7 +293,6 @@ export default {
     // console.log("开始");
     var _this = this;
     // this.getcontactlist();
-    debugger
     _this.from = this.$route.query.pagename;
    var isRefresh = false
     if (typeof this.$route.query.sheetListsApprove[0] == "string") {
@@ -334,7 +333,6 @@ export default {
       _this.from == "leaveRequestpage" ||
       _this.from == "overtimeRequestpage"
     ) {
-      debugger
       _this.defaultType = this.$route.query.defaultType;
       _this.leaveReasons = this.$route.query.leaveReasons;
       _this.startTime = this.$route.query.startTime;
@@ -367,15 +365,18 @@ export default {
             this.getSERVER_PORT_MAIN() +
             "/"+
             this.getPROJECT_MAIN() +"/user/searchAllUser.do"
+      var authorityType = ""
+      if (this.from == "outsignpage") {
+        authorityType = "外勤审批"
+      }
 
       var content = {
         companyId: _this.company_id,
-        authority: "外出外勤审批"
+        authority: authorityType
       };
       var contentData = JSON.stringify(content)
       _this.appPrivateKey = this.getPrivatekey();
       var headerAndBody = this.getHeaderAndBody(contentData,_this.serverPublicKey)
-      debugger
       _this.$ajax
         .post(url,headerAndBody.contentDataByKey,
           {
@@ -388,8 +389,6 @@ export default {
           }
         )
         .then(function(response) {
-          debugger
-          
           var returnKey = _this.RSAdecrypt(response.headers.serverencryptedkey, _this.appPrivateKey)
           let returnResponseData = response.data
           let encrypt = returnResponseData.replace(/[\r\n]/g,"")

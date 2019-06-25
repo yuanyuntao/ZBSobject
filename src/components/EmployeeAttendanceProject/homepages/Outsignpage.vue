@@ -275,8 +275,6 @@ export default {
           defaultparam: this.defaultparam,
           attendance_longitude: this.attendance_longitude,
           attendance_latitude: this.attendance_latitude,
-
-
         }
       });
     },
@@ -439,7 +437,7 @@ watch: {
       }
     }
 
-  },
+},
   created: function() {
     console.log("开始");
     var _this = this;
@@ -453,6 +451,7 @@ watch: {
     _this.isAdministrator = localStorage.getItem("isAdministrator")
     _this.company_id = localStorage.getItem("company_id")
     _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+    debugger
 
 
     _this.fileData = this.$defines.fileData;
@@ -464,22 +463,48 @@ watch: {
     _this.defaultparam = this.$route.query.defaultparam;
     _this.attendanceType = this.$route.query.type;
 
-    if (this.$route.query.pagename == "selectApproverpage") {
+    if (this.$route.query.pagename == "selectApproverpage" || this.$route.query.pagename == "selectCCpage") {
       
-      _this.choseListApprove = this.$route.query.choseListApprove;
+      
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.outReasons = this.$route.query.outReasons;
+
+      //将被选中的抄送人与审批人重合的删除
+      var choseListApproveTemporary = this.$route.query.choseListApprove;
+      var choseListCCTemporary = this.$route.query.choseListCC;
+      if (choseListCCTemporary.length > 0 && choseListApproveTemporary.length > 0) {
+        for (let i = 0; i < choseListCCTemporary.length; i++) {
+          for (let j = 0; j < choseListApproveTemporary.length; j++) {
+            if (choseListCCTemporary[i].userId == choseListApproveTemporary[j].userId) {
+              for (let k = 0; k < _this.sheetListsCC.length; k++) {
+                for (let q = 0; q < _this.sheetListsCC[k].users.length; q++) {
+                 if (choseListApproveTemporary[j].userId == _this.sheetListsCC[k].users[q].user_id) {
+                   _this.sheetListsCC[k].users[q].chose = false
+                 }
+                }
+              }
+              alert(choseListApproveTemporary[j].userName+" 是审批人，可以不用抄送了哦！")
+              choseListCCTemporary.splice(i,1);
+              
+            }
+            if (choseListCCTemporary.length == 0) {
+              break
+            }
+          }
+        }
+      }
+      _this.choseListApprove = choseListApproveTemporary
+      _this.choseListCC = choseListCCTemporary
+    } 
+    // else if (this.$route.query.pagename == "selectCCpage") {
       
-    } else if (this.$route.query.pagename == "selectCCpage") {
-      
-      _this.choseListApprove = this.$route.query.choseListApprove;
-      _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      _this.choseListCC = this.$route.query.choseListCC;
-      _this.sheetListsCC = this.$route.query.sheetListsCC;
-      _this.outReasons = this.$route.query.outReasons;
-    }
+    //   _this.choseListApprove = this.$route.query.choseListApprove;
+    //   _this.sheetListsApprove = this.$route.query.sheetListsApprove;
+    //   _this.choseListCC = this.$route.query.choseListCC;
+    //   _this.sheetListsCC = this.$route.query.sheetListsCC;
+    //   _this.outReasons = this.$route.query.outReasons;
+    // }
   }
 };
 </script>

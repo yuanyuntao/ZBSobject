@@ -8,7 +8,13 @@
       <input type="text" class="qxs-ic_user qxs-icon" placeholder="用户名" v-model="userId">
       <input type="password" class="qxs-ic_password qxs-icon" placeholder="密码" v-model="password">
       <!-- <button class="login_btn el-button el-button&#45;&#45;primary is-round" type="primary" round>登录</button> -->
-      <button class="login_btn" @click="login" type="primary" round :loading="isBtnLoading">登录</button>
+      <button
+        class="login_btn"
+        @click="login"
+        type="primary"
+        round
+        :loading="isBtnLoading"
+      >{{isBtnLoadingText}}</button>
       <div style="margin-top: 10px">
         <span style="color: #000099;">注册</span>
         <span>&nbsp; &nbsp;</span>
@@ -31,7 +37,9 @@ export default {
       appSignature: "", //APP使用RSA密钥对请求体的签名
       appPublicKey: "", //APP的RSA公钥，提供给服务器加密服务端的AES密钥
       appPrivateKey: "",
-      serverPublicKey: "" //服务端的RSA公钥，提供给服务器判断有没有过期
+      serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
+      isBtnLoading: false,
+      isBtnLoadingText: "登录"
     };
   },
   created() {
@@ -39,18 +47,8 @@ export default {
     // let sing = decrypt(test,num,this.getIV())
     // console.log("生成的sing:"+ sing)
     // let test = this.RSAencrypt("abc",this.getPublicKey())
-
     // console.log("生成的test:"+ test)
     // console.log("解密的test:"+ this.RSAdecrypt(test,this.getPrivatekey()))
-
-    var _this = this;
-    _this.appPrivateKey = this.getPrivatekey();
-
-    this.getServerPublicKey().then(function(response) {
-      _this.serverPublicKey = response;
-
-      // console.log("serverPublicKey:"+ _this.serverPublicKey)
-    });
     // if (
     //   JSON.parse(localStorage.getItem("user")) &&
     //   JSON.parse(localStorage.getItem("user")).userId
@@ -65,6 +63,22 @@ export default {
       return "登录";
     }
   },
+  watch: {
+    // 如果 `clientHeight` 发生改变，这个函数就会运行
+    isBtnLoading: function() {
+      if (this.isBtnLoading) {
+        this.isBtnLoadingText = "登录中...";
+      }
+    }
+  },
+  mounted() {
+    var _this = this;
+    _this.appPrivateKey = this.getPrivatekey();
+
+    this.getServerPublicKey().then(function(response) {
+      _this.serverPublicKey = response;
+    });
+  },
   methods: {
     login() {
       if (!this.userId) {
@@ -75,20 +89,21 @@ export default {
         alert("请输入密码");
         return;
       }
+      this.isBtnLoadingText = "登录中..."
       var content = {
         userId: this.userId,
         password: this.password
       };
-      var contentData = JSON.stringify(content)
-      var headerAndBody = this.getHeaderAndBody(contentData,this.serverPublicKey)
+      var contentData = JSON.stringify(content);
+      var headerAndBody = this.getHeaderAndBody(
+        contentData,
+        this.serverPublicKey
+      );
       // this.getServerPublicKey().then(function(response) {
       // _this.serverPublicKey = response;
       //  alert(response);
       // console.log("serverPublicKey:"+ _this.serverPublicKey)
-    // });
-
-
-
+      // });
 
       // var AESKey = getRandom(32);
       // var contentDataByKey = encrypt(contentData, AESKey, this.getIV());
@@ -106,69 +121,74 @@ export default {
       // this.getPROJECT_MAIN() + "/user/login.do?content=" +
       // encodeURIComponent(contentData);
       this.$ajax
-        .post(
-          url,
-          headerAndBody.contentDataByKey,
-          {
-            headers: {
-              appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
-              appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
-              appPublicKey: headerAndBody.appPublicKey,
-              serverPublicKey: headerAndBody.serverPublicKey
-            },
-            
+        .post(url, headerAndBody.contentDataByKey, {
+          headers: {
+            appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+            appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+            appPublicKey: headerAndBody.appPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
           }
-        )
-        .then((response) => {
+        })
+        .then(response => {
           // console.log("response....." + response.headers.serverencryptedkey);
           // console.log(
           //   "response....." +
-            
+
           //     this.RSAdecrypt(response.headers.serverencryptedkey, this.appPrivateKey)
           // );
 
-          var returnKey = this.RSAdecrypt(response.headers.serverencryptedkey, this.appPrivateKey)
-          let returnResponseData = response.data
-          let encrypt = returnResponseData.replace(/[\r\n]/g,"")
-          var returnData = decrypt(encrypt,returnKey,this.getIV())
+          var returnKey = this.RSAdecrypt(
+            response.headers.serverencryptedkey,
+            this.appPrivateKey
+          );
+          let returnResponseData = response.data;
+          let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          var returnData = decrypt(encrypt, returnKey, this.getIV());
           // console.log("returnData....." + returnData);
 
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
             var isAdministrator = false;
-            if (returnData.data.user.company_id == 0 || returnData.data.user.role == 1) {
+            if (
+              returnData.data.user.company_id == 0 ||
+              returnData.data.user.role == 1
+            ) {
               isAdministrator = true;
             }
-            this.$defines.setUserId(returnData.data.user.user_id)
-            this.$defines.setUserName(returnData.data.user.user_name)
-            this.$defines.setIsAdministrator(isAdministrator)
-            this.$defines.setCompanyId(returnData.data.user.company_id)
-            this.$defines.setServerPublicKey(this.serverPublicKey)
+            this.$defines.setUserId(returnData.data.user.user_id);
+            this.$defines.setUserName(returnData.data.user.user_name);
+            this.$defines.setIsAdministrator(isAdministrator);
+            this.$defines.setCompanyId(returnData.data.user.company_id);
+            this.$defines.setServerPublicKey(this.serverPublicKey);
 
-            localStorage.setItem("userId", returnData.data.user.user_id)
-            localStorage.setItem("userName", returnData.data.user.user_name)
-            localStorage.setItem("isAdministrator", isAdministrator)
-            localStorage.setItem("company_id", returnData.data.user.company_id)
-            localStorage.setItem("serverPublicKey", this.serverPublicKey)
-
-
-
+            localStorage.setItem("userId", returnData.data.user.user_id);
+            localStorage.setItem("userName", returnData.data.user.user_name);
+            localStorage.setItem("isAdministrator", isAdministrator);
+            localStorage.setItem("company_id", returnData.data.user.company_id);
+            localStorage.setItem("serverPublicKey", this.serverPublicKey);
 
             this.$router.push("/homepage");
           } else if (returnData.code == 1014) {
+            this.isBtnLoadingText = "登录"
             alert("用户名或密码不正确！");
-          
+            return
+            
           } else {
+            this.isBtnLoadingText = "登录"
             alert("连接错误,请检查网络！");
+            return
           }
         })
         .catch(reason => {
-    console.log('reason'+reason);
-  });
+          console.log("reason" + reason);
+          this.isBtnLoadingText = "登录"
+          return
+        });
 
       // this.$router.push("/loginsuccess");
       // console.log("pressed.....");
+      // this.isBtnLoading = false;
     }
   }
 };
