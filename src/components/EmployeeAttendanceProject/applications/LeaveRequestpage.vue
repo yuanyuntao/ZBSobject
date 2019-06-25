@@ -1,5 +1,5 @@
 <template>
-  <div class="leaveRequestpage">
+  <div class="leaveRequestpage" ref="leaveRequestpage">
     <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 18px;letter-spacing:5px;"></div>
     <div
       type="primary"
@@ -37,11 +37,13 @@
         <input type="number"
           class="inputTime"
           v-model="leaveDays"
+          min=0
         >
         &nbsp;天&nbsp;
         <input type="number"
           class="inputTime"
           v-model="leaveHours"
+          min=0
         >
         &nbsp;小时
       </div>
@@ -77,8 +79,8 @@
       <div class="showApproveAndCC" v-show="choseListApprove.length>0">
         <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
 
           <img
@@ -109,8 +111,8 @@
       <div class="showApproveAndCC" v-show="choseListCC.length > 0">
         <div v-for="item in choseListCC" :key="item.id" style="display:flex;padding-right:15px">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
         </div>
       </div>
@@ -177,9 +179,6 @@ export default {
         path: "/application",
         query: {
         pagename: "leaveRequestpage",
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
         }
       });
     },
@@ -274,9 +273,6 @@ export default {
         path: "/selectApproverpage",
         query: {
           pagename: "leaveRequestpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
@@ -297,9 +293,6 @@ export default {
         path: "/selectCCpage",
         query: {
           pagename: "leaveRequestpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
@@ -314,10 +307,50 @@ export default {
         }
       });
     },
-    sure() {}
+    sure() {
+      if (this.startTime == "") {
+        alert("请输入休假开始时间！")
+        return
+      }
+      if (this.endTime == "") {
+        alert("请输入休假结束时间！")
+        return
+      }
+      if (this.leaveDays == "" && this.leaveHours == "") {
+        alert("请输入休假时间！")
+        return
+      }
+      if (this.choseListApprove.length == 0) {
+        alert("审批人不能为空！");
+        return
+      }
+
+
+
+    },
+    changeFixed(clientHeight) {
+      //动态修改样式
+      this.$refs.leaveRequestpage.style.height = clientHeight + "px";
+    },
+  },
+  watch: {
+    // 如果 `clientHeight` 发生改变，这个函数就会运行
+    clientHeight: function() {
+      
+      this.totalHeight = this.$refs.leaveRequestpage.offsetHeight
+      if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
+      this.changeFixed(this.clientHeight);
+    }
   },
   mounted() {
     this.getCurTime();
+    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
+    // console.log(self);
+    // window.onresize = function temp() {
+    //   this.clientHeight = `${document.documentElement.clientHeight}`;
+    // };
     if (window.history && window.history.pushState) {   
       history.pushState(null, null, document.URL);    
       window.addEventListener('popstate', this.goBack, false);  
@@ -326,19 +359,16 @@ export default {
   destroyed(){
   window.removeEventListener('popstate', this.goBack, false);
   },
+ 
   created: function() {
     console.log("开始");
     var _this = this;
-    if (this.$route.query.pagename == "application") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
-      // console.log("地址是：" + _this.address+_this.attendanceType);
-    } else if (this.$route.query.pagename == "selectApproverpage") {
-      _this.userId = this.$route.query.userId;
-      console.log("ID：" + _this.userId);
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+    if (this.$route.query.pagename == "selectApproverpage") {
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;
@@ -352,9 +382,6 @@ export default {
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
     } else if (this.$route.query.pagename == "selectCCpage") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="outRequestpage">
+  <div class="outRequestpage" ref="outRequestpage">
     <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 18px;letter-spacing:5px;"></div>
     <div
       type="primary"
@@ -47,12 +47,14 @@
           v-model="leaveDays"
           type="number"
           style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
+          min=0
         >
         &nbsp;天&nbsp;
         <input
           v-model="leaveHours"
           type="number"
           style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
+          min=0
         >
 
         &nbsp;小时
@@ -103,8 +105,8 @@
       <div class="showApproveAndCC" v-show="choseListApprove.length>0">
         <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
 
           <img
@@ -135,8 +137,8 @@
       <div class="showApproveAndCC" v-show="choseListCC.length > 0">
         <div v-for="item in choseListCC" :key="item.id" style="display:flex;padding-right:15px">
           <div>
-            <div class="head_image" v-text="item.substr(item.length-1, 1)"></div>
-            <p v-text="item" style="font-size: 12px;margin:5px"></p>
+            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
+            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
         </div>
       </div>
@@ -300,9 +302,6 @@ export default {
         path: "/selectApproverpage",
         query: {
           pagename: "outRequestpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
@@ -323,9 +322,6 @@ export default {
         path: "/selectCCpage",
         query: {
           pagename: "outRequestpage",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName,
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
@@ -341,10 +337,19 @@ export default {
         }
       });
     },
-    sure() {}
+    sure() {},
+    changeFixed(clientHeight) {
+      //动态修改样式
+      this.$refs.outRequestpage.style.height = clientHeight + "px";
+    }
   },
   mounted() {
     this.getCurTime();
+    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
+    // console.log(self);
+    // window.onresize = function temp() {
+    //   this.clientHeight = `${document.documentElement.clientHeight}`;
+    // };
     if (window.history && window.history.pushState) {   
       history.pushState(null, null, document.URL);    
       window.addEventListener('popstate', this.goBack, false);  
@@ -353,19 +358,31 @@ export default {
   destroyed(){
   window.removeEventListener('popstate', this.goBack, false);
   },
+  watch: {
+    // 如果 `clientHeight` 发生改变，这个函数就会运行
+    clientHeight: function() {
+      this.totalHeight = this.$refs.outRequestpage.offsetHeight
+      if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
+      this.changeFixed(this.clientHeight);
+    }
+  },
   created: function() {
     console.log("开始");
     var _this = this;
-    if (this.$route.query.pagename == "application") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
-      // console.log("地址是：" + _this.address+_this.attendanceType);
-    } else if (this.$route.query.pagename == "selectApproverpage") {
-      _this.userId = this.$route.query.userId;
-      console.log("ID：" + _this.userId);
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
+    // if (this.$route.query.pagename == "application") {
+    //   _this.userId = this.$route.query.userId;
+    //   _this.isAdministrator = this.$route.query.isAdministrator;
+    //   _this.userName = this.$route.query.userName;
+    //   // console.log("地址是：" + _this.address+_this.attendanceType);
+    // } else 
+    _this.userId = localStorage.getItem("userId")
+    _this.userName = localStorage.getItem("userName")
+    _this.isAdministrator = localStorage.getItem("isAdministrator")
+    _this.company_id = localStorage.getItem("company_id")
+    _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+    if (this.$route.query.pagename == "selectApproverpage") {
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;
@@ -378,9 +395,6 @@ export default {
       _this.leaveHours = this.$route.query.leaveHours;
       _this.outAddress = this.$route.query.outAddress;
     } else if (this.$route.query.pagename == "selectCCpage") {
-      _this.userId = this.$route.query.userId;
-      _this.isAdministrator = this.$route.query.isAdministrator;
-      _this.userName = this.$route.query.userName;
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.choseListCC = this.$route.query.choseListCC;

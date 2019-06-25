@@ -111,7 +111,9 @@ Vue.prototype.RSAdecrypt = function(pas,privateKey){
 }
 
 
-
+/**
+ * 签名的公钥必须要加上"-----BEGIN PRIVATE KEY-----"，结尾要加上"-----END PRIVATE KEY-----"
+ */
 Vue.prototype.getSignsig = function (signData,privateKey) {
   let rsa = new Jsrsasign.RSAKey()
   rsa = Jsrsasign.KEYUTIL.getKey("-----BEGIN PRIVATE KEY-----" + privateKey + "-----END PRIVATE KEY-----")
@@ -121,15 +123,6 @@ Vue.prototype.getSignsig = function (signData,privateKey) {
   return Jsrsasign.hextob64(sig.sign())
   // return sig.sign()
 }
-// Vue.prototype.getSignsig = function (privateKey) {
-// let signature = this.$RSA.KJUR.crypto.Signature({"alg":"SHA256withRSA"})
-// let sig = this.$RSA.RSAKey()
-// sig = this.$RSA.KEYUTIL.getKey(privateKey)
-// signature.init(sig);
-// signature.updateString(privateKey);  //signData是待加密数据
-// let signsig = signature.sign()          //signsig是最后加密完的数据
-// return signsig
-// }
 
 
 
@@ -300,7 +293,7 @@ Vue.prototype.getServerPublicKey = function () {
       {_timeout: 10000,
         onTimeout: request => {
           alert("请求超时");
-          location.reload()
+          this.getServerPublicKey()
         }}
       
     )

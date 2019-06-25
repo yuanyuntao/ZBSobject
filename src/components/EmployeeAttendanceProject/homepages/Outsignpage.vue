@@ -424,7 +424,7 @@ export default {
 destroyed(){
   window.removeEventListener('popstate', this.goBack, false);
 },
-  watch: {
+watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
       this.totalHeight = this.$refs.outsignpage.offsetHeight
@@ -432,11 +432,16 @@ destroyed(){
         this.clientHeight = this.totalHeight + 20
       }
       this.changeFixed(this.clientHeight);
+    },
+     period(newVal){
+      if(newVal<0){
+        this.period = '';
+      }
     }
+
   },
   created: function() {
     console.log("开始");
-    debugger
     var _this = this;
     // _this.userId = this.$defines.userId;
     // _this.userName = this.$defines.userName;

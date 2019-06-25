@@ -597,9 +597,9 @@ export default {
     // 获取浏览器可视区域高度
     this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
     //console.log(self.clientHeight);
-    window.onresize = function temp() {
-      this.clientHeight = `${document.documentElement.clientHeight}`;
-    };
+    // window.onresize = function temp() {
+    //   this.clientHeight = `${document.documentElement.clientHeight}`;
+    // };
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
@@ -621,27 +621,12 @@ export default {
 
   created: function() {
     // console.log("开始");
-    debugger
     var _this = this;
-    // _this.userId = this.$defines.userId;
-    // if (_this.userId == "") {
-    //   let a = localStorage.getItem("userId")
-    // }
-    // localStorage.setItem("userId", _this.userId)
-    // this.$defines.setUserId(_this.userId)
-    
-
-    // _this.userName = this.$defines.userName;
-    // _this.isAdministrator = this.$defines.isAdministrator;
-    // _this.company_id = this.$defines.companyId;
-    // _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.userId = localStorage.getItem("userId")
     _this.userName = localStorage.getItem("userName")
     _this.isAdministrator = localStorage.getItem("isAdministrator")
     _this.company_id = localStorage.getItem("company_id")
     _this.serverPublicKey = localStorage.getItem("serverPublicKey")
-
-
     _this.appPrivateKey = this.getPrivatekey();
     this.getLocations();
   },
