@@ -149,6 +149,7 @@ export default {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
       this.totalHeight = this.$refs.outsignpage.offsetHeight;
+      debugger
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }

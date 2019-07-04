@@ -18,7 +18,7 @@
         <span style="font-size: 20px;">开始时间：</span>
         <div
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 22px"
-          @click="showDatePicker(6, 5)"
+          @click="showDatePicker(6, 3)"
         >{{startTime}}</div>
         <!-- <span style="border-radius: 5px;text-align:left;height:40px;width:60px;border: 1px solid rgb(83, 83, 83)" @click="showDatePicker(6, 5)" >{{startTime}}</span> -->
       </div>
@@ -26,7 +26,7 @@
         <span style="font-size: 20px;">结束时间：</span>
         <div
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 22px"
-          @click="showDatePicker(7, 5)"
+          @click="showDatePicker(7, 3)"
         >{{endTime}}</div>
         <!-- <span style="border-radius: 5px;text-align:left;height:20px;width:60px;border: 1px solid rgb(83, 83, 83)" @click="showDatePicker(7, 5)" >{{endTime}}</span> -->
       </div>

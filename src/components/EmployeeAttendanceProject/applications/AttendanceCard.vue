@@ -1,5 +1,14 @@
 <template>
   <div class="attendanceCard" ref="attendanceCard">
+    <div style="height:20px">
+      
+    </div>
+    <div type="primary" round class="lookRecords" @click="lookRecords">
+       <p>补卡记录</p>
+        <img class="iconRecord" src="../../../assets/littleimg/jilu.png" alt />
+        
+      </div>
+     
     <div class="top">
       <div type="primary" round class="dateSelect" @click="dayBefore">
         <img class="arrowIcon" src="../../../assets/littleimg/left.png" alt />
@@ -181,6 +190,15 @@ export default {
     goBack() {
       this.$router.push({
         path: "/application",
+        query: {
+          pagename: "attendanceCard",
+        }
+      });
+    },
+    //查看记录
+    lookRecords(){
+      this.$router.push({
+        path: "/fieldRecord",
         query: {
           pagename: "attendanceCard",
         }
@@ -603,5 +621,21 @@ export default {
   margin-top: 20px;
   width: 20px;
   height: 20px;
+}
+.lookRecords{
+  font-size: 18px;
+  border-radius: 15px;
+  background-color: rgb(18, 31, 214);
+  padding: 10px;
+  margin-left: 10px;
+  display: flex;
+  width: 100px;
+  color:antiquewhite;
+  /* float: right; */
+
+}
+.iconRecord{
+  width: 25px;
+  height: 25px;
 }
 </style>

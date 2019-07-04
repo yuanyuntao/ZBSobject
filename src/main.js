@@ -46,7 +46,8 @@ import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applicat
 import OutRequestpage from "./components/EmployeeAttendanceProject/applications/outRequestpage"
 import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/travelRequestpage"
 import AttendanceCard from "./components/EmployeeAttendanceProject/applications/attendanceCard"
-
+import FieldRecord from "./components/EmployeeAttendanceProject/applications/fieldRecord"
+import RecordInformation from "./components/EmployeeAttendanceProject/applications/recordInformation"
 
 //management
 import Management from "./components/EmployeeAttendanceProject/management"
@@ -177,7 +178,9 @@ const router = new VueRouter({
     { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
     { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
     { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
-    
+    { path: "/fieldRecord", component: FieldRecord, meta: { title: '补卡记录' } },
+    { path: "/recordInformation", component: RecordInformation, meta: { title: '记录详情' } },
+
     //管理
     { path: "/management", component: Management, meta: { title: '管理' } },
     { path: "/punchInDetails", component: PunchInDetails, meta: { title: '外勤审批' } },

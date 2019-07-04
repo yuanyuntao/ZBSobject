@@ -111,6 +111,7 @@
       <img class="out_attendance" src="../../../assets/littleimg/add_out_attendance.png" alt>
       <span style="vertical-align: middle;">外勤打卡</span>
     </div>
+    <div style="height:10px"></div>
 
     <div id="allmap" class="allmap"></div>
   </div>
@@ -482,6 +483,7 @@ export default {
         })
         .then(function(response) {
           if (response.data.code == 1001) {
+            alert("1")
             location.reload();
             alert("签退成功！");
           } else {
@@ -494,19 +496,10 @@ export default {
      * 外勤
      */
     outSign() {
+      debugger
       var _this = this;
-      // this.$router.push({
-      //   path: "/outsignpage",
-      //   query: {
-      //     pagename: "signpage",
-      //     address: _this.attendance_address,
-      //     defaultparam: 1,
-      //     type: 0,
-      //     attendance_longitude: this.attendance_longitude,
-      //     attendance_latitude: this.attendance_latitude,
-      //   }
-      // });
-      if (_this.ifInOk && _this.ifOutOk) {
+      
+      if (_this.isIn && _this.isOut) {
         this.$router.push({
         path: "/Outsignpage",
         query: {
@@ -518,7 +511,7 @@ export default {
           attendance_latitude: this.attendance_latitude,
         }
       });
-      }else if (_this.ifInOk && !_this.ifOutOk) {
+      }else if (_this.isIn && !_this.isOut) {
         this.$router.push({
         path: "/Outsignpage",
         query: {
@@ -531,7 +524,7 @@ export default {
           attendance_latitude: this.attendance_latitude,
         }
       });
-      }else if (!_this.ifInOk && _this.ifOutOk) {
+      }else if (!_this.isIn && _this.isOut) {
         this.$router.push({
         path: "/Outsignpage",
         query: {
@@ -544,8 +537,18 @@ export default {
           attendance_latitude: this.attendance_latitude,
         }
       });
-      }else{
-        return
+      }else if(!_this.isIn && !_this.isOut) {
+        this.$router.push({
+        path: "/outsignpage",
+        query: {
+          pagename: "signpage",
+          address: _this.attendance_address,
+          defaultparam: 1,
+          type: 0,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+        }
+      });
       }
     },
     /**
@@ -596,6 +599,13 @@ export default {
     // window.onresize = function temp() {
     //   this.clientHeight = `${document.documentElement.clientHeight}`;
     // };
+    //  this.changeFixed(this.clientHeight)
+     this.totalHeight = this.$refs.sign_page.offsetHeight
+     if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
+      this.changeFixed(this.clientHeight);
+    debugger
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
@@ -606,12 +616,13 @@ export default {
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
-     clientHeight: function() {
+     totalHeight: function() {
       this.totalHeight = this.$refs.sign_page.offsetHeight
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20
       }
       this.changeFixed(this.clientHeight);
+      
     }
   },
 
