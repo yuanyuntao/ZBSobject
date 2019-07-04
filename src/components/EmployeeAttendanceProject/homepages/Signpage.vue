@@ -495,62 +495,58 @@ export default {
      */
     outSign() {
       var _this = this;
-      this.$router.push({
-        path: "/outsignpage",
+      // this.$router.push({
+      //   path: "/outsignpage",
+      //   query: {
+      //     pagename: "signpage",
+      //     address: _this.attendance_address,
+      //     defaultparam: 1,
+      //     type: 0,
+      //     attendance_longitude: this.attendance_longitude,
+      //     attendance_latitude: this.attendance_latitude,
+      //   }
+      // });
+      if (_this.ifInOk && _this.ifOutOk) {
+        this.$router.push({
+        path: "/Outsignpage",
         query: {
           pagename: "signpage",
+          defaultparam:1,
+          type:0,
           address: _this.attendance_address,
-          defaultparam: 1,
-          type: 0,
           attendance_longitude: this.attendance_longitude,
           attendance_latitude: this.attendance_latitude,
         }
       });
-      // if (_this.ifInOk && _this.ifOutOk) {
-      //   this.$router.push({
-      //   path: "/Outsignpage",
-      //   query: {
-      //     userId: _this.userId,
-      //     isAdministrator: _this.isAdministrator,
-      //     userName: _this.userName,
-      //     company_id: _this.company_id,
-      //     address:_this.address,
-      //     defaultparam:1,
-      //     type:0,
-      // serverPublicKey: this.serverPublicKey
-      //   }
-      // });
-      // }else if (_this.ifInOk && !_this.ifOutOk) {
-      //   this.$router.push({
-      //   path: "/Outsignpage",
-      //   query: {
-      //     userId: _this.userId,
-      //     isAdministrator: _this.isAdministrator,
-      //     userName: _this.userName,
-      //     company_id: _this.company_id,
-      //     address:_this.address,
-      //     defaultparam:1,
-      //     type:1,
-      // serverPublicKey: this.serverPublicKey
-      //   }
-      // });
-      // }else if (!_this.ifInOk && _this.ifOutOk) {
-      //   this.$router.push({
-      //   path: "/Outsignpage",
-      //   query: {
-      //     userId: _this.userId,
-      //     isAdministrator: _this.isAdministrator,
-      //     userName: _this.userName,
-      //     company_id: _this.company_id,
-      //     address:_this.address,
-      //     defaultparam:2,
-      //     type:2,
-      // serverPublicKey: this.serverPublicKey
-      //   }
-      // });
-      // }else{
-      //   return
-      // }
+      }else if (_this.ifInOk && !_this.ifOutOk) {
+        this.$router.push({
+        path: "/Outsignpage",
+        query: {
+          pagename: "signpage",
+          defaultparam:1,
+          type:1,
+
+          address: _this.attendance_address,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+        }
+      });
+      }else if (!_this.ifInOk && _this.ifOutOk) {
+        this.$router.push({
+        path: "/Outsignpage",
+        query: {
+          pagename: "signpage",
+          defaultparam:2,
+          type:2,
+
+          address: _this.attendance_address,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude,
+        }
+      });
+      }else{
+        return
+      }
     },
     /**
      * 获取接口json数据

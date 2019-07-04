@@ -3,10 +3,10 @@
 // import router from './router'
 // import VueParticles from 'vue-particles'
 // import AMap from 'vue-amap'
-// import ListTest from "./components/listTest"
+import FaceDetection from "./components/faceDetection"
 // Vue.use(VueParticles)
 // Vue.use(AMap)
-//{ path: "/listTest", component: ListTest , meta: { title: '测试'} },
+
 
 
 
@@ -45,9 +45,16 @@ import LeaveRequestpage from "./components/EmployeeAttendanceProject/application
 import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/overtimeRequestpage"
 import OutRequestpage from "./components/EmployeeAttendanceProject/applications/outRequestpage"
 import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/travelRequestpage"
+import AttendanceCard from "./components/EmployeeAttendanceProject/applications/attendanceCard"
+
 
 //management
 import Management from "./components/EmployeeAttendanceProject/management"
+import PunchInDetails from "./components/EmployeeAttendanceProject/managements/punchInDetails"
+import Screening from "./components/EmployeeAttendanceProject/managements/screening"
+import FieldApproval from "./components/EmployeeAttendanceProject/managements/fieldApproval"
+
+
 
 //dynamic
 import Dynamic from "./components/EmployeeAttendanceProject/dynamic"
@@ -65,6 +72,8 @@ Vue.prototype.$jsEncrypt = JsEncrypt
 import defines from './components/js/Parameters.js'
 Vue.prototype.$defines = defines
 
+//滑动测试
+import Refersh from './components/TestProject/refersh'
 
 // Vue.prototype.$RSA = Jsrsasign
 
@@ -167,9 +176,13 @@ const router = new VueRouter({
     { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
     { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
     { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
-
+    { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
+    
     //管理
     { path: "/management", component: Management, meta: { title: '管理' } },
+    { path: "/punchInDetails", component: PunchInDetails, meta: { title: '外勤审批' } },
+    { path: "/screening", component: Screening, meta: { title: '筛选条件' } },
+    { path: "/fieldApproval", component: FieldApproval, meta: { title: '审批详情' } },
 
     //动态
     { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
@@ -181,6 +194,9 @@ const router = new VueRouter({
 
 
     //测试用
+    { path: "/refersh", component: Refersh , meta: { title: '人脸识别'} },
+
+    
 
     // { path: "/simpleindex", component: Simpleindex ,meta: { title: '日历测试2'} },
     // { path: "/listTest", component: ListTest , meta: { title: '测试用'} },
@@ -232,8 +248,8 @@ Vue.prototype.getHeaderAndBody = function (contentData,serverPublicKey) {
 	let AESKey = getRandom(32);
 	let contentDataByKey = encrypt(contentData, AESKey, iv);
 	let appPublicKey = this.getPublicKey();
-	let appEncryptedKey = this.RSAencrypt(AESKey, this.serverPublicKey);
-	let appSignature = this.getSignsig(contentData, this.appPrivateKey);
+	let appEncryptedKey = this.RSAencrypt(AESKey, serverPublicKey);
+	let appSignature = this.getSignsig(contentData, this.getPrivatekey());
 	let returnData = {
 		appEncryptedKey: appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
         appSignature: appSignature, //APP使用RSA密钥对请求体的签名
@@ -268,12 +284,14 @@ Vue.prototype.getIV = function () {
 
 
 Vue.prototype.getServerPublicKey = function () {
+  // alert("1")
   return new Promise((resolve, reject) => {
     let url =
       "http://" +
       this.getSERVER_HOST_MAIN() + ":" +
       this.getSERVER_PORT_MAIN() + "/" +
       this.getPROJECT_MAIN() + "/user/rsaPublicKey.do"
+      // alert(url)
       // this.$ajax.get(
     // // this.$http
     // //   .get(
@@ -298,6 +316,7 @@ Vue.prototype.getServerPublicKey = function () {
       
     )
       .then(function (response) {
+        // alert("2")
         resolve(response.data.data.rsaPublicKey);
       }).catch(async (err) => {
         reject(err);
@@ -334,6 +353,17 @@ Vue.prototype.getTIME = function (time, type) {
   var seconds =
     date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
   var week = "星期" + "日一二三四五六".charAt(date.getDay());
+  var date2 = new Date(date);
+  date2.setDate(date.getDate()-7);
+  var year2 = date2.getFullYear();
+  /* 在日期格式中，月份是从0开始的，因此要加0
+   * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+   * */
+  var month2 =
+  date2.getMonth() + 1 < 10
+      ? "0" + (date2.getMonth() + 1)
+      : date2.getMonth() + 1;
+  var day2 = date2.getDate() < 10 ? "0" + date2.getDate() : date2.getDate();
   // 拼接
   if (type == 1) {
     return year + "年" + month + "月" + day + "日" + "  " + week;
@@ -347,6 +377,10 @@ Vue.prototype.getTIME = function (time, type) {
     return year + "-" + month + "-" + day + " " + "  " + week + "   " + hours + ":" + minutes + ":" + seconds
   } else if (type == 6) {
     return year + "年" + month + "月" + day + "日 " + hours + ":" + minutes + ":" + seconds
+  } else if (type == 7) {
+    return year2 + "-" + month2 + "-" + day2
+  } else if (type == 8) {
+    return year + "年" + month + "月" + day + "日"
   }
 }
 

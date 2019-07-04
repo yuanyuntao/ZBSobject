@@ -132,13 +132,16 @@
             <span>员工名片</span>
           </div>
         </div>
-        <div class="iconNone">
-          <span></span>
+        <div class="icon" style="border-bottom: 1px solid #eee;" @click="changePage('/punchInDetails')">
+          <span>
+            <img class="imgs" src="../../assets/usedimg/kaoqinbuka.png">
+          </span>
           <br>
           <div style="padding-bottom:20px;">
-            <span></span>
+            <span>外勤审批</span>
           </div>
         </div>
+
         <div class="iconNone">
           <span></span>
           <br>
@@ -172,9 +175,6 @@ export default {
         path: "/homepage",
         query: {
           pagename: "application",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName
         }
       });
     },
@@ -184,9 +184,6 @@ export default {
         path: page,
         query: {
           pagename: "application",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName
         }
       });
     },
@@ -224,10 +221,9 @@ export default {
   },
   created: function() {
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    // console.log("用户名" + _this.userName);
+    _this.userId = localStorage.getItem("userId");
+    _this.userName = localStorage.getItem("userName");
+    _this.isAdministrator = localStorage.getItem("isAdministrator");
   }
 };
 </script>

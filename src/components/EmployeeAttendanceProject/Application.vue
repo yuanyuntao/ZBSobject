@@ -57,7 +57,7 @@
           <span>出差申请</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/')">
+        <div class="icon" @click="changePage('/attendanceCard')">
           <span>
             <img class="imgs" src="../../assets/usedimg/kaoqinbuka.png">
           </span>

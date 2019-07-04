@@ -75,7 +75,7 @@ export default {
     var _this = this;
     _this.appPrivateKey = this.getPrivatekey();
 
-    this.getServerPublicKey().then(function(response) {
+    _this.getServerPublicKey().then(function(response) {
       _this.serverPublicKey = response;
     });
   },
@@ -182,13 +182,10 @@ export default {
         })
         .catch(reason => {
           console.log("reason" + reason);
+          alert("错误,请稍后再试！");
           this.isBtnLoadingText = "登录"
           return
         });
-
-      // this.$router.push("/loginsuccess");
-      // console.log("pressed.....");
-      // this.isBtnLoading = false;
     }
   }
 };

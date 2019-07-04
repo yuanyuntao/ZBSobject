@@ -351,6 +351,14 @@ export default {
       _this.leaveHours = this.$route.query.leaveHours;
       _this.outAddress = this.$route.query.outAddress;
     }
+    else if (
+      _this.from == "attendanceCard" 
+    ) {
+      _this.outReasons = this.$route.query.outReasons;
+      _this.defaultparam = this.$route.query.defaultparam;
+      _this.imgs = this.$route.query.imgs;
+
+    }
     this.selectednum = _this.choseList.length;
 
     
@@ -368,6 +376,9 @@ export default {
       var authorityType = ""
       if (this.from == "outsignpage") {
         authorityType = "外勤审批"
+      }
+      if (this.from == "attendanceCard") {
+        authorityType = "补卡审批"
       }
 
       var content = {

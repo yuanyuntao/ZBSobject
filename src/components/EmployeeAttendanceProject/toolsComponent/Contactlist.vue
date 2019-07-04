@@ -56,7 +56,6 @@ export default {
   methods: {
     gotoPersonalInfor: function(i) {
       //点击跳转对应的页面
-      debugger
       this.$router.push({
               path: "/personal_inforpage",
 

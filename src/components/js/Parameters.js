@@ -6,6 +6,9 @@ export default {
 	serverPublicKey: "",
 	fileData:[],
 	imges:[],
+	attendanceCardimgs: [], //上传的图片列表
+	attendanceCardfileData: [],
+	select_time:"",
 	setUserId(newUserId) {
 		this.userId = newUserId
     },
@@ -26,7 +29,18 @@ export default {
 	},
 	setImges(newImges) {
 		this.imges = newImges
-    },
+	},
+	setAttendanceCardImges(newImges){
+		this.attendanceCardimgs = newImges
+
+	},
+	setattendanceCardFileData(newFileData){
+		this.attendanceCardfileData = newFileData
+
+	},
+	setSelect_time(newTime){
+        this.select_time = newTime
+	}
     
     
 }

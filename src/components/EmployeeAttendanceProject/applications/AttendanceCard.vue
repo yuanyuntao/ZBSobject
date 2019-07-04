@@ -1,19 +1,34 @@
 <template>
-  <div class="outsignpage" ref="outsignpage">
-    <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 25px;letter-spacing:5px"></div>
+  <div class="attendanceCard" ref="attendanceCard">
+    <div class="top">
+      <div type="primary" round class="dateSelect" @click="dayBefore">
+        <img class="arrowIcon" src="../../../assets/littleimg/left.png" alt />
+        <p>前一天</p>
+      </div>
+      <div type="primary" round class="selectedData" @click="showDatePicker(6, 3)">{{selectTime}}</div>
+
+      <div type="primary" round class="dateSelect" @click="dayAfter">
+        <p style="margin-left:10px">后一天</p>
+
+        <img class="arrowIcon" src="../../../assets/littleimg/right.png" alt />
+      </div>
+    </div>
     <div
       type="primary"
       round
-      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
+      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;display:flex;"
     >
-      <span style="font-size: 20px;font-weight: bold;">考勤详情</span>
-      <br>
-      <div style="padding-top:10px;text-align:left">
-        <span style="font-size: 15px;color:#91918c">时间：</span>
-        <span style="font-size: 15px;font-weight: bold;">{{this.getTIME(nowtime,6)}}</span>
+      <div>
+        <span class="words">考勤记录</span>
       </div>
-      <br>
-      <span style="font-size: 15px;color:#91918c">地点：{{address}}</span>
+    
+
+    <div style>
+      <div v-for="i in cardRecord" :key="i.id" style="margin-left:40px;padding:5px;border-bottom: 1px solid rgb(240, 240, 240);">
+        {{i.attendance_type=1?"签到":"签退"}}：{{(i.attendance_time).substr(11,5)}} &ensp; {{i.result}}
+        <div class="cardRecord"></div>
+      </div>
+    </div>
     </div>
 
     <div
@@ -22,51 +37,27 @@
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;display: flex;"
     >
       <div style=" width: 60%;text-align: left">
-        <span style="font-size: 20px;font-weight: bold;">考勤类型</span>
+        <span class="words">补卡类型</span>
       </div>
       <div style>
-        <template v-if="attendanceType==2">
           <input
             type="radio"
             name="radios"
             value="1"
             v-model="defaultparam"
             style="vertical-align: middle"
-            disabled
-          >
-        </template>
-        <template v-else>
-          <input
-            type="radio"
-            name="radios"
-            value="1"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          >
-        </template>
+          />
 
         <span style="vertical-align: middle">签到</span>
       </div>
       <div style="padding-left:10px">
-        <template v-if="attendanceType==1">
           <input
             type="radio"
             name="radios"
             value="2"
             v-model="defaultparam"
             style="vertical-align: middle"
-            disabled
-          >
-        </template>
-        <template v-else>
-          <input
-            type="radio"
-            name="radios"
-            value="2"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          >
-        </template>
+          />
         <span style="vertical-align: middle">签退</span>
       </div>
     </div>
@@ -76,17 +67,17 @@
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
     >
       <div>
-        <span style="font-size: 20px;font-weight: bold;">外出事由</span>
+        <span class="words">补卡信息</span>
         <img
           class="imge"
           style="float: right; width: 20px;height: 20px;padding-right:20px"
           src="../../../assets/littleimg/xiangji.png"
           alt
           @click="imgClick()"
-        >
+        />
       </div>
       <div>
-        <textarea type="text" class="outReasons" placeholder="请输入外出事由" v-model="outReasons"></textarea>
+        <textarea type="text" class="outReasons" placeholder="请输入补卡事由" v-model="outReasons"></textarea>
       </div>
       <div class="photos" v-show="imgs.length > 0">
         <!--照片区域-->
@@ -103,8 +94,8 @@
                 width: 20px;
                 height: 20px;"
             v-on:click="deleteImg(index)"
-          >
-          <img :src="urls" style="width: 80px;height: 80px;">
+          />
+          <img :src="urls" style="width: 80px;height: 80px;" />
         </div>
         <input
           style="float: left;  display: none;"
@@ -112,7 +103,7 @@
           id="uploadFile"
           accept="image/*"
           v-on:change="readLocalFile()"
-        >
+        />
       </div>
     </div>
 
@@ -122,14 +113,14 @@
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
     >
       <div>
-        <span style="font-size: 18px;font-weight: bold;">选择审批人</span>
+        <span class="words">选择审批人</span>
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px;"
           src="../../../assets/littleimg/jiahao.png"
           alt
           @click="selectApprover"
-        >
+        />
       </div>
       <div class="showApproveAndCC" v-show="choseListApprove.length>0">
         <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
@@ -143,42 +134,19 @@
             v-show="index != (choseListApprove.length-1) "
             src="../../../assets/littleimg/jiantou.png"
             alt
-          >
+          />
         </div>
       </div>
     </div>
 
-    <div
-      type="primary"
-      round
-      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
-    >
-      <div>
-        <span style="font-size: 18px;font-weight: bold;">选择抄送人</span>
-        <img
-          class="imge"
-          style="float: right; width: 28px;height: 28px;padding-right:20px"
-          src="../../../assets/littleimg/jiahao.png"
-          alt
-          @click="selectCC"
-        >
-      </div>
-      <div class="showApproveAndCC" v-show="choseListCC.length > 0">
-        <div v-for="item in choseListCC" :key="item.id" style="display:flex;padding-right:15px">
-          <div>
-            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
-            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
-          </div>
-        </div>
-      </div>
-    </div>
     <button class="sure" @click="sure" type="primary" round>确定</button>
   </div>
 </template>
 
 <script>
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
-  name: "outsignpage",
+  name: "attendanceCard",
   components: {},
   data() {
     return {
@@ -187,11 +155,14 @@ export default {
       userName: "",
       company_id: "",
       serverPublicKey: "",
-      attendance_longitude: "",
-      attendance_latitude: "",
+
+      cardRecord: [], //考勤记录
+      select_time:"",
 
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
+
+      selectTime: "",
       nowtime: new Date(), //现在时间
       address: "", //打卡地点
       defaultparam: 1, //默认选择签到类型
@@ -201,8 +172,6 @@ export default {
       canOut: true, //是否可以签到
       choseListApprove: [], //审批人
       sheetListsApprove: [], //审批人选择列表
-      choseListCC: [], //抄送人
-      sheetListsCC: [], //抄送人选择列表
       imgs: [], //上传的图片列表
       fileData: []
     };
@@ -211,19 +180,99 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/signpage",
+        path: "/application",
         query: {
-          pagename: "outsignpage",
+          pagename: "attendanceCard",
         }
       });
+    },
+    dayBefore(){
+        this.selectTime = this.getDay(this.select_time,-1)
+        this.getRecordData(this)
+
+
+    },
+    dayAfter(){
+         this.selectTime = this.getDay(this.select_time,1)
+         this.getRecordData(this)
+
+    },
+    getDay(date,num){
+        var date2 = new Date(date);
+        date2.setDate(date.getDate()+num);
+        this.select_time = date2
+        this.$defines.setSelect_time(date2)
+        var year = date2.getFullYear();
+        var month = date2.getMonth() + 1 < 10 ? "0" + (date2.getMonth() + 1) : date2.getMonth() + 1;
+        var day = date2.getDate() < 10 ? "0" + date2.getDate() : date2.getDate();
+        return year + "年" + month + "月" + day + "日"
+    },
+    getRecordData(_this){
+        var selectedTime = _this.selectTime
+      .replace("年", "-")
+      .replace("月", "-")
+      .replace("日", "");
+
+    var content = {
+      userId: localStorage.getItem("userId"),
+      companyId: localStorage.getItem("company_id"),
+      startTime: selectedTime, //开始时间
+      endTime: selectedTime //结束时间
+    };
+    var contentData = JSON.stringify(content);
+    var headerAndBody = this.getHeaderAndBody(
+      contentData,
+      localStorage.getItem("serverPublicKey")
+    );
+
+    let url =
+      "http://" +
+      this.getSERVER_HOST_MAIN() +
+      ":" +
+      this.getSERVER_PORT_MAIN() +
+      "/" +
+      this.getPROJECT_MAIN() +
+      "/user/searchAttendanceRecord.do";
+    this.$ajax
+      .post(url, headerAndBody.contentDataByKey, {
+        headers: {
+          appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+          appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+          appPublicKey: headerAndBody.appPublicKey,
+          serverPublicKey: headerAndBody.serverPublicKey
+        }
+      })
+      .then(response => {
+        var returnKey = this.RSAdecrypt(
+          response.headers.serverencryptedkey,
+          this.getPrivatekey()
+        );
+        let returnResponseData = response.data;
+        let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+        var returnData = decrypt(encrypt, returnKey, this.getIV());
+        // console.log("returnData....." + returnData);
+
+        var returnData = JSON.parse(returnData);
+
+        if (returnData.code == 1001) {
+          this.cardRecord = returnData.data.attendanceRecord;
+        } else if (returnData.code == 1014) {
+          alert("网络有问题！");
+          return;
+        } else {
+          alert("网络有问题！");
+          return;
+        }
+      });
+
     },
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
       this.fileData.splice(index, 1);
 
-      this.$defines.setImges(this.imgs);
-      this.$defines.setFileData(this.fileData);
+      this.$defines.setAttendanceCardImges(this.imgs);
+      this.$defines.setattendanceCardFileData(this.fileData);
     },
     //图片click
     imgClick: function() {
@@ -260,41 +309,21 @@ export default {
       this.$router.push({
         path: "/selectApproverpage",
         query: {
-          pagename: "outsignpage",
+          pagename: "attendanceCard",
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
-          choseListCC: this.choseListCC,
-          sheetListsCC: this.sheetListsCC,
-          address: this.address,
           outReasons: this.outReasons,
-          defaultparam: this.defaultparam,
-          attendance_longitude: this.attendance_longitude,
-          attendance_latitude: this.attendance_latitude
-        }
-      });
-    },
-    selectCC: function() {
-      //点击跳转对应的页面
-      this.$router.push({
-        path: "/selectCCpage",
-        query: {
-          pagename: "outsignpage",
-          choseListCC: this.choseListCC,
-          sheetListsCC: this.sheetListsCC,
-          choseListApprove: this.choseListApprove,
-          sheetListsApprove: this.sheetListsApprove,
-          address: this.address,
-          outReasons: this.outReasons,
-          defaultparam: this.defaultparam,
-          attendance_longitude: this.attendance_longitude,
-          attendance_latitude: this.attendance_latitude
+          defaultparam: this.defaultparam
         }
       });
     },
 
     getAttendanceRecord() {
       var choseListApproveData = [];
-      var choseListCCData = [];
+      if (this.defaultparam!="1" && this.defaultparam!="2") {
+          alert("请选择补卡类型！");
+          return
+      }
       if (this.choseListApprove.length == 0) {
         alert("审批人不能为空！");
         return;
@@ -303,47 +332,23 @@ export default {
           choseListApproveData.push(this.choseListApprove[i].userId.toString());
         }
       }
-      if (this.choseListCC.length > 0) {
-        for (let i = 0; i < this.choseListCC.length; i++) {
-          choseListCCData.push(this.choseListCC[i].userId.toString());
-        }
-      }
       let signWords = {
-        user_id: parseInt(this.userId),
-        user_name: this.userName,
+        user_id: localStorage.getItem("userId"),
         attendance_type: this.defaultparam,
-        attendance_longitude: parseFloat(this.attendance_longitude),
-        attendance_latitude: parseFloat(this.attendance_latitude),
-        attendance_address: this.address,
-        attendance_time: this.getTIME(this.nowtime, 3),
-        out_attendance: 1,
+        remarks:this.outReasons, 
+        attendance_type:this.defaultparam,
+        appeal_time: this.selectTime.replace("年", "-").replace("月", "-").replace("日", ""),
+        appeal_attendance: 1,
         audit_user: choseListApproveData,
-        copy_user: choseListCCData
       };
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       for (let i = 0; i < this.$defines.fileData.length; i++) {
-        // let file = this.imgs[i].file
         let file = this.$defines.fileData[i].files[0];
-        // console.log(file.size())
         fileFormData.append("picture", file, file.name);
       }
-      // var _this = this
-      //   for (let i = 0; i < _this.fileData.length; i++) {
-      //       let file = _this.fileData[i]
-      //       _this.fileFormData.append("picture", file,file.name);
-      //   }
-      // debugger
       return fileFormData;
     },
-    //   dataURLtoBlob(dataurl) {
-    // 	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    //       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    // 	while(n--){
-    // 		u8arr[n] = bstr.charCodeAt(n);
-    // 	}
-    // 	return new Blob([u8arr], {type:mime});
-    // },
     sure() {
       var _this = this;
       var information = _this.getAttendanceRecord();
@@ -354,7 +359,7 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/addAttendanceRecord.do";
+        "/user/addAppealAttendanceRecord.do";
 
       _this.$ajax
         .post(url, information, {
@@ -364,18 +369,18 @@ export default {
           debugger;
           if (response.data.code == 1001) {
             if (_this.defaultparam == 1) {
-              alert("签到成功！");
+              alert("签到补卡成功！");
             } else if (_this.defaultparam == 2) {
-              alert("签退成功！");
+              alert("签退补卡成功！");
             } else {
               alert("错误！");
             }
             _this.goBack();
           } else {
             if (_this.defaultparam == 1) {
-              alert("签到失败，请检查网络！");
+              alert("签到补卡失败，请检查网络！");
             } else if (_this.defaultparam == 2) {
-              alert("签退失败，请检查网络！");
+              alert("签退补卡失败，请检查网络！");
             } else {
               alert("错误！");
             }
@@ -384,9 +389,75 @@ export default {
           }
         });
     },
+        showDatePicker(demo, type) {
+      var date = new Date();
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      var d = date.getDate();
+      var h = date.getHours();
+      var min = date.getMinutes();
+      this.time = this.showChinese
+        ? [y + "年", m + "月", d + "日", h + "时", min + "分"]
+        : [y * 1, m * 1, d * 1, h * 1, min * 1];
+      var dataObj = {};
+      if (demo === 6) {
+        this.minTime = [2019, 1, 1, 0, 0];
+      }
+      if (demo === 7) {
+        if (!this.resetTime[0]) return alert("请先选择开始时间！");
+        var resetTime = [];
+        if (this.showChinese) {
+          this.resetTime.forEach((item, index) => {
+            resetTime.push(item.substr(0, item.length - 1) * 1);
+          });
+        }
+        this.time = this.resetTime;
+        this.minTime = this.showChinese ? resetTime : this.resetTime;
+        this.getCurTime(this.minTime);
+      }
+      dataObj = {
+        type: type,
+        min: this.minTime,
+        max: this.maxTime,
+        showChinese: this.showChinese
+      };
+
+      let init = JSON.parse(JSON.stringify(this.time));
+      dataObj.value = init;
+      this.$datepicker(dataObj)
+        .then(e => {
+          var y = e[0];
+          
+          var m = e[1]< 10 ? "0" + e[1] : e[1];
+          var d = e[2]< 10 ? "0" + e[2] : e[2];
+          var h = e[3];
+          var mm = e[4];
+        //   this.years = e[0]
+        //   this.mounth = e[1]
+        //   this.days = e[2]
+          if (demo === 6) {
+            this.resetTime = e;
+            this.selectTime = dataObj.showChinese
+              ? y + m + d 
+              : y + "年" + m + "月" + d + "日" ;
+              var a=y + "-" + m + "-" + d;
+              this.select_time =  new Date(a);
+              this.$defines.setSelect_time(select_time)
+
+            this.endTime = "";
+          } else if (demo === 7) {
+            this.endTime = dataObj.showChinese
+              ? y + m + d + h + mm
+              : y + "年" + m + "月" + d + "日 " + h + "时" + mm + "分";
+          }
+        })
+        .catch(e => {
+          // console.log(e)
+        });
+    },
     changeFixed(clientHeight) {
       //动态修改样式
-      this.$refs.outsignpage.style.height = clientHeight + "px";
+      this.$refs.attendanceCard.style.height = clientHeight + "px";
     }
   },
   mounted() {
@@ -411,104 +482,44 @@ export default {
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
-      this.totalHeight = this.$refs.outsignpage.offsetHeight;
+      this.totalHeight = this.$refs.attendanceCard.offsetHeight;
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }
       this.changeFixed(this.clientHeight);
-    },
-    period(newVal) {
-      if (newVal < 0) {
-        this.period = "";
-      }
     }
   },
   created: function() {
     console.log("开始");
     var _this = this;
-    // _this.userId = this.$defines.userId;
-    // _this.userName = this.$defines.userName;
-    // _this.isAdministrator = this.$defines.isAdministrator;
-    // _this.company_id = this.$defines.companyId;
-    // _this.serverPublicKey = this.$defines.serverPublicKey;
-    _this.userId = localStorage.getItem("userId");
-    _this.userName = localStorage.getItem("userName");
-    _this.isAdministrator = localStorage.getItem("isAdministrator");
-    _this.company_id = localStorage.getItem("company_id");
-    _this.serverPublicKey = localStorage.getItem("serverPublicKey");
 
-    _this.fileData = this.$defines.fileData;
-    _this.imgs = this.$defines.imges;
-
-    _this.attendance_longitude = this.$route.query.attendance_longitude;
-    _this.attendance_latitude = this.$route.query.attendance_latitude;
-    _this.address = this.$route.query.address;
+    _this.fileData = this.$defines.attendanceCardfileData;
+    _this.imgs = this.$defines.attendanceCardimgs;
     _this.defaultparam = this.$route.query.defaultparam;
-    _this.attendanceType = this.$route.query.type;
 
-    if (
-      this.$route.query.pagename == "selectApproverpage" ||
-      this.$route.query.pagename == "selectCCpage"
-    ) {
+    if (this.$route.query.pagename == "selectApproverpage") {
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.outReasons = this.$route.query.outReasons;
+      _this.choseListApprove = this.$route.query.choseListApprove;
 
-      //将被选中的抄送人与审批人重合的删除
-      var choseListApproveTemporary = this.$route.query.choseListApprove;
-      var choseListCCTemporary = this.$route.query.choseListCC;
-      if (
-        choseListCCTemporary.length > 0 &&
-        choseListApproveTemporary.length > 0
-      ) {
-        for (let i = 0; i < choseListCCTemporary.length; i++) {
-          for (let j = 0; j < choseListApproveTemporary.length; j++) {
-            if (
-              choseListCCTemporary[i].userId ==
-              choseListApproveTemporary[j].userId
-            ) {
-              for (let k = 0; k < _this.sheetListsCC.length; k++) {
-                for (let q = 0; q < _this.sheetListsCC[k].users.length; q++) {
-                  if (
-                    choseListApproveTemporary[j].userId ==
-                    _this.sheetListsCC[k].users[q].user_id
-                  ) {
-                    _this.sheetListsCC[k].users[q].chose = false;
-                  }
-                }
-              }
-              alert(
-                choseListApproveTemporary[j].userName +
-                  " 是审批人，可以不用抄送了哦！"
-              );
-              choseListCCTemporary.splice(i, 1);
-            }
-            if (choseListCCTemporary.length == 0) {
-              break;
-            }
-          }
-        }
-      }
-      _this.choseListApprove = choseListApproveTemporary;
-      _this.choseListCC = choseListCCTemporary;
+
     }
-    // else if (this.$route.query.pagename == "selectCCpage") {
-
-    //   _this.choseListApprove = this.$route.query.choseListApprove;
-    //   _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-    //   _this.choseListCC = this.$route.query.choseListCC;
-    //   _this.sheetListsCC = this.$route.query.sheetListsCC;
-    //   _this.outReasons = this.$route.query.outReasons;
-    // }
+    _this.selectTime = this.getTIME(_this.nowtime, 8);
+    _this.getRecordData(_this)
+    if (this.$defines.select_time == "") {
+        this.$defines.setSelect_time(new Date())
+    }
+    _this.select_time = this.$defines.select_time;
+    
   }
 };
 </script>
 
 <style scoped>
-.outsignpage {
+.attendanceCard {
   width: 100%;
   height: 100%;
-  background-image: url("../../../assets/bigimg/bg_attendance.jpeg");
+  background-color: #e3e9e7;
   background-size: 100% 100%;
   background-attachment: fixed;
   /* padding:10px; */
@@ -527,7 +538,7 @@ export default {
   width: 55%;
   font-size: 28px;
   border-radius: 10px;
-  background: linear-gradient(to right, #45d4c1, #b1d1cd); /* 标准的语法 */
+  background-color: #37b897; /* 标准的语法 */
   filter: brightness(1.4);
 }
 .head_image {
@@ -553,6 +564,40 @@ export default {
   margin-top: 10px;
   text-align: center;
   overflow: auto;
+}
+.arrowIcon {
+  margin: 2px 0;
+  width: 25px;
+  height: 25px;
+}
+.words {
+  font-size: 18px;
+  font-weight: bold;
+}
+.dateSelect {
+  border-radius: 5px;
+  color: #000;
+  background-color: #fff;
+  padding: 10px 0;
+  margin: 10px 5px;
+  display: flex;
+  width: 25%;
+}
+.selectedData {
+  border-radius: 5px;
+  color: #000;
+  background-color: #fff;
+  padding: 10px 0;
+  margin: 10px 0;
+  letter-spacing: 0px;
+  width: 45%;
+}
+.top {
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  text-align: center;
 }
 .arrow {
   margin-top: 20px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="personal_inforpage">
+  <div class="personal_inforpage" ref="personal_inforpage">
     <!-- <div style="padding-top:10px;color:#fff;font-size: 25px;letter-spacing:5px">
       <span>联系人详情</span>
     </div> -->
@@ -96,6 +96,8 @@ export default {
       userName: "",
       isAdministrator: "",
       userId: "",
+
+      clientHeight:"",//显示器高度
     };
   },
   methods: {
@@ -116,8 +118,20 @@ export default {
               break;
           }
     },
+    changeFixed(clientHeight) {
+      //动态修改样式
+      this.$refs.personal_inforpage.style.height = clientHeight + "px";
+    }
   },
   mounted() {
+    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
+    // console.log(self);
+    window.onresize = function temp() {
+      this.clientHeight = `${document.documentElement.clientHeight}`;
+    };
+
+
+
     if (window.history && window.history.pushState) {   
       history.pushState(null, null, document.URL);    
       window.addEventListener('popstate', this.goBack, false);  
@@ -125,6 +139,16 @@ export default {
   },
   destroyed(){
   window.removeEventListener('popstate', this.goBack, false);
+},
+watch: {
+    // 如果 `clientHeight` 发生改变，这个函数就会运行
+    clientHeight: function() {
+      this.totalHeight = this.$refs.personal_inforpage.offsetHeight
+      if (this.totalHeight > this.clientHeight) {
+        this.clientHeight = this.totalHeight + 20
+      }
+      this.changeFixed(this.clientHeight);
+    },
 },
 
   created: function() {
