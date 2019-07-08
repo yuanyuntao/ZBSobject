@@ -1,14 +1,14 @@
 <template>
-  <div class="fieldApproval">
+  <div class="recordInformation">
     <div class="moduls">
       <div class="words">申请人</div>
       <div class="information">{{item.user_name}}</div>
     </div>
     <div class="moduls">
-      <div class="words">打卡类型</div>
+      <div class="words">补卡类型</div>
       <div class="information">{{item.type_name}}</div>
     </div>
-    <div class="moduls">
+    <!-- <div class="moduls">
       <div class="words">
         <p style=" margin: 10px 0px;">打卡地址</p>
       </div>
@@ -18,31 +18,35 @@
         <div><img class="dingwei" style="height:30px;width:30px" src="../../../assets/littleimg/dingwei.png"></div>
         
         </div>
+    </div> -->
+    <div class="moduls">
+      <div class="words">补卡日期</div>
+      <div class="information">{{item.appeal_time}}</div>
     </div>
     <div class="moduls">
-      <div class="words">打卡时间</div>
-      <div class="information">{{item.attendance_time}}</div>
-    </div>
-    <div class="moduls">
-      <div class="words">外出事由</div>
+      <div class="words">补卡事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
-          <div class="sheeImage" v-for="i in item.outAttendanceRecordPic" v-bind:key="i.id">
+          <div class="sheeImage" v-for="i in item.appealAttendanceRecordPic" v-bind:key="i.id">
             <img class="image" :src="getURL(i.url)">
           </div>
         </div>
       </div>
     </div>
     <div class="moduls">
+      <div class="words">申请时间</div>
+      <div class="information">{{item.attendance_time}}</div>
+    </div>
+    <div class="moduls">
       <div class="words">
         <p style=" margin: 25px 0px;">审批流程</p>
       </div>
       <div class="information">
-        <div v-for="i in item.outAttendanceInfoAuditRecord" :key="i.id">
+        <div v-for="i in item.appealAttendanceInfoAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-            <template v-if="i.audit_status==0">未审批</template>
+            <template v-if="i.audit_status==0">待审批</template>
             <template v-else-if="i.audit_status==1">审批中</template>
             <template v-else-if="i.audit_status==2">审批通过</template>
             <template v-else-if="i.audit_status==3">审批不通过</template>
@@ -56,78 +60,16 @@
     </div>
     <div class="moduls">
       <div class="words">审批结果</div>
-      
-
-      <div class="information" style="display: flex; text-align: right">
-        <template v-if="approved">
-        <div >
-          <input
-            type="radio"
-            name="radios"
-            value="2"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-            disabled
-          >
-          <span style="vertical-align: middle">同意</span>
-        </div>
-        <div style="padding-left:10px">
-          <input
-            type="radio"
-            name="radios"
-            value="3"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-            disabled
-          >
-          <span style="vertical-align: middle">拒绝</span>
-        </div>
-        </template>
-        <template v-else>
-          <div >
-          <input
-            type="radio"
-            name="radios"
-            value="2"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          >
-          <span style="vertical-align: middle">同意</span>
-        </div>
-        <div style="padding-left:10px">
-          <input
-            type="radio"
-            name="radios"
-            value="3"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          >
-          <span style="vertical-align: middle">拒绝</span>
-        </div>
-        </template>
-      </div>
+      <div class="information">{{item.result}}</div>
     </div>
-    <div class="moduls">
-      <div class="words">审批意见</div>
-      <div class="information">
-        <template v-if="approved">
-        <textarea type="text" class="Opinions" disabled v-model="opinions"></textarea>
-        </template>
-        <template v-else>
-        <textarea type="text" class="Opinions"  v-model="opinions"></textarea>
-        </template>
-      </div>
-    </div>
-    <div class="surediv" v-show="!approved">
-      <button class="sure" @click="sure" type="primary" round>确定</button>
-    </div>
+    
     
   </div>
 </template>
 <script>
-import { encrypt, decrypt } from "../../js/utils.js";
+import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "fieldApproval",
+  name: "recordInformation",
   components: {},
   data() {
     return {
@@ -142,9 +84,9 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/punchInDetails",
+        path: "/fieldRecord",
         query: {
-          pagename: "fieldApproval"
+          pagename: "recordInformation"
         }
       });
     },
@@ -202,7 +144,6 @@ export default {
           var returnData = decrypt(encrypt, returnKey, this.getIV());
 
           var returnData = JSON.parse(returnData);
-          debugger
 
           if (returnData.code == 1001) {
             alert("审批成功！")
@@ -234,13 +175,6 @@ export default {
     var _this = this;
     _this.item = this.$route.query.item;
     debugger
-    if (localStorage.getItem("approved")=="false") {
-      _this.approved = false;
-      
-    }else if(localStorage.getItem("approved")=="true"){
-      _this.approved = true;
-      _this.opinions = _this.item.audit_remarks
-    }
     
 
     // console.log("用户名" + _this.userName);
@@ -248,7 +182,7 @@ export default {
 };
 </script>
   <style scoped>
-.fieldApproval {
+.recordInformation {
   width: 100%;
   background-color: rgb(240, 240, 240);
   text-align: center;

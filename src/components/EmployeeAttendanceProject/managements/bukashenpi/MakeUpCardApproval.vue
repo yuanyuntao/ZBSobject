@@ -1,55 +1,39 @@
 <template>
-  <div class="fieldRecord" ref="fieldRecord">
-    <div style="height:5px">
+  <div class="makeUpCardApproval" ref="makeUpCardApproval">
+    <div class="attendance">
+      <div class="pendingTrial" ref="pendingTrial" type="primary" round @click="pendingTrial">
+        <span style="vertical-align:middle">待审批</span>
+      </div>
+      <div class="examined" ref="examined" type="primary" round @click="examined">
+        <span style="vertical-align:middle">已审批</span>
+      </div>
     </div>
-    
+    <div>
+      <p style="color:blue;text-decoration: underline" @click="gotoScreening">筛选</p>
+    </div>
     <div
       v-for="item in approvalList"
       v-bind:key="item.id"
       style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
-      @click="goRecordInformation(item)"
+      @click="outsignApproval(item)"
     >
-    <template v-if="item.result_id==7">
-    <img
-            src="../../../assets/littleimg/shenpitongguo.png"
-            style=" position: absolute;padding:5px;right:10px;
-                width: 60px;
-                height: 60px;"
-          >
-     </template>
-     <template v-else-if="item.result_id==8">
-    <img
-            src="../../../assets/littleimg/butongguo.png"
-            style=" position: absolute;padding:10px;right:10px;
-                width: 60px;
-                height: 60px;"
-          >
-     </template>
-     <template v-else-if="item.result_id==5">
-    <img
-            src="../../../assets/littleimg/zhengzaishenhe.png"
-            style=" position: absolute;padding:10px;right:10px;
-                width: 60px;
-                height: 52px;"
-          >
-     </template>
       <span style="font-size: 14px;font-weight: bold;">{{item.user_name}}</span>
+      <!-- appeal_time -->
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <span
-        style="font-size: 13px;color:#91918c;float:right"
+        style="font-size: 13px;color:#91918c;float:right;"
       >{{item.type_name}}</span>
       <br>
       <span style="font-size: 14px;">{{item.remarks}}</span>
       <br>
-      <span style="font-size: 13px;color:#91918c">{{item.attendance_time.substr(0, 10)}}</span>
+      <span style="font-size: 13px;color:#91918c">{{item.attendance_time}}</span>
     </div>
-    <div v-if="approvalList.length==0">没有查到相关记录</div>
   </div>
 </template>   
 <script>
-import { encrypt, decrypt } from "../../js/utils.js";
+import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "fieldRecord",
+  name: "makeUpCardApproval",
   components: {},
   data() {
     return {
@@ -60,7 +44,7 @@ export default {
       serverPublicKey: "",
 
       bNum: 0, //从第几条开始
-      rows: 50, //查询条数
+      rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
       applicatUserId: "",
@@ -77,40 +61,68 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/attendanceCard",
+        path: "/management",
         query: {
-          pagename: "fieldRecord"
+          pagename: "makeUpCardApproval"
         }
       });
     },
-    getDay(date,num){
-        var date2 = new Date(date);
-        date2.setDate(date.getDate()+num);
-        this.select_time = date2
-        this.$defines.setSelect_time(date2)
-        var year = date2.getFullYear();
-        var month = date2.getMonth() + 1 < 10 ? "0" + (date2.getMonth() + 1) : date2.getMonth() + 1;
-        var day = date2.getDate() < 10 ? "0" + date2.getDate() : date2.getDate();
-        return year + "-" + month + "-" + day
+    //待审批
+    pendingTrial() {
+      debugger
+      if (localStorage.getItem("mackUpCardapproved") == "false") {
+        return;
+      } else {
+        this.$refs.pendingTrial.style.background = "rgb(58, 190, 98)";
+        this.$refs.pendingTrial.style.color = "#eee";
+        this.$refs.pendingTrial.style.border = "1px solid #fff";
+
+        this.$refs.examined.style.background = "#eee";
+        this.$refs.examined.style.color = "rgb(58, 190, 98)";
+        this.$refs.examined.style.border = "1px solid rgb(58, 190, 98)";
+        localStorage.setItem("mackUpCardapproved", false);
+        this.getListData();
+      }
+    },
+    //已审批
+    examined() {
+      if (localStorage.getItem("mackUpCardapproved") == "true") {
+        return;
+      } else {
+        this.$refs.examined.style.background = "rgb(58, 190, 98)";
+        this.$refs.examined.style.color = "#eee";
+        this.$refs.examined.style.border = "1px solid #fff";
+
+        this.$refs.pendingTrial.style.background = "#eee";
+        this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
+        this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
+        localStorage.setItem("mackUpCardapproved", true);
+        this.getListData();
+      }
     },
     gotoScreening() {
       this.$router.push({
-        path: "/screening",
+        path: "/makeUpCardScreening",
         query: {
-          pagename: "punchInDetails",
+          pagename: "makeUpCardApproval",
 
         }
       });
     },
     getListData() {
 
+      if (localStorage.getItem("mackUpCardapproved") == null) {
+        localStorage.setItem("mackUpCardapproved", false);
+      }
+
       var content = {
         userId: this.userId,
         bNum: 0, //从第几条开始
         rows: 20, //查询条数
-        bt: this.getDay(this.nowtime,-30), //开始时间
-        et: this.getTIME(this.nowtime,4), //结束时间
-        
+        bt: localStorage.getItem("mackUpCardstartTime")==null||localStorage.getItem("mackUpCardstartTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("startTime"), //开始时间
+        et: localStorage.getItem("mackUpCardendTime")==null||localStorage.getItem("mackUpCardendTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("endTime"), //结束时间
+        applicatUserId: localStorage.getItem("mackUpCardApplicatUserId")==null?"":localStorage.getItem("mackUpCardApplicatUserId"),
+        approved: localStorage.getItem("mackUpCardapproved")
       };
       var contentData = JSON.stringify(content);
       var headerAndBody = this.getHeaderAndBody(
@@ -124,14 +136,14 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/searchApprovalAppealAttendanceRecord.do";
+        "/user/searchAppealAttendance.do";
       this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
             appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
             appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
             appPublicKey: headerAndBody.appPublicKey,
-            serverPublicKey: headerAndBody.serverPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
           }
         })
         .then(response => {
@@ -155,11 +167,11 @@ export default {
           }
         });
     },
-    goRecordInformation(item){
+    outsignApproval(item){
       this.$router.push({
-        path: "/recordInformation",
+        path: "/makeUpCardDetails",
         query: {
-          pagename: "fieldRecord",
+          pagename: "makeUpCardApproval",
           item:item
         }
       });
@@ -170,15 +182,24 @@ export default {
 
     changeFixed(clientHeight) {
       //动态修改样式
-      this.$refs.fieldRecord.style.height = clientHeight + "px";
+      this.$refs.makeUpCardApproval.style.height = clientHeight + "px";
     }
   },
   mounted() {
+     if (localStorage.getItem("mackUpCardapproved") == "true") {
+        this.$refs.examined.style.background = "rgb(58, 190, 98)";
+        this.$refs.examined.style.color = "#eee";
+        this.$refs.examined.style.border = "1px solid #fff";
+
+        this.$refs.pendingTrial.style.background = "#eee";
+        this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
+        this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
+      }
     this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // // console.log(self);
-    // window.onresize = function temp() {
-    //   this.clientHeight = `${document.documentElement.clientHeight}`;
-    // };
+    // console.log(self);
+    window.onresize = function temp() {
+      this.clientHeight = `${document.documentElement.clientHeight}`;
+    };
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
@@ -199,8 +220,8 @@ export default {
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
-    totalHeight: function() {
-      this.totalHeight = this.$refs.fieldRecord.offsetHeight;
+    clientHeight: function() {
+      this.totalHeight = this.$refs.makeUpCardApproval.offsetHeight;
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }
@@ -210,7 +231,7 @@ export default {
 };
 </script>
 <style scoped>
-.fieldRecord {
+.makeUpCardApproval {
   width: 100%;
   background-color: rgb(240, 240, 240);
 }
@@ -245,9 +266,5 @@ export default {
   font-weight: bold;
   border-radius: 20px;
   background-color: #eee;
-}
-.approvalStatusIcon{
-    float: right;
-    z-index:-1;
 }
 </style>

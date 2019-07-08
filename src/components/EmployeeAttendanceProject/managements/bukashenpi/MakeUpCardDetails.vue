@@ -1,5 +1,5 @@
 <template>
-  <div class="recordInformation">
+  <div class="makeUpCardDetails">
     <div class="moduls">
       <div class="words">申请人</div>
       <div class="information">{{item.user_name}}</div>
@@ -8,21 +8,11 @@
       <div class="words">补卡类型</div>
       <div class="information">{{item.type_name}}</div>
     </div>
-    <!-- <div class="moduls">
-      <div class="words">
-        <p style=" margin: 10px 0px;">打卡地址</p>
-      </div>
-      <div class="information" style="display: flex;">
-        <div>{{item.attendance_address}}</div>
-        
-        <div><img class="dingwei" style="height:30px;width:30px" src="../../../assets/littleimg/dingwei.png"></div>
-        
-        </div>
-    </div> -->
     <div class="moduls">
       <div class="words">补卡日期</div>
       <div class="information">{{item.appeal_time}}</div>
     </div>
+    
     <div class="moduls">
       <div class="words">补卡事由</div>
       <div class="information">
@@ -46,7 +36,7 @@
         <div v-for="i in item.appealAttendanceInfoAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-            <template v-if="i.audit_status==0">待审批</template>
+            <template v-if="i.audit_status==0">未审批</template>
             <template v-else-if="i.audit_status==1">审批中</template>
             <template v-else-if="i.audit_status==2">审批通过</template>
             <template v-else-if="i.audit_status==3">审批不通过</template>
@@ -60,16 +50,78 @@
     </div>
     <div class="moduls">
       <div class="words">审批结果</div>
-      <div class="information">{{item.result}}</div>
+      
+
+      <div class="information" style="display: flex; text-align: right">
+        <template v-if="approved">
+        <div >
+          <input
+            type="radio"
+            name="radios"
+            value="2"
+            v-model="defaultparam"
+            style="vertical-align: middle"
+            disabled
+          >
+          <span style="vertical-align: middle">同意</span>
+        </div>
+        <div style="padding-left:10px">
+          <input
+            type="radio"
+            name="radios"
+            value="3"
+            v-model="defaultparam"
+            style="vertical-align: middle"
+            disabled
+          >
+          <span style="vertical-align: middle">拒绝</span>
+        </div>
+        </template>
+        <template v-else>
+          <div >
+          <input
+            type="radio"
+            name="radios"
+            value="2"
+            v-model="defaultparam"
+            style="vertical-align: middle"
+          >
+          <span style="vertical-align: middle">同意</span>
+        </div>
+        <div style="padding-left:10px">
+          <input
+            type="radio"
+            name="radios"
+            value="3"
+            v-model="defaultparam"
+            style="vertical-align: middle"
+          >
+          <span style="vertical-align: middle">拒绝</span>
+        </div>
+        </template>
+      </div>
     </div>
-    
+    <div class="moduls">
+      <div class="words">审批意见</div>
+      <div class="information">
+        <template v-if="approved">
+        <textarea type="text" class="Opinions" disabled v-model="opinions"></textarea>
+        </template>
+        <template v-else>
+        <textarea type="text" class="Opinions"  v-model="opinions"></textarea>
+        </template>
+      </div>
+    </div>
+    <div class="surediv" v-show="!approved">
+      <button class="sure" @click="sure" type="primary" round>提交审批</button>
+    </div>
     
   </div>
 </template>
 <script>
-import { encrypt, decrypt } from "../../js/utils.js";
+import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "recordInformation",
+  name: "makeUpCardDetails",
   components: {},
   data() {
     return {
@@ -84,9 +136,9 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/fieldRecord",
+        path: "/makeUpCardApproval",
         query: {
-          pagename: "recordInformation"
+          pagename: "makeUpCardDetails"
         }
       });
     },
@@ -107,10 +159,10 @@ export default {
       var content = {
         userId: localStorage.getItem("userId"),
         resultId: this.item.result_id,
-        remarks: this.opinions, //查询条数
+        auditRemarks: this.opinions, 
         auditStatus: this.defaultparam,
-        outAttendanceId: this.item.out_attendance_id,
-        outAttendanceRecordAuditId: this.item.outAttendanceRecordAudit_id,
+        appealAttendanceId: this.item.appeal_attendance_id,
+        appealAttendanceRecordAuditId: this.item.appealAttendanceRecordAudit_id,
       };
       var contentData = JSON.stringify(content);
       var headerAndBody = this.getHeaderAndBody(
@@ -124,7 +176,7 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/submitApprovalOutAttendance.do";
+        "/user/submitApprovalAppealAttendance.do";
       this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
@@ -144,6 +196,7 @@ export default {
           var returnData = decrypt(encrypt, returnKey, this.getIV());
 
           var returnData = JSON.parse(returnData);
+          debugger
 
           if (returnData.code == 1001) {
             alert("审批成功！")
@@ -175,6 +228,13 @@ export default {
     var _this = this;
     _this.item = this.$route.query.item;
     debugger
+    if (localStorage.getItem("mackUpCardapproved")=="false") {
+      _this.approved = false;
+      
+    }else if(localStorage.getItem("mackUpCardapproved")=="true"){
+      _this.approved = true;
+      _this.opinions = _this.item.audit_remarks
+    }
     
 
     // console.log("用户名" + _this.userName);
@@ -182,7 +242,7 @@ export default {
 };
 </script>
   <style scoped>
-.recordInformation {
+.makeUpCardDetails {
   width: 100%;
   background-color: rgb(240, 240, 240);
   text-align: center;

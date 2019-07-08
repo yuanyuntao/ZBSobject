@@ -5,13 +5,13 @@
     </div>
     <div type="primary" round class="lookRecords" @click="lookRecords">
        <p>补卡记录</p>
-        <img class="iconRecord" src="../../../assets/littleimg/jilu.png" alt />
+        <img class="iconRecord" src="../../../../assets/littleimg/jilu.png" alt />
         
       </div>
      
     <div class="top">
       <div type="primary" round class="dateSelect" @click="dayBefore">
-        <img class="arrowIcon" src="../../../assets/littleimg/left.png" alt />
+        <img class="arrowIcon" src="../../../../assets/littleimg/left.png" alt />
         <p>前一天</p>
       </div>
       <div type="primary" round class="selectedData" @click="showDatePicker(6, 3)">{{selectTime}}</div>
@@ -19,7 +19,7 @@
       <div type="primary" round class="dateSelect" @click="dayAfter">
         <p style="margin-left:10px">后一天</p>
 
-        <img class="arrowIcon" src="../../../assets/littleimg/right.png" alt />
+        <img class="arrowIcon" src="../../../../assets/littleimg/right.png" alt />
       </div>
     </div>
     <div
@@ -80,7 +80,7 @@
         <img
           class="imge"
           style="float: right; width: 20px;height: 20px;padding-right:20px"
-          src="../../../assets/littleimg/xiangji.png"
+          src="../../../../assets/littleimg/xiangji.png"
           alt
           @click="imgClick()"
         />
@@ -97,7 +97,7 @@
             position: relative;margin-right:10px"
         >
           <img
-            src="../../../assets/littleimg/shanchu.png"
+            src="../../../../assets/littleimg/shanchu.png"
             style=" position: absolute;top: 0px;
                 right: 0px;
                 width: 20px;
@@ -126,7 +126,7 @@
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px;"
-          src="../../../assets/littleimg/jiahao.png"
+          src="../../../../assets/littleimg/jiahao.png"
           alt
           @click="selectApprover"
         />
@@ -141,7 +141,7 @@
           <img
             class="arrow"
             v-show="index != (choseListApprove.length-1) "
-            src="../../../assets/littleimg/jiantou.png"
+            src="../../../../assets/littleimg/jiantou.png"
             alt
           />
         </div>
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { encrypt, decrypt } from "../../js/utils.js";
+import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
   name: "attendanceCard",
   components: {},

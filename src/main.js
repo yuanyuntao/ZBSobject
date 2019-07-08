@@ -45,16 +45,18 @@ import LeaveRequestpage from "./components/EmployeeAttendanceProject/application
 import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/overtimeRequestpage"
 import OutRequestpage from "./components/EmployeeAttendanceProject/applications/outRequestpage"
 import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/travelRequestpage"
-import AttendanceCard from "./components/EmployeeAttendanceProject/applications/attendanceCard"
-import FieldRecord from "./components/EmployeeAttendanceProject/applications/fieldRecord"
-import RecordInformation from "./components/EmployeeAttendanceProject/applications/recordInformation"
+import AttendanceCard from "./components/EmployeeAttendanceProject/applications/attendanceCard/attendanceCard"
+import FieldRecord from "./components/EmployeeAttendanceProject/applications/attendanceCard/fieldRecord"
+import RecordInformation from "./components/EmployeeAttendanceProject/applications/attendanceCard/recordInformation"
 
 //management
 import Management from "./components/EmployeeAttendanceProject/management"
 import PunchInDetails from "./components/EmployeeAttendanceProject/managements/punchInDetails"
 import Screening from "./components/EmployeeAttendanceProject/managements/screening"
 import FieldApproval from "./components/EmployeeAttendanceProject/managements/fieldApproval"
-
+import MakeUpCardApproval from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardApproval"
+import MakeUpCardScreening from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardScreening"
+import MakeUpCardDetails from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardDetails"
 
 
 //dynamic
@@ -77,6 +79,8 @@ Vue.prototype.$defines = defines
 import Refersh from './components/TestProject/refersh'
 
 // Vue.prototype.$RSA = Jsrsasign
+
+import ttt from './components/EmployeeAttendanceProject/toolsComponent/ttt'
 
 
 /**
@@ -187,6 +191,10 @@ const router = new VueRouter({
     { path: "/screening", component: Screening, meta: { title: '筛选条件' } },
     { path: "/fieldApproval", component: FieldApproval, meta: { title: '审批详情' } },
 
+    { path: "/makeUpCardApproval", component: MakeUpCardApproval, meta: { title: '补卡审批' } },
+    { path: "/makeUpCardScreening", component: MakeUpCardScreening, meta: { title: '筛选条件' } },
+    { path: "/makeUpCardDetails", component: MakeUpCardDetails, meta: { title: '审批详情' } },
+
     //动态
     { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
 
@@ -198,6 +206,8 @@ const router = new VueRouter({
 
     //测试用
     { path: "/refersh", component: Refersh , meta: { title: '人脸识别'} },
+
+    { path: "/ttt", component: ttt , meta: { title: '弹出框测试'} },
 
     
 
@@ -389,12 +399,20 @@ Vue.prototype.getTIME = function (time, type) {
 
 /* eslint-disable no-new */
 
+
+
+
+
+
 new Vue({
   el: '#app',
   router,
   components: { App },
   // router,
   template: "<app/>",
+  data: {
+    timeOutEvent: 0
+       },
   //   template: `
   //   <div id="app">
   //   <ul>

@@ -64,13 +64,13 @@
         </div>
       </div>
       <div class="appfeaturlist" ref="appfeaturlist3">
-        <div class="icon" @click="changePage('/')">
+        <div class="icon" @click="changePage('/makeUpCardApproval')">
           <span>
             <img class="imgs" src="../../assets/usedimg/kaoqinbuka.png">
           </span>
           <br>
           <div style="padding-bottom:20px;">
-            <span>考勤补卡</span>
+            <span>补卡审批</span>
           </div>
         </div>
         <div class="icon">
