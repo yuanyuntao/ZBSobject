@@ -156,11 +156,11 @@ export default {
             ) {
               isAdministrator = true;
             }
-            this.$defines.setUserId(returnData.data.user.user_id);
-            this.$defines.setUserName(returnData.data.user.user_name);
-            this.$defines.setIsAdministrator(isAdministrator);
-            this.$defines.setCompanyId(returnData.data.user.company_id);
-            this.$defines.setServerPublicKey(this.serverPublicKey);
+            // this.$defines.setUserId(returnData.data.user.user_id);
+            // this.$defines.setUserName(returnData.data.user.user_name);
+            // this.$defines.setIsAdministrator(isAdministrator);
+            // this.$defines.setCompanyId(returnData.data.user.company_id);
+            // this.$defines.setServerPublicKey(this.serverPublicKey);
 
             localStorage.setItem("userId", returnData.data.user.user_id);
             localStorage.setItem("userName", returnData.data.user.user_name);

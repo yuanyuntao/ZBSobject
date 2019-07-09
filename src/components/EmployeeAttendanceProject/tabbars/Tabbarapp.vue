@@ -8,9 +8,6 @@
         :txt="item.txt"
         :page="item.page"
         :sel="selected"
-        :userId="userId"
-        :isAdministrator="isAdministrator"
-        :userName="userName"
       >
         <img :src="item.activeImg" slot="activeImg">
         <img :src="item.normalImg" slot="normalImg">
@@ -23,9 +20,6 @@
         :txt="item.txt"
         :page="item.page"
         :sel="selected"
-        :userId="userId"
-        :isAdministrator="isAdministrator"
-        :userName="userName"
       >
         <img :src="item.activeImg" slot="activeImg">
         <img :src="item.normalImg" slot="normalImg">
@@ -39,9 +33,7 @@ import ItemWarp from "./itemWarp.vue";
 export default {
   name:"tabbarapp",
   props: {
-    userId:"",
-    userName: "",
-    isAdministrator:"",
+    // isAdministrator:"",
   },
   components: { 
       ItemWarp
@@ -49,6 +41,7 @@ export default {
   
   data: function() {
     return {
+      isAdministrator:localStorage.getItem("isAdministrator")=="false"?false:true,
       selected: "application",
       tabbarDes: [
         {

@@ -16,9 +16,6 @@ export default {
     txt: { type: String },
     page: { type: String },
     sel: { type: String },
-    userId: "",
-    isAdministrator: "",
-    userName: "",
   },
   computed: {
     bol: function() {
@@ -31,15 +28,8 @@ export default {
   methods: {
     changePage: function() {
       //点击跳转对应的页面
-      // this.$router.push("/" + this.page);
-      // this.$emit("change", this.page);
       this.$router.push({
         path: "/" + this.page,
-        query: {
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName
-        }
       });
       
     }

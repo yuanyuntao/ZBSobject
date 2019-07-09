@@ -9,6 +9,10 @@ export default {
 	attendanceCardimgs: [], //上传的图片列表
 	attendanceCardfileData: [],
 	select_time:"",
+	leaveRequestImges:[],
+	leaveRequestFileData:[],
+	
+
 	setUserId(newUserId) {
 		this.userId = newUserId
     },
@@ -40,7 +44,13 @@ export default {
 	},
 	setSelect_time(newTime){
         this.select_time = newTime
-	}
-    
+	},
+	setLeaveRequestImges(newImges){
+		this.leaveRequestImges = newImges
+	},
+	
+	setLeaveRequestFileData(newFileData){
+		this.leaveRequestFileData = newFileData
+	},
     
 }

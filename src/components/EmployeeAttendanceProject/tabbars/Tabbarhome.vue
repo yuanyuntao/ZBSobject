@@ -8,9 +8,6 @@
         :txt="item.txt"
         :page="item.page"
         :sel="selected"
-        :userId="userId"
-        :isAdministrator="isAdministrator"
-        :userName="userName"
       >
         <img :src="item.activeImg" slot="activeImg">
         <img :src="item.normalImg" slot="normalImg">
@@ -23,9 +20,6 @@
         :txt="item.txt"
         :page="item.page"
         :sel="selected"
-        :userId="userId"
-        :isAdministrator="isAdministrator"
-        :userName="userName"
       >
         <img :src="item.activeImg" slot="activeImg">
         <img :src="item.normalImg" slot="normalImg">
@@ -43,14 +37,14 @@ export default {
       ItemWarp
        },
   props: {
-    userId:"",
-    userName: "",
-    isAdministrator:"",
+    // isAdministrator:localStorage.getItem("isAdministrator"),
   },
   
   data: function() {
     return {
       selected: "homepage",
+      isAdministrator:localStorage.getItem("isAdministrator")=="false"?false:true,
+      
       tabbarDes: [
         {
           txt: "首页",

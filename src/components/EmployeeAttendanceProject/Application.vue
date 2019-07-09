@@ -1,10 +1,7 @@
 <template>
   <div class="application">
     <div class="footer_guide">
-      <Tabbarapp 
-        :userId="userId"
-        :isAdministrator="isAdministrator"
-        :userName="userName"></Tabbarapp>
+      <Tabbarapp ></Tabbarapp>
     </div>
     <div class="appfeaturlists">
       
@@ -167,9 +164,6 @@ export default {
   },
   data: function() {
     return {
-      userName: "",
-      isAdministrator: "",
-      userId: "",
       clientHeight:"",
     };
   },
@@ -179,9 +173,6 @@ export default {
         path: "/homepage",
         query: {
         pagename: "application",
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
         }
       });
     },
@@ -191,9 +182,6 @@ export default {
         path: page,
         query: {
           pagename:"application",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName
         }
       });
     },
@@ -231,15 +219,7 @@ export default {
       this.changeFixed((this.clientHeight-50)/5);
     }
   },
-
-
-
   created: function() {
-    var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
-    // console.log("用户名" + _this.userName);
   }
 };
 </script>

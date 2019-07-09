@@ -264,7 +264,7 @@ export default {
     changeFixed(clientHeight) {
       //动态修改样式
       this.$refs.fieldRecord.style.height = clientHeight + "px";
-    }
+    },
   },
   mounted() {
     this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
@@ -303,22 +303,26 @@ export default {
       }
           that.openMask(value)
       }, 500);
+      
       x = e.touches[0].clientX;
       y = e.touches[0].clientY;
       e.preventDefault();
+      // that.goRecordInformation()
   }, false);
-  document.addEventListener("touchmove", function(e) {
+  oDiv.addEventListener("touchmove", function(e) {
       if (x != e.touches[0].clientX || y != e.touches[0].clientY) {
           clearTimeout(timer);
           return false;
       }
   }, false);
-  document.addEventListener("touchend", function(ev) {
+  oDiv.addEventListener("touchend", function(ev) {
       if (z != 1) {
           clearTimeout(timer);
           x = 0;
           y = 0;
+          that.goRecordInformation(value)
           return false;
+          
       } else {
           x = 0;
           y = 0;
@@ -348,7 +352,7 @@ export default {
         this.clientHeight = this.totalHeight + 20;
       }
       this.changeFixed(this.clientHeight);
-    }
+    },
   }
 };
 </script>

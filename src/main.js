@@ -41,7 +41,10 @@ import Calendar from "./components/EmployeeAttendanceProject/homepages/calendar"
 //application
 import Application from "./components/EmployeeAttendanceProject/application"
 import Notificationpage from "./components/EmployeeAttendanceProject/applications/notificationpage"
-import LeaveRequestpage from "./components/EmployeeAttendanceProject/applications/leaveRequestpage"
+import LeaveRequestpage from "./components/EmployeeAttendanceProject/applications/leaveRequest/leaveRequestpage"
+import LeaveRequestInformation from "./components/EmployeeAttendanceProject/applications/leaveRequest/LeaveRequestInformation"
+
+
 import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/overtimeRequestpage"
 import OutRequestpage from "./components/EmployeeAttendanceProject/applications/outRequestpage"
 import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/travelRequestpage"
@@ -184,6 +187,8 @@ const router = new VueRouter({
     { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
     { path: "/fieldRecord", component: FieldRecord, meta: { title: '补卡记录' } },
     { path: "/recordInformation", component: RecordInformation, meta: { title: '记录详情' } },
+    { path: "/LeaveRequestInformation", component: LeaveRequestInformation, meta: { title: '记录详情' } },
+
 
     //管理
     { path: "/management", component: Management, meta: { title: '管理' } },

@@ -148,7 +148,7 @@
       </div>
     </div>
 
-    <button class="sure" @click="sure" type="primary" round>确定</button>
+    <button class="sure" @click="sure" type="primary" round>提交申请</button>
   </div>
 </template>
 

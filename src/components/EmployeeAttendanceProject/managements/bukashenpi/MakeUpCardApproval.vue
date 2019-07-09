@@ -111,9 +111,7 @@ export default {
     },
     getListData() {
 
-      if (localStorage.getItem("mackUpCardapproved") == null) {
-        localStorage.setItem("mackUpCardapproved", false);
-      }
+      
 
       var content = {
         userId: this.userId,
