@@ -94,7 +94,7 @@
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px;"
-          src="../../../assets/littleimg/jiahao.png"
+          src="../../../../assets/littleimg/jiahao.png"
           alt
           @click="selectApprover"
         >
@@ -109,7 +109,7 @@
           <img
             class="arrow"
             v-show="index != (choseListApprove.length-1) "
-            src="../../../assets/littleimg/jiantou.png"
+            src="../../../../assets/littleimg/jiantou.png"
             alt
           >
         </div>
@@ -126,7 +126,7 @@
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px"
-          src="../../../assets/littleimg/jiahao.png"
+          src="../../../../assets/littleimg/jiahao.png"
           alt
           @click="selectCC"
         >

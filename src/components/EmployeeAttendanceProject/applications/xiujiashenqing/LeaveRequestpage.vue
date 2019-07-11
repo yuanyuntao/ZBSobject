@@ -191,6 +191,7 @@
         v-bind:key="item.id"
         style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
         v-longtouch="item"
+        @click="goLeaveRequestInformation(item)"
       >
         <template v-if="item.effective==0">
           <img
@@ -368,7 +369,6 @@ export default {
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
           // console.log("returnData....." + returnData);
-          debugger
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
@@ -404,7 +404,6 @@ export default {
 
       this.fileData.push(local);
       this.$defines.setLeaveRequestFileData(this.fileData);
-      //   debugger
       var current = this;
       var reader = new FileReader();
       var content;
@@ -426,7 +425,6 @@ export default {
 
     //新增
     pendingTrial() {
-      debugger;
       if (localStorage.getItem("leaveRequestApproved") == "true") {
         return;
       } else {
@@ -443,7 +441,6 @@ export default {
       }
     },
     examined() {
-      debugger
       if (localStorage.getItem("leaveRequestApproved") == "false") {
         return;
       } else {
@@ -529,7 +526,6 @@ export default {
             }
           })
           .then(function(response) {
-            debugger;
 
             var returnKey = _this.RSAdecrypt(
               response.headers.serverencryptedkey,
@@ -546,7 +542,6 @@ export default {
             _this.canUseTime = returnData.data.hours;
           });
       } else {
-        debugger;
         var _this = this;
         var content = {
           userId: _this.userId,
@@ -578,7 +573,7 @@ export default {
             }
           })
           .then(function(response) {
-            debugger;
+            debugger
 
             var returnKey = _this.RSAdecrypt(
               response.headers.serverencryptedkey,
@@ -748,6 +743,7 @@ export default {
           choseListCCData.push(this.choseListCC[i].userId.toString());
         }
       }
+      debugger
       let signWords = {
         user_id: parseInt(this.userId),
         start_time: this.startTime,
@@ -755,24 +751,16 @@ export default {
         vacation_type_id: this.defaultType,
         day: this.leaveDays,
         hour: this.leaveHours,
-        reason: this.leaveReasons,
+        remarks: this.leaveReasons,
         audit_user: choseListApproveData,
         copy_user: choseListCCData
       };
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       for (let i = 0; i < this.$defines.leaveRequestFileData.length; i++) {
-        // let file = this.imgs[i].file
         let file = this.$defines.leaveRequestFileData[i].files[0];
-        // console.log(file.size())
         fileFormData.append("picture", file, file.name);
       }
-      // var _this = this
-      //   for (let i = 0; i < _this.fileData.length; i++) {
-      //       let file = _this.fileData[i]
-      //       _this.fileFormData.append("picture", file,file.name);
-      //   }
-      // debugger
       return fileFormData;
     },
     sure() {
@@ -795,7 +783,6 @@ export default {
       var _this = this;
 
       var information = _this.getAttendanceRecord();
-      debugger;
 
       var url =
         "http://" +
@@ -804,14 +791,13 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/addAttendanceRecord.do";
+        "/user/addVacationRecord.do";
 
       _this.$ajax
         .post(url, information, {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
-          debugger;
           if (response.data.code == 1001) {
             alert("申请成功！");
             _this.goBack();
@@ -824,7 +810,16 @@ export default {
     changeFixed(clientHeight) {
       //动态修改样式
       this.$refs.leaveRequestpage.style.height = clientHeight + "px";
-    }
+    },
+    goLeaveRequestInformation(item) {
+      this.$router.push({
+        path: "/leaveRequestInformation",
+        query: {
+          pagename: "leaveRequestpage",
+          item: item
+        }
+      });
+    },
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
@@ -837,6 +832,16 @@ export default {
     }
   },
   mounted() {
+    if (!this.isNew) {
+      this.$refs.examined.style.background = "rgb(58, 190, 98)";
+      this.$refs.examined.style.color = "#eee";
+      this.$refs.examined.style.border = "1px solid #fff";
+
+      this.$refs.pendingTrial.style.background = "#eee";
+      this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
+      this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
+      
+    }
     this.getCurTime();
     this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
     // console.log(self);
@@ -899,7 +904,7 @@ export default {
             clearTimeout(timer);
             x = 0;
             y = 0;
-            that.goLeaveRequestInformation(item)
+            that.goLeaveRequestInformation(value)
             return false;
           } else {
             x = 0;
@@ -911,15 +916,7 @@ export default {
       );
     });
   },
-  goLeaveRequestInformation(item) {
-      this.$router.push({
-        path: "/leaveRequestInformation",
-        query: {
-          pagename: "leaveRequestpage",
-          item: item
-        }
-      });
-    },
+  
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
@@ -937,6 +934,12 @@ export default {
       localStorage.setItem("leaveRequestApproved", true);
       _this.isNew = true;
     }
+    debugger
+    if (this.$route.query.pagename == "leaveRequestInformation") {
+      localStorage.setItem("leaveRequestApproved", false);
+      _this.isNew = false;
+      
+    }
     _this.getListData()
 
     _this.fileData = this.$defines.leaveRequestFileData;
@@ -949,7 +952,7 @@ export default {
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       // _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
-
+debugger
       _this.leaveReasons = this.$route.query.leaveReasons;
       _this.defaultType = this.$route.query.defaultType;
       _this.startTime = this.$route.query.startTime;
@@ -1014,6 +1017,7 @@ export default {
   height: 23px;
   width: 200px;
   border: 1px solid rgb(83, 83, 83);
+  font-size: 18px;
 }
 .endTime {
   border-radius: 5px;
@@ -1021,6 +1025,7 @@ export default {
   height: 23px;
   width: 200px;
   border: 1px solid rgb(83, 83, 83);
+  font-size: 18px;
 }
 .inputTime {
   height: 23px;

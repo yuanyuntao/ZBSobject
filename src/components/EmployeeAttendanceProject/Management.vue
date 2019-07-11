@@ -23,7 +23,7 @@
             <span>发布通知</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/overtimeRequestpage')">
+        <div class="icon" @click="changePage('/leaveRequestApproval')">
           <span>
             <img class="imgs" src="../../assets/usedimg/xiujiashenqing.png">
           </span>

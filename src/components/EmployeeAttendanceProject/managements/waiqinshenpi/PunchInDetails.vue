@@ -1,5 +1,5 @@
 <template>
-  <div class="makeUpCardApproval" ref="makeUpCardApproval">
+  <div class="punchInDetails" ref="punchInDetails">
     <div class="attendance">
       <div class="pendingTrial" ref="pendingTrial" type="primary" round @click="pendingTrial">
         <span style="vertical-align:middle">待审批</span>
@@ -18,13 +18,12 @@
       @click="outsignApproval(item)"
     >
       <span style="font-size: 14px;font-weight: bold;">{{item.user_name}}</span>
-      <!-- appeal_time -->
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <span
-        style="font-size: 13px;color:#91918c;float:right;"
+        style="font-size: 13px;color:#91918c"
       >{{item.type_name}}</span>
       <br>
-      <span style="font-size: 14px;">{{item.remarks}}</span>
+      <span style="font-size: 14px;font-weight: bold;">{{item.attendance_address}}</span>
       <br>
       <span style="font-size: 13px;color:#91918c">{{item.attendance_time}}</span>
     </div>
@@ -33,7 +32,7 @@
 <script>
 import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "makeUpCardApproval",
+  name: "punchInDetails",
   components: {},
   data() {
     return {
@@ -60,20 +59,16 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
-      localStorage.setItem("startTime", "");
-      localStorage.setItem("endTime", "");
-      localStorage.setItem("applicatUserId", "");
       this.$router.push({
         path: "/management",
         query: {
-          pagename: "makeUpCardApproval"
+          pagename: "punchInDetails"
         }
       });
     },
     //待审批
     pendingTrial() {
-      debugger
-      if (localStorage.getItem("mackUpCardapproved") == "false") {
+      if (localStorage.getItem("approved") == "false") {
         return;
       } else {
         this.$refs.pendingTrial.style.background = "rgb(58, 190, 98)";
@@ -83,13 +78,13 @@ export default {
         this.$refs.examined.style.background = "#eee";
         this.$refs.examined.style.color = "rgb(58, 190, 98)";
         this.$refs.examined.style.border = "1px solid rgb(58, 190, 98)";
-        localStorage.setItem("mackUpCardapproved", false);
+        localStorage.setItem("approved", false);
         this.getListData();
       }
     },
     //已审批
     examined() {
-      if (localStorage.getItem("mackUpCardapproved") == "true") {
+      if (localStorage.getItem("approved") == "true") {
         return;
       } else {
         this.$refs.examined.style.background = "rgb(58, 190, 98)";
@@ -99,30 +94,33 @@ export default {
         this.$refs.pendingTrial.style.background = "#eee";
         this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
-        localStorage.setItem("mackUpCardapproved", true);
+        localStorage.setItem("approved", true);
         this.getListData();
       }
     },
     gotoScreening() {
       this.$router.push({
-        path: "/makeUpCardScreening",
+        path: "/screening",
         query: {
-          pagename: "makeUpCardApproval",
+          pagename: "punchInDetails",
+
         }
       });
     },
     getListData() {
 
-      
+      if (localStorage.getItem("approved") == null) {
+        localStorage.setItem("approved", false);
+      }
 
       var content = {
         userId: this.userId,
         bNum: 0, //从第几条开始
         rows: 20, //查询条数
-        bt: localStorage.getItem("mackUpCardstartTime")==null||localStorage.getItem("mackUpCardstartTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("startTime"), //开始时间
-        et: localStorage.getItem("mackUpCardendTime")==null||localStorage.getItem("mackUpCardendTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("endTime"), //结束时间
-        applicatUserId: localStorage.getItem("mackUpCardApplicatUserId")==null?"":localStorage.getItem("mackUpCardApplicatUserId"),
-        approved: localStorage.getItem("mackUpCardapproved")
+        bt: localStorage.getItem("startTime")==null||localStorage.getItem("startTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("startTime"), //开始时间
+        et: localStorage.getItem("endTime")==null||localStorage.getItem("endTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("endTime"), //结束时间
+        applicatUserId: localStorage.getItem("applicatUserId")==null?"":localStorage.getItem("applicatUserId"),
+        approved: localStorage.getItem("approved")
       };
       var contentData = JSON.stringify(content);
       var headerAndBody = this.getHeaderAndBody(
@@ -136,7 +134,7 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/searchAppealAttendance.do";
+        "/user/searchOutAttendance.do";
       this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
@@ -159,7 +157,7 @@ export default {
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
-            this.approvalList = returnData.data.appealAttendanceInfo;
+            this.approvalList = returnData.data.outAttendanceInfo;
           } else if (returnData.code == 1014) {
             return;
           } else {
@@ -169,9 +167,9 @@ export default {
     },
     outsignApproval(item){
       this.$router.push({
-        path: "/makeUpCardDetails",
+        path: "/fieldApproval",
         query: {
-          pagename: "makeUpCardApproval",
+          pagename: "punchInDetails",
           item:item
         }
       });
@@ -182,11 +180,11 @@ export default {
 
     changeFixed(clientHeight) {
       //动态修改样式
-      this.$refs.makeUpCardApproval.style.height = clientHeight + "px";
+      this.$refs.punchInDetails.style.height = clientHeight + "px";
     }
   },
   mounted() {
-     if (localStorage.getItem("mackUpCardapproved") == "true") {
+     if (localStorage.getItem("approved") == "true") {
         this.$refs.examined.style.background = "rgb(58, 190, 98)";
         this.$refs.examined.style.color = "#eee";
         this.$refs.examined.style.border = "1px solid #fff";
@@ -221,7 +219,7 @@ export default {
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
-      this.totalHeight = this.$refs.makeUpCardApproval.offsetHeight;
+      this.totalHeight = this.$refs.punchInDetails.offsetHeight;
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }
@@ -231,7 +229,7 @@ export default {
 };
 </script>
 <style scoped>
-.makeUpCardApproval {
+.punchInDetails {
   width: 100%;
   background-color: rgb(240, 240, 240);
 }

@@ -41,25 +41,32 @@ import Calendar from "./components/EmployeeAttendanceProject/homepages/calendar"
 //application
 import Application from "./components/EmployeeAttendanceProject/application"
 import Notificationpage from "./components/EmployeeAttendanceProject/applications/notificationpage"
-import LeaveRequestpage from "./components/EmployeeAttendanceProject/applications/leaveRequest/leaveRequestpage"
-import LeaveRequestInformation from "./components/EmployeeAttendanceProject/applications/leaveRequest/LeaveRequestInformation"
+import LeaveRequestpage from "./components/EmployeeAttendanceProject/applications/xiujiashenqing/leaveRequestpage"
 
+import LeaveRequestInformation from "./components/EmployeeAttendanceProject/applications/xiujiashenqing/LeaveRequestInformation"
 
-import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/overtimeRequestpage"
-import OutRequestpage from "./components/EmployeeAttendanceProject/applications/outRequestpage"
-import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/travelRequestpage"
-import AttendanceCard from "./components/EmployeeAttendanceProject/applications/attendanceCard/attendanceCard"
-import FieldRecord from "./components/EmployeeAttendanceProject/applications/attendanceCard/fieldRecord"
-import RecordInformation from "./components/EmployeeAttendanceProject/applications/attendanceCard/recordInformation"
+import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/jiabanshenqing/overtimeRequestpage"
+import OutRequestpage from "./components/EmployeeAttendanceProject/applications/waichushenqing/outRequestpage"
+import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/chuchaishenqing/travelRequestpage"
+
+import AttendanceCard from "./components/EmployeeAttendanceProject/applications/bukashenqing/attendanceCard"
+import FieldRecord from "./components/EmployeeAttendanceProject/applications/bukashenqing/fieldRecord"
+import RecordInformation from "./components/EmployeeAttendanceProject/applications/bukashenqing/recordInformation"
 
 //management
 import Management from "./components/EmployeeAttendanceProject/management"
-import PunchInDetails from "./components/EmployeeAttendanceProject/managements/punchInDetails"
-import Screening from "./components/EmployeeAttendanceProject/managements/screening"
-import FieldApproval from "./components/EmployeeAttendanceProject/managements/fieldApproval"
+
+import PunchInDetails from "./components/EmployeeAttendanceProject/managements/waiqinshenpi/punchInDetails"
+import Screening from "./components/EmployeeAttendanceProject/managements/waiqinshenpi/screening"
+import FieldApproval from "./components/EmployeeAttendanceProject/managements/waiqinshenpi/fieldApproval"
+
 import MakeUpCardApproval from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardApproval"
 import MakeUpCardScreening from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardScreening"
 import MakeUpCardDetails from "./components/EmployeeAttendanceProject/managements/bukashenpi/makeUpCardDetails"
+
+import LeaveRequestApproval from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestApproval"
+import LeaveRequestScreening from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestScreening"
+import LeaveRequestDetails from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestDetails"
 
 
 //dynamic
@@ -84,6 +91,83 @@ import Refersh from './components/TestProject/refersh'
 // Vue.prototype.$RSA = Jsrsasign
 
 import ttt from './components/EmployeeAttendanceProject/toolsComponent/ttt'
+
+
+Vue.config.productionTip = false
+
+//设置路由
+const router = new VueRouter({
+  mode: 'history',
+  base: __dirname,
+  routes: [
+    { path: "/", component: Userlogin },
+    //首页
+    { path: "/homepage", component: Homepage, meta: { title: '首页' } },
+    { path: "/signpage", component: Signpage, meta: { title: '考勤打卡' } },
+    { path: "/rulespage", component: Rulespage, meta: { title: '考勤规则' } },
+    { path: "/outsignpage", component: Outsignpage, meta: { title: '外勤打卡' } },
+    { path: "/contactpage", component: Contactpage, meta: { title: '公司通讯录' } },
+    { path: "/personal_inforpage", component: Personal_inforpage, meta: { title: '详细信息' } },
+    { path: "/selectApproverpage", component: SelectApproverpage, meta: { title: '选择审批人' } },
+    { path: "/selectCCpage", component: SelectCCpage, meta: { title: '选择抄送人' } },
+    { path: "/agencyMatters", component: AgencyMatters, meta: { title: '待办事项' } },
+    { path: "/calendar", component: Calendar, meta: { title: '考勤记录' } },
+
+    //应用中心
+    { path: "/application", component: Application, meta: { title: '应用中心' } },
+    { path: "/notificationpage", component: Notificationpage, meta: { title: '公告通知' } },
+    { path: "/leaveRequestpage", component: LeaveRequestpage, meta: { title: '休假申请' } },
+    { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
+
+    { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
+
+    { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
+
+    { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
+    { path: "/fieldRecord", component: FieldRecord, meta: { title: '补卡记录' } },
+    { path: "/recordInformation", component: RecordInformation, meta: { title: '记录详情' } },
+    { path: "/LeaveRequestInformation", component: LeaveRequestInformation, meta: { title: '记录详情' } },
+
+
+    //管理
+    { path: "/management", component: Management, meta: { title: '管理' } },
+    { path: "/punchInDetails", component: PunchInDetails, meta: { title: '外勤审批' } },
+    { path: "/screening", component: Screening, meta: { title: '筛选条件' } },
+    { path: "/fieldApproval", component: FieldApproval, meta: { title: '审批详情' } },
+
+    { path: "/makeUpCardApproval", component: MakeUpCardApproval, meta: { title: '补卡审批' } },
+    { path: "/makeUpCardScreening", component: MakeUpCardScreening, meta: { title: '筛选条件' } },
+    { path: "/makeUpCardDetails", component: MakeUpCardDetails, meta: { title: '审批详情' } },
+
+    { path: "/leaveRequestApproval", component: LeaveRequestApproval, meta: { title: '休假审批' } },
+    { path: "/leaveRequestScreening", component: LeaveRequestScreening, meta: { title: '筛选条件' } },
+    { path: "/leaveRequestDetails", component: LeaveRequestDetails, meta: { title: '审批详情' } },
+
+    //动态
+    { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
+
+    //个人中心
+    { path: "/myinfor", component: Myinfor, meta: { title: '个人中心' } },
+    { path: "/accountinformation", component: Accountinformation, meta: { title: '账号信息' } },
+
+
+
+    //测试用
+    { path: "/refersh", component: Refersh , meta: { title: '人脸识别'} },
+
+    { path: "/ttt", component: ttt , meta: { title: '弹出框测试'} },
+
+    
+
+    // { path: "/simpleindex", component: Simpleindex ,meta: { title: '日历测试2'} },
+    // { path: "/listTest", component: ListTest , meta: { title: '测试用'} },
+
+
+
+
+
+  ]
+})
 
 
 /**
@@ -157,74 +241,7 @@ Vue.filter('dateformat', function (data) {
 
 })
 
-Vue.config.productionTip = false
 
-//设置路由
-const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: "/", component: Userlogin },
-    //首页
-    { path: "/homepage", component: Homepage, meta: { title: '首页' } },
-    { path: "/signpage", component: Signpage, meta: { title: '考勤打卡' } },
-    { path: "/rulespage", component: Rulespage, meta: { title: '考勤规则' } },
-    { path: "/outsignpage", component: Outsignpage, meta: { title: '外勤打卡' } },
-    { path: "/contactpage", component: Contactpage, meta: { title: '公司通讯录' } },
-    { path: "/personal_inforpage", component: Personal_inforpage, meta: { title: '详细信息' } },
-    { path: "/selectApproverpage", component: SelectApproverpage, meta: { title: '选择审批人' } },
-    { path: "/selectCCpage", component: SelectCCpage, meta: { title: '选择抄送人' } },
-    { path: "/agencyMatters", component: AgencyMatters, meta: { title: '待办事项' } },
-    { path: "/calendar", component: Calendar, meta: { title: '考勤记录' } },
-
-    //应用中心
-    { path: "/application", component: Application, meta: { title: '应用中心' } },
-    { path: "/notificationpage", component: Notificationpage, meta: { title: '公告通知' } },
-    { path: "/leaveRequestpage", component: LeaveRequestpage, meta: { title: '休假申请' } },
-    { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
-    { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
-    { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
-    { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
-    { path: "/fieldRecord", component: FieldRecord, meta: { title: '补卡记录' } },
-    { path: "/recordInformation", component: RecordInformation, meta: { title: '记录详情' } },
-    { path: "/LeaveRequestInformation", component: LeaveRequestInformation, meta: { title: '记录详情' } },
-
-
-    //管理
-    { path: "/management", component: Management, meta: { title: '管理' } },
-    { path: "/punchInDetails", component: PunchInDetails, meta: { title: '外勤审批' } },
-    { path: "/screening", component: Screening, meta: { title: '筛选条件' } },
-    { path: "/fieldApproval", component: FieldApproval, meta: { title: '审批详情' } },
-
-    { path: "/makeUpCardApproval", component: MakeUpCardApproval, meta: { title: '补卡审批' } },
-    { path: "/makeUpCardScreening", component: MakeUpCardScreening, meta: { title: '筛选条件' } },
-    { path: "/makeUpCardDetails", component: MakeUpCardDetails, meta: { title: '审批详情' } },
-
-    //动态
-    { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
-
-    //个人中心
-    { path: "/myinfor", component: Myinfor, meta: { title: '个人中心' } },
-    { path: "/accountinformation", component: Accountinformation, meta: { title: '账号信息' } },
-
-
-
-    //测试用
-    { path: "/refersh", component: Refersh , meta: { title: '人脸识别'} },
-
-    { path: "/ttt", component: ttt , meta: { title: '弹出框测试'} },
-
-    
-
-    // { path: "/simpleindex", component: Simpleindex ,meta: { title: '日历测试2'} },
-    // { path: "/listTest", component: ListTest , meta: { title: '测试用'} },
-
-
-
-
-
-  ]
-})
 
 router.beforeEach((to, from, next) => {
 

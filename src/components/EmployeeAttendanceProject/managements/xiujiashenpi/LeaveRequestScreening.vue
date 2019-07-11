@@ -1,6 +1,6 @@
 
 <template>
-  <div class="makeUpCardScreening" ref="makeUpCardScreening">
+  <div class="leaveRequestScreening" ref="leaveRequestScreening">
     <div
       type="primary"
       round
@@ -43,7 +43,7 @@
 </template>
 <script>
 export default {
-  name: "makeUpCardScreening",
+  name: "leaveRequestScreening",
   components: {},
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
       this.$router.push({
         path: "/" + this.form,
         query: {
-          pagename: "makeUpCardScreening"
+          pagename: "leaveRequestScreening"
         }
       });
     },
@@ -161,13 +161,13 @@ export default {
         });
     },
     sure() {
-      localStorage.setItem("mackUpCardstartTime", this.startTime);
-      localStorage.setItem("mackUpCardendTime", this.endTime);
-      localStorage.setItem("mackUpCardApplicatUserId", this.applicatUserId);
+      localStorage.setItem("leaveRequeststartTime", this.startTime);
+      localStorage.setItem("leaveRequestendTime", this.endTime);
+      localStorage.setItem("leaveRequestApplicatUserId", this.applicatUserId);
       this.$router.push({
         path: "/" + this.form,
         query: {
-          pagename: "makeUpCardScreening"
+          pagename: "leaveRequestScreening"
         }
       });
     }
@@ -187,17 +187,17 @@ export default {
     debugger
     var _this = this;
     _this.form = this.$route.query.pagename;
-    _this.startTime = localStorage.getItem("mackUpCardstartTime")==null?"":localStorage.getItem("mackUpCardstartTime");
-    _this.endTime = localStorage.getItem("mackUpCardendTime")==null?"":localStorage.getItem("mackUpCardendTime");
-    _this.applicatUserId = localStorage.getItem("mackUpCardApplicatUserId")==null?"":localStorage.getItem("mackUpCardApplicatUserId");
+    _this.startTime = localStorage.getItem("leaveRequeststartTime")==null?"":localStorage.getItem("leaveRequeststartTime");
+    _this.endTime = localStorage.getItem("leaveRequestendTime")==null?"":localStorage.getItem("leaveRequestendTime");
+    _this.applicatUserId = localStorage.getItem("leaveRequestApplicatUserId")==null?"":localStorage.getItem("leaveRequestApplicatUserId");
   }
 };
 </script>
 <style scoped>
-.makeUpCardScreening {
+.leaveRequestScreening {
   width: 100%;
   height: 100%;
-  background-color: rgb(240, 240, 240);
+  /* background-color: rgb(240, 240, 240); */
 
   background-size: 100% 100%;
   background-attachment: fixed;

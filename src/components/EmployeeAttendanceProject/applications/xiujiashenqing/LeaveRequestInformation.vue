@@ -1,34 +1,31 @@
 <template>
-  <div class="recordInformation">
+  <div class="leaveRequestInformation">
     <div class="moduls">
       <div class="words">申请人</div>
       <div class="information">{{item.user_name}}</div>
     </div>
     <div class="moduls">
-      <div class="words">补卡类型</div>
+      <div class="words">假期类型</div>
+      <div class="information">{{item.vacation_type_name}}</div>
+    </div>
+    <div class="moduls">
+      <div class="words">开始时间</div>
+      <div class="information">{{item.start_time}}</div>
+    </div>
+    <div class="moduls">
+      <div class="words">结束时间</div>
+      <div class="information">{{item.stop_time}}</div>
+    </div>
+    <div class="moduls">
+      <div class="words">可调休时间</div>
       <div class="information">{{item.type_name}}</div>
     </div>
-    <!-- <div class="moduls">
-      <div class="words">
-        <p style=" margin: 10px 0px;">打卡地址</p>
-      </div>
-      <div class="information" style="display: flex;">
-        <div>{{item.attendance_address}}</div>
-        
-        <div><img class="dingwei" style="height:30px;width:30px" src="../../../assets/littleimg/dingwei.png"></div>
-        
-        </div>
-    </div> -->
     <div class="moduls">
-      <div class="words">补卡日期</div>
-      <div class="information">{{item.appeal_time}}</div>
-    </div>
-    <div class="moduls">
-      <div class="words">补卡事由</div>
+      <div class="words">休假事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
-          <div class="sheeImage" v-for="i in item.appealAttendanceRecordPic" v-bind:key="i.id">
+          <div class="sheeImage" v-for="i in item.vacationRecordPic" v-bind:key="i.id">
             <img class="image" :src="getURL(i.url)">
           </div>
         </div>
@@ -36,14 +33,14 @@
     </div>
     <div class="moduls">
       <div class="words">申请时间</div>
-      <div class="information">{{item.attendance_time}}</div>
+      <div class="information">{{item.createTime}}</div>
     </div>
     <div class="moduls">
       <div class="words">
         <p style=" margin: 25px 0px;">审批流程</p>
       </div>
       <div class="information">
-        <div v-for="i in item.appealAttendanceInfoAuditRecord" :key="i.id">
+        <div v-for="i in item.vacationAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
             <template v-if="i.audit_status==0">待审批</template>
@@ -69,7 +66,7 @@
 <script>
 import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "recordInformation",
+  name: "leaveRequestInformation",
   components: {},
   data() {
     return {
@@ -84,9 +81,9 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/fieldRecord",
+        path: "/leaveRequestpage",
         query: {
-          pagename: "recordInformation"
+          pagename: "leaveRequestInformation"
         }
       });
     },
@@ -182,7 +179,7 @@ export default {
 };
 </script>
   <style scoped>
-.recordInformation {
+.leaveRequestInformation {
   width: 100%;
   background-color: rgb(240, 240, 240);
   text-align: center;

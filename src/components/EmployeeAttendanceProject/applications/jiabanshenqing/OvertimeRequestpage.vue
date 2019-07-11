@@ -1,13 +1,12 @@
-
 <template>
-  <div class="outRequestpage" ref="outRequestpage">
+  <div class="overtimeRequestpage" ref="overtimeRequestpage">
     <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 18px;letter-spacing:5px;"></div>
     <div
       type="primary"
       round
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;background-color:rgb(250, 250, 250)"
     >
-      <span style="font-size: 18px;font-weight: bold;">外出类型</span>
+      <span style="font-size: 18px;font-weight: bold;">加班类型</span>
       <div style="float: right;padding-right:20px">
         <select v-model="defaultType" style="width:70px;height:30px;">
           <option v-for="item in options" :value="item.value" :key="item.id">{{item.name}}</option>
@@ -46,44 +45,30 @@
         <input
           v-model="leaveDays"
           type="number"
-          style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
           min=0
+          style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
         >
         &nbsp;天&nbsp;
         <input
           v-model="leaveHours"
           type="number"
-          style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
           min=0
+          style="height:23px;width:55px;font-size: 18px;text-align: right;padding-right:5px"
         >
 
         &nbsp;小时
       </div>
     </div>
-
     <div
       type="primary"
       round
       style="border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;background-color:rgb(250, 250, 250)"
     >
       <div>
-        <span style="font-size: 18px;font-weight: bold;">外出地点</span>
+        <span style="font-size: 18px;font-weight: bold;">加班事由</span>
       </div>
       <div style="padding-top:10px">
-        <textarea type="text" class="outAddress" placeholder="请输入外出地点" v-model="outAddress"></textarea>
-      </div>
-    </div>
-
-    <div
-      type="primary"
-      round
-      style="border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;background-color:rgb(250, 250, 250)"
-    >
-      <div>
-        <span style="font-size: 18px;font-weight: bold;">外出事由</span>
-      </div>
-      <div style="padding-top:10px">
-        <textarea type="text" class="leaveReasons" placeholder="请输入外出事由" v-model="leaveReasons"></textarea>
+        <textarea type="text" class="leaveReasons" placeholder="请输入加班事由" v-model="leaveReasons"></textarea>
       </div>
     </div>
 
@@ -97,7 +82,7 @@
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px;"
-          src="../../../assets/littleimg/jiahao.png"
+          src="../../../../assets/littleimg/jiahao.png"
           alt
           @click="selectApprover"
         >
@@ -112,7 +97,7 @@
           <img
             class="arrow"
             v-show="index != (choseListApprove.length-1) "
-            src="../../../assets/littleimg/jiantou.png"
+            src="../../../../assets/littleimg/jiantou.png"
             alt
           >
         </div>
@@ -129,7 +114,7 @@
         <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px"
-          src="../../../assets/littleimg/jiahao.png"
+          src="../../../../assets/littleimg/jiahao.png"
           alt
           @click="selectCC"
         >
@@ -150,7 +135,7 @@
 </template>
 <script>
 export default {
-  name: "outRequestpage",
+  name: "overtimeRequestpage",
   components: {},
   data() {
     return {
@@ -160,7 +145,7 @@ export default {
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date(), //现在时间                display: flex;
-      outAddress: "", //打卡地点
+      address: "", //打卡地点
 
       leaveReasons: "", //外出事由
 
@@ -204,10 +189,7 @@ export default {
       this.$router.push({
         path: "/application",
         query: {
-        pagename: "outRequestpage",
-        userId: this.userId,
-        isAdministrator: this.isAdministrator,
-        userName: this.userName,
+        pagename: "overtimeRequestpage",
         }
       });
     },
@@ -301,7 +283,7 @@ export default {
       this.$router.push({
         path: "/selectApproverpage",
         query: {
-          pagename: "outRequestpage",
+          pagename: "overtimeRequestpage",
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
@@ -311,8 +293,7 @@ export default {
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //结束时间
           leaveDays: this.leaveDays, //加班天数
-          leaveHours: this.leaveHours, //加班小时数
-          outAddress: this.outAddress
+          leaveHours: this.leaveHours //加班小时数
         }
       });
     },
@@ -321,7 +302,7 @@ export default {
       this.$router.push({
         path: "/selectCCpage",
         query: {
-          pagename: "outRequestpage",
+          pagename: "overtimeRequestpage",
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
@@ -332,15 +313,14 @@ export default {
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //开始时间
           leaveDays: this.leaveDays, //加班天数
-          leaveHours: this.leaveHours, //加班小时数
-          outAddress: this.outAddress
+          leaveHours: this.leaveHours //加班小时数
         }
       });
     },
     sure() {},
     changeFixed(clientHeight) {
       //动态修改样式
-      this.$refs.outRequestpage.style.height = clientHeight + "px";
+      this.$refs.overtimeRequestpage.style.height = clientHeight + "px";
     }
   },
   mounted() {
@@ -355,28 +335,23 @@ export default {
       window.addEventListener('popstate', this.goBack, false);  
       }
   },
-  destroyed(){
-  window.removeEventListener('popstate', this.goBack, false);
-  },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
-      this.totalHeight = this.$refs.outRequestpage.offsetHeight
+      
+      this.totalHeight = this.$refs.overtimeRequestpage.offsetHeight
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20
       }
       this.changeFixed(this.clientHeight);
     }
   },
+  destroyed(){
+  window.removeEventListener('popstate', this.goBack, false);
+  },
   created: function() {
     console.log("开始");
     var _this = this;
-    // if (this.$route.query.pagename == "application") {
-    //   _this.userId = this.$route.query.userId;
-    //   _this.isAdministrator = this.$route.query.isAdministrator;
-    //   _this.userName = this.$route.query.userName;
-    //   // console.log("地址是：" + _this.address+_this.attendanceType);
-    // } else 
     _this.userId = localStorage.getItem("userId")
     _this.userName = localStorage.getItem("userName")
     _this.isAdministrator = localStorage.getItem("isAdministrator")
@@ -393,7 +368,6 @@ export default {
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-      _this.outAddress = this.$route.query.outAddress;
     } else if (this.$route.query.pagename == "selectCCpage") {
       _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
@@ -405,13 +379,12 @@ export default {
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-      _this.outAddress = this.$route.query.outAddress;
     }
   }
 };
 </script>
 <style scoped>
-.outRequestpage {
+.overtimeRequestpage {
   width: 100%;
   height: 100%;
   background-color: rgb(240, 240, 240);
@@ -420,14 +393,8 @@ export default {
   background-attachment: fixed;
   /* padding:10px; */
 }
-.outAddress {
-  height: 40px;
-  width: 100%;
-  font-size: 15px;
-  border: 0;
-}
 .leaveReasons {
-  height: 80px;
+  height: 50px;
   width: 100%;
   font-size: 15px;
   border: 0;
