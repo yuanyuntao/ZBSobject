@@ -44,7 +44,7 @@
             <span>加班审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/travelRequestpage')">
+        <div class="icon" @click="changePage('/outRequestApproval')">
           <span>
             <img class="imgs" src="../../assets/usedimg/waichushenqing.png">
           </span>

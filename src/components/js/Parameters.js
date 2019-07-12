@@ -11,7 +11,12 @@ export default {
 	select_time:"",
 	leaveRequestImges:[],
 	leaveRequestFileData:[],
-	
+	overtimeRequestFileData:[],
+	overtimeRequestImges:[],
+	outRequestFileData:[],
+	outRequestImges:[],
+	travelRequestFileData:[],
+	travelRequestImges:[],
 
 	setUserId(newUserId) {
 		this.userId = newUserId
@@ -51,6 +56,27 @@ export default {
 	
 	setLeaveRequestFileData(newFileData){
 		this.leaveRequestFileData = newFileData
+	},
+	setOvertimeRequestImges(newImges){
+		this.overtimeRequestImges = newImges
+	},
+	
+	setOvertimeRequestFileData(newFileData){
+		this.overtimeRequestFileData = newFileData
+	},
+	setOutRequestImges(newImges){
+		this.outRequestImges = newImges
+	},
+	
+	setOutRequestFileData(newFileData){
+		this.outRequestFileData = newFileData
+	},
+	setTravelRequestImges(newImges){
+		this.travelRequestImges = newImges
+	},
+	
+	setTravelRequestFileData(newFileData){
+		this.travelRequestFileData = newFileData
 	},
     
 }

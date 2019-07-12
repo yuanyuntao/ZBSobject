@@ -190,8 +190,7 @@
         v-for="item in approvalList"
         v-bind:key="item.id"
         style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
-        v-longtouch="item"
-        @click="goLeaveRequestInformation(item)"
+        @touchstart="touchin(item)" @touchmove="touchmove()" @touchend="cleartime(item)"
       >
         <template v-if="item.effective==0">
           <img
@@ -233,7 +232,7 @@
           style="font-size: 13px;color:#91918c;float:right"
         >{{item.vacation_type_name}}</span>
         <br />
-        <span style="font-size: 14px;">{{item.start_time}} ~ {{item.start_time}}</span>
+        <span style="font-size: 14px;">{{item.start_time}} ~ {{item.stop_time}}</span>
         <br>
         <span style="font-size: 14px;">共{{item.day}}天{{item.hour}}小时</span>
 
@@ -299,6 +298,7 @@ export default {
       fileData: [],
 
       options: [],
+      Loop:0,
 
       //记录
       approvalList: [] //记录列表
@@ -316,6 +316,37 @@ export default {
         }
       });
     },
+    touchin(item){
+        var that=this;
+        this.Loop = setTimeout(function() {
+          that.Loop = 0;
+          //执行长按要执行的内容，如弹出菜单
+          if (item.effective == 0) {
+              alert("该条申请已经失效！");
+              return;
+            }
+            if (item.result_id == 7) {
+              alert("该条申请已经审批完，无法撤回！");
+              return;
+            }
+          that.openMask(item)
+        }, 500);
+        return false;
+
+      },
+      touchmove(){
+        clearTimeout(this.Loop);//清除定时器
+        this.Loop = 0;
+      },
+      cleartime(item) {
+        var that=this;
+        clearTimeout(this.Loop);
+        if(that.Loop!=0){
+        that.goLeaveRequestInformation(item)
+        }
+        return false;
+
+      },
     openMask(item) {
       this.selectedItem = item
       this.sendVal = true;
@@ -852,69 +883,6 @@ export default {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
-    var that = this;
-    Vue.directive("longtouch", function(el, binding) {
-      var oDiv = el,
-        value = binding.value,
-        x = 0,
-        y = 0,
-        z = 0,
-        timer = null;
-
-      oDiv.addEventListener(
-        "touchstart",
-        function(e) {
-          if (e.touches.length > 1) {
-            return false;
-          }
-          z = 0;
-
-          timer = setTimeout(function() {
-            z = 1;
-            if (value.effective == 0) {
-              alert("该条申请已经失效！");
-              return;
-            }
-            if (value.result_id == 7) {
-              alert("该条申请已经审批完，无法撤回！");
-              return;
-            }
-            that.openMask(value);
-          }, 500);
-          x = e.touches[0].clientX;
-          y = e.touches[0].clientY;
-          e.preventDefault();
-        },
-        false
-      );
-      oDiv.addEventListener(
-        "touchmove",
-        function(e) {
-          if (x != e.touches[0].clientX || y != e.touches[0].clientY) {
-            clearTimeout(timer);
-            return false;
-          }
-        },
-        false
-      );
-      oDiv.addEventListener(
-        "touchend",
-        function(ev) {
-          if (z != 1) {
-            clearTimeout(timer);
-            x = 0;
-            y = 0;
-            that.goLeaveRequestInformation(value)
-            return false;
-          } else {
-            x = 0;
-            y = 0;
-            z = 0;
-          }
-        },
-        false
-      );
-    });
   },
   
   destroyed() {

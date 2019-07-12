@@ -1,13 +1,13 @@
 <template>
-  <div class="leaveRequestInformation">
+  <div class="outRequestInformation">
     <div class="moduls">
       <div class="words">申请人</div>
       <div class="information">{{item.user_name}}</div>
     </div>
-    <div class="moduls">
-      <div class="words">假期类型</div>
+    <!-- <div class="moduls">
+      <div class="words">加班类型</div>
       <div class="information">{{item.vacation_type_name}}</div>
-    </div>
+    </div> -->
     <div class="moduls">
       <div class="words">开始时间</div>
       <div class="information">{{item.start_time}}</div>
@@ -17,15 +17,19 @@
       <div class="information">{{item.stop_time}}</div>
     </div>
     <div class="moduls">
-      <div class="words">可调休时间</div>
-      <div class="information">{{item.type_name}}</div>
+      <div class="words">外出时长</div>
+      <div class="information">{{item.hour}}小时</div>
     </div>
     <div class="moduls">
-      <div class="words">休假事由</div>
+      <div class="words">外出地点</div>
+      <div class="information">{{item.address}}</div>
+    </div>
+    <div class="moduls">
+      <div class="words">加班事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
-          <div class="sheeImage" v-for="i in item.vacationRecordPic" v-bind:key="i.id">
+          <div class="sheeImage" v-for="i in item.outGoingRecordPic" v-bind:key="i.id">
             <img class="image" :src="getURL(i.url)">
           </div>
         </div>
@@ -40,7 +44,7 @@
         <p style=" margin: 25px 0px;">审批流程</p>
       </div>
       <div class="information">
-        <div v-for="i in item.vacationAuditRecord" :key="i.id">
+        <div v-for="i in item.outGoingAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
             <template v-if="i.audit_status==0">待审批</template>
@@ -66,7 +70,7 @@
 <script>
 import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
-  name: "leaveRequestInformation",
+  name: "outRequestInformation",
   components: {},
   data() {
     return {
@@ -81,9 +85,9 @@ export default {
     //监听返回按钮
     goBack() {
       this.$router.push({
-        path: "/leaveRequestpage",
+        path: "/outRequestpage",
         query: {
-          pagename: "leaveRequestInformation"
+          pagename: "outRequestInformation"
         }
       });
     },
@@ -98,6 +102,7 @@ export default {
       ).replace(new RegExp(/(\\)/g), "/");
       return urlNew;
     },
+    
   },
   mounted(){
     if (window.history && window.history.pushState) {
@@ -112,12 +117,15 @@ export default {
   created: function() {
     var _this = this;
     _this.item = this.$route.query.item;
+    debugger
+    
+
     // console.log("用户名" + _this.userName);
   }
 };
 </script>
   <style scoped>
-.leaveRequestInformation {
+.outRequestInformation {
   width: 100%;
   background-color: rgb(240, 240, 240);
   text-align: center;
@@ -195,5 +203,14 @@ export default {
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid rgb(240, 240, 240);
+}
+.sure {
+  width: 55%;
+  color: #fff;
+  font-size: 28px;
+  margin-top: 20px ;
+  border-radius: 10px;
+  background-color: rgb(68, 124, 56); /* 标准的语法 */
+  filter: brightness(1.4);
 }
 </style>

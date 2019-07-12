@@ -46,8 +46,13 @@ import LeaveRequestpage from "./components/EmployeeAttendanceProject/application
 import LeaveRequestInformation from "./components/EmployeeAttendanceProject/applications/xiujiashenqing/LeaveRequestInformation"
 
 import OvertimeRequestpage from "./components/EmployeeAttendanceProject/applications/jiabanshenqing/overtimeRequestpage"
+import OvertimeRequestInformation from "./components/EmployeeAttendanceProject/applications/jiabanshenqing/overtimeRequestInformation"
+
 import OutRequestpage from "./components/EmployeeAttendanceProject/applications/waichushenqing/outRequestpage"
+import OutRequestInformation from "./components/EmployeeAttendanceProject/applications/waichushenqing/outRequestInformation"
+
 import TravelRequestpage from "./components/EmployeeAttendanceProject/applications/chuchaishenqing/travelRequestpage"
+import TravelRequestInformation from "./components/EmployeeAttendanceProject/applications/chuchaishenqing/travelRequestInformation"
 
 import AttendanceCard from "./components/EmployeeAttendanceProject/applications/bukashenqing/attendanceCard"
 import FieldRecord from "./components/EmployeeAttendanceProject/applications/bukashenqing/fieldRecord"
@@ -67,6 +72,18 @@ import MakeUpCardDetails from "./components/EmployeeAttendanceProject/management
 import LeaveRequestApproval from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestApproval"
 import LeaveRequestScreening from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestScreening"
 import LeaveRequestDetails from "./components/EmployeeAttendanceProject/managements/xiujiashenpi/leaveRequestDetails"
+
+import OutRequestApproval from "./components/EmployeeAttendanceProject/managements/waichushenpi/outRequestApproval"
+import OutRequestScreening from "./components/EmployeeAttendanceProject/managements/waichushenpi/outRequestScreening"
+import OutRequestDetails from "./components/EmployeeAttendanceProject/managements/waichushenpi/outRequestDetails"
+
+import OvertimeRequestApproval from "./components/EmployeeAttendanceProject/managements/jiabanshenpi/overtimeRequestApproval"
+import OvertimeRequestScreening from "./components/EmployeeAttendanceProject/managements/jiabanshenpi/overtimeRequestScreening"
+import OvertimeRequestDetails from "./components/EmployeeAttendanceProject/managements/jiabanshenpi/overtimeRequestDetails"
+
+import TravelRequestApproval from "./components/EmployeeAttendanceProject/managements/chuchaishenpi/travelRequestApproval"
+import TravelRequestScreening from "./components/EmployeeAttendanceProject/managements/chuchaishenpi/travelRequestScreening"
+import TravelRequestDetails from "./components/EmployeeAttendanceProject/managements/chuchaishenpi/travelRequestDetails"
 
 
 //dynamic
@@ -117,16 +134,23 @@ const router = new VueRouter({
     { path: "/application", component: Application, meta: { title: '应用中心' } },
     { path: "/notificationpage", component: Notificationpage, meta: { title: '公告通知' } },
     { path: "/leaveRequestpage", component: LeaveRequestpage, meta: { title: '休假申请' } },
-    { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
+    { path: "/LeaveRequestInformation", component: LeaveRequestInformation, meta: { title: '休假记录详情' } },
 
+    { path: "/overtimeRequestpage", component: OvertimeRequestpage, meta: { title: '加班申请' } },
+    { path: "/overtimeRequestInformation", component: OvertimeRequestInformation, meta: { title: '加班记录详情' } },
+                                                      
     { path: "/outRequestpage", component: OutRequestpage, meta: { title: '外出申请' } },
+    { path: "/outRequestInformation", component: OutRequestInformation, meta: { title: '外出记录详情' } },
+
 
     { path: "/travelRequestpage", component: TravelRequestpage, meta: { title: '出差申请' } },
+    { path: "/travelRequestInformation", component: TravelRequestInformation, meta: { title: '出差记录详情' } },
+
 
     { path: "/attendanceCard", component: AttendanceCard, meta: { title: '考勤补卡' } },
     { path: "/fieldRecord", component: FieldRecord, meta: { title: '补卡记录' } },
-    { path: "/recordInformation", component: RecordInformation, meta: { title: '记录详情' } },
-    { path: "/LeaveRequestInformation", component: LeaveRequestInformation, meta: { title: '记录详情' } },
+    { path: "/recordInformation", component: RecordInformation, meta: { title: '补卡记录详情' } },
+    
 
 
     //管理
@@ -142,6 +166,19 @@ const router = new VueRouter({
     { path: "/leaveRequestApproval", component: LeaveRequestApproval, meta: { title: '休假审批' } },
     { path: "/leaveRequestScreening", component: LeaveRequestScreening, meta: { title: '筛选条件' } },
     { path: "/leaveRequestDetails", component: LeaveRequestDetails, meta: { title: '审批详情' } },
+
+    { path: "/overtimeRequestApproval", component: OvertimeRequestApproval, meta: { title: '加班审批' } },
+    { path: "/overtimeRequestScreening", component: OvertimeRequestScreening, meta: { title: '筛选条件' } },
+    { path: "/overtimeRequestDetails", component: OvertimeRequestDetails, meta: { title: '审批详情' } },
+
+    { path: "/outRequestApproval", component: OutRequestApproval, meta: { title: '外出审批' } },
+    { path: "/outRequestScreening", component: OutRequestScreening, meta: { title: '筛选条件' } },
+    { path: "/outRequestDetails", component: OutRequestDetails, meta: { title: '审批详情' } },
+
+    { path: "/travelRequestApproval", component: TravelRequestApproval, meta: { title: '出差审批' } },
+    { path: "/travelRequestScreening", component: TravelRequestScreening, meta: { title: '筛选条件' } },
+    { path: "/travelRequestDetails", component: TravelRequestDetails, meta: { title: '审批详情' } },
+
 
     //动态
     { path: "/dynamic", component: Dynamic, meta: { title: '动态' } },
@@ -178,9 +215,8 @@ let publickey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNtgJEtTkXVxw7bQlCD4Xb0UZ
   return publickey
 }
 Vue.prototype.getPrivatekey = function () {
-  let privatekey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAI22AkS1ORdXHDttCUIPhdvRRmLgo2plXbwxAaEfQEedCo7ZzOZ70sfBnPjypjDfUa738OOvjJYjkQglkJApy7ftK9aE1nSOPbylPY+1ZWFzgy3NGT82pwTIGUI0UD3suL+rc77uGilO9o5k07IzWp7Fskktj02HCu7ANd0wyFNDAgMBAAECgYEAgjN2RhaTi+RXZio6VV3ZySuwlex7eKgFxYDpVFZYQvQA3VszrZibAznatciL9V9Zt37K7wc+DjxDZs7M0gf0yXpymNj7uXf+ZYvubOAloJK0DsdZq/wUgJmG5WhbbEwPOP/laOlsP7SQ9GAkpt72CwPSUkBobutJxWmjmC+7A6ECQQDVeBmio8XXpL2yBEfLcGilEUMn/1qN9tXBl6B6hSDPibm1KqX5K8+HA83Lq02P+3PpmWTA98eimwPSS95KqBSZAkEAqfHqMHuTqpm4ec0K77hGPeza8UCM+hxmB/8deSIN3syWhoDW+nhXWIFK8ADMftsf1Pl7W6JMl32UPDbFJBC0OwJAcIE3oYwG/TwJ7gRrgkDgJf8PEcl3BFMPHVS4c1oujLLdeSndB5GbcmEC2VCTNEsmL/t0Km9se7qPLQpnQZmMIQI/Go2yCeFFMWLTcDSZgNtKHmLj0s5DONE3IAi8kjC/+g/9dQaskHY9L5cEHnwBd9DFKIHSxH6XeRQmFUJ5iykRAkAQPyw9kFQbek6IQvJOT3w5bnrn+Ug+loQfLqQLoAbMWJmsD75VXYV1b2GQR9r7HWWw5rxECXERDhGHSoAkBJc7"
+let privatekey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAI22AkS1ORdXHDttCUIPhdvRRmLgo2plXbwxAaEfQEedCo7ZzOZ70sfBnPjypjDfUa738OOvjJYjkQglkJApy7ftK9aE1nSOPbylPY+1ZWFzgy3NGT82pwTIGUI0UD3suL+rc77uGilO9o5k07IzWp7Fskktj02HCu7ANd0wyFNDAgMBAAECgYEAgjN2RhaTi+RXZio6VV3ZySuwlex7eKgFxYDpVFZYQvQA3VszrZibAznatciL9V9Zt37K7wc+DjxDZs7M0gf0yXpymNj7uXf+ZYvubOAloJK0DsdZq/wUgJmG5WhbbEwPOP/laOlsP7SQ9GAkpt72CwPSUkBobutJxWmjmC+7A6ECQQDVeBmio8XXpL2yBEfLcGilEUMn/1qN9tXBl6B6hSDPibm1KqX5K8+HA83Lq02P+3PpmWTA98eimwPSS95KqBSZAkEAqfHqMHuTqpm4ec0K77hGPeza8UCM+hxmB/8deSIN3syWhoDW+nhXWIFK8ADMftsf1Pl7W6JMl32UPDbFJBC0OwJAcIE3oYwG/TwJ7gRrgkDgJf8PEcl3BFMPHVS4c1oujLLdeSndB5GbcmEC2VCTNEsmL/t0Km9se7qPLQpnQZmMIQI/Go2yCeFFMWLTcDSZgNtKHmLj0s5DONE3IAi8kjC/+g/9dQaskHY9L5cEHnwBd9DFKIHSxH6XeRQmFUJ5iykRAkAQPyw9kFQbek6IQvJOT3w5bnrn+Ug+loQfLqQLoAbMWJmsD75VXYV1b2GQR9r7HWWw5rxECXERDhGHSoAkBJc7"
   
-
   return privatekey
 }
 
