@@ -35,7 +35,7 @@
       </div>
 
       <div class="appfeaturlist" ref="appfeaturlist2">
-        <div class="icon" @click="changePage('/outRequestpage')">
+        <div class="icon" @click="changePage('/overtimeRequestApproval')">
           <span>
             <img class="imgs" src="../../assets/usedimg/jiabanshenqing.png">
           </span>
@@ -53,7 +53,7 @@
             <span>外出审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/')">
+        <div class="icon" @click="changePage('/travelRequestApproval')">
           <span>
             <img class="imgs" src="../../assets/usedimg/chuchaishenqing.png">
           </span>

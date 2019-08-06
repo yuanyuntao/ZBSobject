@@ -336,7 +336,7 @@ Vue.prototype.getHeaderAndBody = function (contentData,serverPublicKey) {
 
 Vue.prototype.getSERVER_HOST_MAIN = function () {
   //  return  "47.99.72.90"
-  return "192.168.5.236"
+  return "192.168.2.119"
   // return  "192.168.2.200"
 
 }

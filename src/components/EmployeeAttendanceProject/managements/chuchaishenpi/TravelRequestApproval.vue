@@ -161,7 +161,7 @@ export default {
     getListData() {
 
       
-debugger
+
       var content = {
         userId: this.userId,
         bNum: 0, //从第几条开始
@@ -194,7 +194,7 @@ debugger
           }
         })
         .then(response => {
-            debugger
+            
           var returnKey = this.RSAdecrypt(
             response.headers.serverencryptedkey,
             this.getPrivatekey()
@@ -205,9 +205,10 @@ debugger
           // console.log("returnData....." + returnData);
 
           var returnData = JSON.parse(returnData);
+          debugger
 
           if (returnData.code == 1001) {
-            this.approvalList = returnData.data.vacationRecordList;
+            this.approvalList = returnData.data.businessTraveIRecordList;
           } else {
               alert("连接错误，请检查网络！")
             return;

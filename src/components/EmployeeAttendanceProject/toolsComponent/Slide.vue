@@ -2,8 +2,8 @@
   <div class="slide">
     <ul>
       <transition-group tag="ul" name="image">
-        <li v-for="(img, index) in imgArray" v-show="index===mark" :key="img">
-          <img :src="img">
+        <li v-for="(img, index) in imgArray" v-show="index===mark" :key="img.id">
+          <img :src="img.pictureUrl" @click="changepage(img.addressUrl)">
         </li>
       </transition-group>
       
@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   data() {
     return {
@@ -35,9 +36,15 @@ export default {
     };
   },
   methods: {
+    changepage(addressUrl){
+      debugger
+      window.location.href = addressUrl
+
+    },
+
     autoPlay() {
       this.mark++;
-      if (this.mark === 5) {
+      if (this.mark === this.imgArray.length) {
         this.mark = 0;
       }
     },
@@ -55,6 +62,70 @@ export default {
     }
   },
   created() {
+    var _this = this
+    var content = {
+        companyId: localStorage.getItem("company_id")
+      };
+      var contentData = JSON.stringify(content);
+      var headerAndBody = this.getHeaderAndBody(
+        contentData,
+        localStorage.getItem("serverPublicKey")
+      );
+      let url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/searchHomePagePicture.do";
+      this.$ajax
+        .post(url, headerAndBody.contentDataByKey, {
+          headers: {
+            appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+            appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+            appPublicKey: headerAndBody.appPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
+          }
+        })
+        .then(response => {
+            
+          var returnKey = this.RSAdecrypt(
+            response.headers.serverencryptedkey,
+            this.getPrivatekey()
+          );
+          let returnResponseData = response.data;
+          let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          var returnData = decrypt(encrypt, returnKey, this.getIV());
+          // console.log("returnData....." + returnData);
+
+          var returnData = JSON.parse(returnData);
+          debugger
+
+          if (returnData.code == 1001) {
+            _this.imgArray = returnData.data.homePagePictureList;
+            for (let i = 0; i < _this.imgArray.length; i++) {
+                var url = "http://" + this.getSERVER_HOST_MAIN() + ":" + this.getSERVER_PORT_MAIN()  
+                + _this.imgArray[i].pictureUrl.replace(new RegExp(/(\\)/g), "/")
+                _this.imgArray[i].pictureUrl= url
+                if (_this.imgArray[i].state == 0) {
+                  var addressUrl = "http://" + this.getSERVER_HOST_MAIN() + ":" + this.getSERVER_PORT_MAIN() + "/" + this.getPROJECT_MAIN() 
+                  + _this.imgArray[i].addressUrl.replace(new RegExp(/(\\)/g), "/")
+                  _this.imgArray[i].addressUrl= addressUrl
+                }else{
+                  debugger
+                  if (_this.imgArray[i].addressUrl.search("https://") == -1 && _this.imgArray[i].addressUrl.search("http://") == -1) {
+                    _this.imgArray[i].addressUrl= "http://"+_this.imgArray[i].addressUrl
+                  }
+                }
+            }
+          } else {
+              alert("连接错误，请检查网络！")
+            return;
+          }
+        });
+
+
     this.play();
   }
 };

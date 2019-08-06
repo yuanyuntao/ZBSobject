@@ -25,7 +25,7 @@
         <span style="font-size: 20px;font-weight: bold;">考勤类型</span>
       </div>
       <div style>
-        <template v-if="attendanceType==2">
+        <template v-if="attendanceType==1">
           <input
             type="radio"
             name="radios"
@@ -48,7 +48,7 @@
         <span style="vertical-align: middle">签到</span>
       </div>
       <div style="padding-left:10px">
-        <template v-if="attendanceType==1">
+        <template v-if="attendanceType==2">
           <input
             type="radio"
             name="radios"

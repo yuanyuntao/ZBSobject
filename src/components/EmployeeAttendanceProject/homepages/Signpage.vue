@@ -483,7 +483,6 @@ export default {
         })
         .then(function(response) {
           if (response.data.code == 1001) {
-            alert("1")
             location.reload();
             alert("签退成功！");
           } else {
@@ -496,27 +495,28 @@ export default {
      * 外勤
      */
     outSign() {
-      debugger
       var _this = this;
       
       if (_this.isIn && _this.isOut) {
-        this.$router.push({
-        path: "/Outsignpage",
-        query: {
-          pagename: "signpage",
-          defaultparam:1,
-          type:0,
-          address: _this.attendance_address,
-          attendance_longitude: this.attendance_longitude,
-          attendance_latitude: this.attendance_latitude,
-        }
-      });
+         alert("不可重复打卡！")
+         return 
+      //   this.$router.push({
+      //   path: "/Outsignpage",
+      //   query: {
+      //     pagename: "signpage",
+      //     defaultparam:1,
+      //     type:0,
+      //     address: _this.attendance_address,
+      //     attendance_longitude: this.attendance_longitude,
+      //     attendance_latitude: this.attendance_latitude,
+      //   }
+      // });
       }else if (_this.isIn && !_this.isOut) {
         this.$router.push({
         path: "/Outsignpage",
         query: {
           pagename: "signpage",
-          defaultparam:1,
+          defaultparam:2,
           type:1,
 
           address: _this.attendance_address,
@@ -529,7 +529,7 @@ export default {
         path: "/Outsignpage",
         query: {
           pagename: "signpage",
-          defaultparam:2,
+          defaultparam:1,
           type:2,
 
           address: _this.attendance_address,

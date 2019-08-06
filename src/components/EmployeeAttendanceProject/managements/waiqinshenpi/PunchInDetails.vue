@@ -27,6 +27,7 @@
       <br>
       <span style="font-size: 13px;color:#91918c">{{item.attendance_time}}</span>
     </div>
+    <div v-if="approvalList.length==0">没有查到相关记录</div>
   </div>
 </template>   
 <script>

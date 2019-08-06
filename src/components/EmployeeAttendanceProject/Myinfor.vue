@@ -1,7 +1,7 @@
 <template>
   <div class="myinfor">
     <div class="footer_guide">
-      <tabbarmy :userId="userId" :isAdministrator="isAdministrator" :userName="userName"></tabbarmy>
+      <tabbarmy></tabbarmy>
     </div>
     <div class="userName">
 
@@ -11,7 +11,7 @@
         src="../../assets/littleimg/yonghu.png" alt>
 
         <div style="padding:25px;color:#fff;letter-spacing:2px">
-          <span>【部门】</span>
+          <span>【{{department}}】</span>
           <span>{{userName}}</span>
         </div>
     </div>
@@ -75,8 +75,7 @@ export default {
   data() {
     return {
       userName: "",
-      isAdministrator: "",
-      userId: ""
+      department: "",
     };
   },
   methods: {
@@ -94,9 +93,9 @@ export default {
   },
   created: function() {
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
+    debugger
+    _this.userName = localStorage.getItem("userName");
+    _this.department = localStorage.getItem("department");
   }
 };
 </script>

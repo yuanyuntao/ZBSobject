@@ -100,7 +100,6 @@ export default {
         this.displaysheetList = [];
         for (let i = 0; i < this.sheetLists.length; i++) {
           if (this.sheetLists[i].department.search(this.searchsth) != -1) {
-            console.log("i：" + i);
             this.displaysheetList.push(this.sheetLists[i]);
           } else {
             if (this.sheetLists[i].department.search(this.searchsth) == -1) {

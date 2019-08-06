@@ -165,7 +165,7 @@ export default {
       var content = {
         userId: localStorage.getItem("userId"),
         resultId: this.item.result_id,
-        remarks: this.opinions, //查询条数
+        auditRemarks: this.opinions, 
         auditStatus: this.defaultparam,
         outAttendanceId: this.item.out_attendance_id,
         outAttendanceRecordAuditId: this.item.outAttendanceRecordAudit_id,
@@ -239,6 +239,7 @@ export default {
       
     }else if(localStorage.getItem("approved")=="true"){
       _this.approved = true;
+      _this.defaultparam = _this.item.audit_status
       _this.opinions = _this.item.audit_remarks
     }
     

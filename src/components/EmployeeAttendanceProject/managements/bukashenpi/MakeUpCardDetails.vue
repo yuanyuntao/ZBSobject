@@ -233,6 +233,7 @@ export default {
       
     }else if(localStorage.getItem("mackUpCardapproved")=="true"){
       _this.approved = true;
+      _this.defaultparam = _this.item.audit_status
       _this.opinions = _this.item.audit_remarks
     }
     

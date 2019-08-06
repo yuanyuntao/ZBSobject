@@ -167,6 +167,10 @@ export default {
             localStorage.setItem("isAdministrator", isAdministrator);
             localStorage.setItem("company_id", returnData.data.user.company_id);
             localStorage.setItem("serverPublicKey", this.serverPublicKey);
+            localStorage.setItem("department", returnData.data.user.department);
+            debugger
+            
+            
 
             this.$router.push("/homepage");
           } else if (returnData.code == 1014) {
