@@ -1,24 +1,18 @@
 <template>
   <div class="attendanceCard" ref="attendanceCard">
-    <div style="height:20px">
-      
-    </div>
+    <div style="height:20px"></div>
     <div type="primary" round class="lookRecords" @click="lookRecords">
-       <p>补卡记录</p>
-        <img class="iconRecord" src="../../../../assets/littleimg/jilu.png" alt />
-        
-      </div>
-     
+      <p>补卡记录</p>
+      <img class="iconRecord" src="../../../../assets/littleimg/jilu.png" alt />
+    </div>
     <div class="top">
       <div type="primary" round class="dateSelect" @click="dayBefore">
         <img class="arrowIcon" src="../../../../assets/littleimg/left.png" alt />
         <p>前一天</p>
       </div>
       <div type="primary" round class="selectedData" @click="showDatePicker(6, 3)">{{selectTime}}</div>
-
       <div type="primary" round class="dateSelect" @click="dayAfter">
         <p style="margin-left:10px">后一天</p>
-
         <img class="arrowIcon" src="../../../../assets/littleimg/right.png" alt />
       </div>
     </div>
@@ -30,16 +24,17 @@
       <div>
         <span class="words">考勤记录</span>
       </div>
-    
-
-    <div style>
-      <div v-for="i in cardRecord" :key="i.id" style="margin-left:40px;padding:5px;border-bottom: 1px solid rgb(240, 240, 240);">
-        {{i.attendance_type=1?"签到":"签退"}}：{{(i.attendance_time).substr(11,5)}} &ensp; {{i.result}}
-        <div class="cardRecord"></div>
+      <div style>
+        <div
+          v-for="i in cardRecord"
+          :key="i.id"
+          style="margin-left:40px;padding:5px;border-bottom: 1px solid rgb(240, 240, 240);"
+        >
+          {{i.attendance_type=1?"签到":"签退"}}：{{(i.attendance_time).substr(11,5)}} &ensp; {{i.result}}
+          <div class="cardRecord"></div>
+        </div>
       </div>
     </div>
-    </div>
-
     <div
       type="primary"
       round
@@ -49,24 +44,23 @@
         <span class="words">补卡类型</span>
       </div>
       <div style>
-          <input
-            type="radio"
-            name="radios"
-            value="1"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          />
-
+        <input
+          type="radio"
+          name="radios"
+          value="1"
+          v-model="defaultparam"
+          style="vertical-align: middle"
+        />
         <span style="vertical-align: middle">签到</span>
       </div>
       <div style="padding-left:10px">
-          <input
-            type="radio"
-            name="radios"
-            value="2"
-            v-model="defaultparam"
-            style="vertical-align: middle"
-          />
+        <input
+          type="radio"
+          name="radios"
+          value="2"
+          v-model="defaultparam"
+          style="vertical-align: middle"
+        />
         <span style="vertical-align: middle">签退</span>
       </div>
     </div>
@@ -115,7 +109,6 @@
         />
       </div>
     </div>
-
     <div
       type="primary"
       round
@@ -137,7 +130,6 @@
             <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
             <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
-
           <img
             class="arrow"
             v-show="index != (choseListApprove.length-1) "
@@ -147,11 +139,9 @@
         </div>
       </div>
     </div>
-
     <button class="sure" @click="sure" type="primary" round>提交申请</button>
   </div>
 </template>
-
 <script>
 import { encrypt, decrypt } from "../../../js/utils.js";
 export default {
@@ -164,13 +154,10 @@ export default {
       userName: "",
       company_id: "",
       serverPublicKey: "",
-
       cardRecord: [], //考勤记录
-      select_time:"",
-
+      select_time: "",
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
-
       selectTime: "",
       nowtime: new Date(), //现在时间
       address: "", //打卡地点
@@ -191,104 +178,97 @@ export default {
       this.$router.push({
         path: "/application",
         query: {
-          pagename: "attendanceCard",
+          pagename: "attendanceCard"
         }
       });
     },
     //查看记录
-    lookRecords(){
+    lookRecords() {
       this.$router.push({
         path: "/fieldRecord",
         query: {
-          pagename: "attendanceCard",
+          pagename: "attendanceCard"
         }
       });
     },
-    dayBefore(){
-        this.selectTime = this.getDay(this.select_time,-1)
-        this.getRecordData(this)
-
-
+    dayBefore() {
+      this.selectTime = this.getDay(this.select_time, -1);
+      this.getRecordData(this);
     },
-    dayAfter(){
-         this.selectTime = this.getDay(this.select_time,1)
-         this.getRecordData(this)
-
+    dayAfter() {
+      this.selectTime = this.getDay(this.select_time, 1);
+      this.getRecordData(this);
     },
-    getDay(date,num){
-        var date2 = new Date(date);
-        date2.setDate(date.getDate()+num);
-        this.select_time = date2
-        this.$defines.setSelect_time(date2)
-        var year = date2.getFullYear();
-        var month = date2.getMonth() + 1 < 10 ? "0" + (date2.getMonth() + 1) : date2.getMonth() + 1;
-        var day = date2.getDate() < 10 ? "0" + date2.getDate() : date2.getDate();
-        return year + "年" + month + "月" + day + "日"
+    getDay(date, num) {
+      var date2 = new Date(date);
+      date2.setDate(date.getDate() + num);
+      this.select_time = date2;
+      this.$defines.setSelect_time(date2);
+      var year = date2.getFullYear();
+      var month =
+        date2.getMonth() + 1 < 10
+          ? "0" + (date2.getMonth() + 1)
+          : date2.getMonth() + 1;
+      var day = date2.getDate() < 10 ? "0" + date2.getDate() : date2.getDate();
+      return year + "年" + month + "月" + day + "日";
     },
-    getRecordData(_this){
-        var selectedTime = _this.selectTime
-      .replace("年", "-")
-      .replace("月", "-")
-      .replace("日", "");
-
-    var content = {
-      userId: localStorage.getItem("userId"),
-      companyId: localStorage.getItem("company_id"),
-      startTime: selectedTime, //开始时间
-      endTime: selectedTime //结束时间
-    };
-    var contentData = JSON.stringify(content);
-    var headerAndBody = this.getHeaderAndBody(
-      contentData,
-      localStorage.getItem("serverPublicKey")
-    );
-
-    let url =
-      "http://" +
-      this.getSERVER_HOST_MAIN() +
-      ":" +
-      this.getSERVER_PORT_MAIN() +
-      "/" +
-      this.getPROJECT_MAIN() +
-      "/user/searchAttendanceRecord.do";
-    this.$ajax
-      .post(url, headerAndBody.contentDataByKey, {
-        headers: {
-          appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
-          appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
-          appPublicKey: headerAndBody.appPublicKey,
-          serverPublicKey: headerAndBody.serverPublicKey
-        }
-      })
-      .then(response => {
-        var returnKey = this.RSAdecrypt(
-          response.headers.serverencryptedkey,
-          this.getPrivatekey()
-        );
-        let returnResponseData = response.data;
-        let encrypt = returnResponseData.replace(/[\r\n]/g, "");
-        var returnData = decrypt(encrypt, returnKey, this.getIV());
-        // console.log("returnData....." + returnData);
-
-        var returnData = JSON.parse(returnData);
-
-        if (returnData.code == 1001) {
-          this.cardRecord = returnData.data.attendanceRecord;
-        } else if (returnData.code == 1014) {
-          alert("网络有问题！");
-          return;
-        } else {
-          alert("网络有问题！");
-          return;
-        }
-      });
-
+    getRecordData(_this) {
+      var selectedTime = _this.selectTime
+        .replace("年", "-")
+        .replace("月", "-")
+        .replace("日", "");
+      var content = {
+        userId: localStorage.getItem("userId"),
+        companyId: localStorage.getItem("company_id"),
+        startTime: selectedTime, //开始时间
+        endTime: selectedTime //结束时间
+      };
+      var contentData = JSON.stringify(content);
+      var headerAndBody = this.getHeaderAndBody(
+        contentData,
+        localStorage.getItem("serverPublicKey")
+      );
+      let url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/searchAttendanceRecord.do";
+      this.$ajax
+        .post(url, headerAndBody.contentDataByKey, {
+          headers: {
+            appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+            appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+            appPublicKey: headerAndBody.appPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
+          }
+        })
+        .then(response => {
+          var returnKey = this.RSAdecrypt(
+            response.headers.serverencryptedkey,
+            this.getPrivatekey()
+          );
+          let returnResponseData = response.data;
+          let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          var returnData = decrypt(encrypt, returnKey, this.getIV());
+          var returnData = JSON.parse(returnData);
+          if (returnData.code == 1001) {
+            this.cardRecord = returnData.data.attendanceRecord;
+          } else if (returnData.code == 1014) {
+            alert("网络有问题！");
+            return;
+          } else {
+            alert("网络有问题！");
+            return;
+          }
+        });
     },
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
       this.fileData.splice(index, 1);
-
       this.$defines.setAttendanceCardImges(this.imgs);
       this.$defines.setattendanceCardFileData(this.fileData);
     },
@@ -296,15 +276,12 @@ export default {
     imgClick: function() {
       document.getElementById("uploadFile").click();
     },
-    // uploadFile
     //点击选中图片
     readLocalFile: function() {
       var local = document.getElementById("uploadFile");
       var localFile = document.getElementById("uploadFile").files[0];
-
       this.fileData.push(local);
       this.$defines.setFileData(this.fileData);
-      //   debugger
       var current = this;
       var reader = new FileReader();
       var content;
@@ -317,11 +294,9 @@ export default {
       reader.onerror = function(event) {
         alert("error");
       };
-
       content = reader.readAsDataURL(localFile, "UTF-8");
       var sss = document.getElementById("uploadFile").value;
       var dd = document.getElementById("uploadFile").files[0];
-      //   console.log(sss);
     },
     selectApprover() {
       this.$router.push({
@@ -338,9 +313,9 @@ export default {
 
     getAttendanceRecord() {
       var choseListApproveData = [];
-      if (this.defaultparam!="1" && this.defaultparam!="2") {
-          alert("请选择补卡类型！");
-          return
+      if (this.defaultparam != "1" && this.defaultparam != "2") {
+        alert("请选择补卡类型！");
+        return;
       }
       if (this.choseListApprove.length == 0) {
         alert("审批人不能为空！");
@@ -353,11 +328,14 @@ export default {
       let signWords = {
         user_id: localStorage.getItem("userId"),
         attendance_type: this.defaultparam,
-        remarks:this.outReasons, 
-        attendance_type:this.defaultparam,
-        appeal_time: this.selectTime.replace("年", "-").replace("月", "-").replace("日", ""),
+        remarks: this.outReasons,
+        attendance_type: this.defaultparam,
+        appeal_time: this.selectTime
+          .replace("年", "-")
+          .replace("月", "-")
+          .replace("日", ""),
         appeal_attendance: 1,
-        audit_user: choseListApproveData,
+        audit_user: choseListApproveData
       };
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
@@ -384,7 +362,6 @@ export default {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
-          debugger;
           if (response.data.code == 1001) {
             if (_this.defaultparam == 1) {
               alert("签到补卡成功！");
@@ -402,12 +379,11 @@ export default {
             } else {
               alert("错误！");
             }
-
             return;
           }
         });
     },
-        showDatePicker(demo, type) {
+    showDatePicker(demo, type) {
       var date = new Date();
       var y = date.getFullYear();
       var m = date.getMonth() + 1;
@@ -445,23 +421,18 @@ export default {
       this.$datepicker(dataObj)
         .then(e => {
           var y = e[0];
-          
-          var m = e[1]< 10 ? "0" + e[1] : e[1];
-          var d = e[2]< 10 ? "0" + e[2] : e[2];
+          var m = e[1] < 10 ? "0" + e[1] : e[1];
+          var d = e[2] < 10 ? "0" + e[2] : e[2];
           var h = e[3];
           var mm = e[4];
-        //   this.years = e[0]
-        //   this.mounth = e[1]
-        //   this.days = e[2]
           if (demo === 6) {
             this.resetTime = e;
             this.selectTime = dataObj.showChinese
-              ? y + m + d 
-              : y + "年" + m + "月" + d + "日" ;
-              var a=y + "-" + m + "-" + d;
-              this.select_time =  new Date(a);
-              this.$defines.setSelect_time(select_time)
-
+              ? y + m + d
+              : y + "年" + m + "月" + d + "日";
+            var a = y + "-" + m + "-" + d;
+            this.select_time = new Date(a);
+            this.$defines.setSelect_time(select_time);
             this.endTime = "";
           } else if (demo === 7) {
             this.endTime = dataObj.showChinese
@@ -483,8 +454,7 @@ export default {
     this.timer = setInterval(function() {
       _this.nowtime = new Date(); //修改数据date
     }, 1000);
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // console.log(self);
+    this.clientHeight = `${document.documentElement.clientHeight}`;
     window.onresize = function temp() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
     };
@@ -493,7 +463,6 @@ export default {
       window.addEventListener("popstate", this.goBack, false);
     }
   },
-
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
@@ -508,27 +477,21 @@ export default {
     }
   },
   created: function() {
-    console.log("开始");
     var _this = this;
-
     _this.fileData = this.$defines.attendanceCardfileData;
     _this.imgs = this.$defines.attendanceCardimgs;
     _this.defaultparam = this.$route.query.defaultparam;
-
     if (this.$route.query.pagename == "selectApproverpage") {
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.outReasons = this.$route.query.outReasons;
       _this.choseListApprove = this.$route.query.choseListApprove;
-
-
     }
     _this.selectTime = this.getTIME(_this.nowtime, 8);
-    _this.getRecordData(_this)
+    _this.getRecordData(_this);
     if (this.$defines.select_time == "") {
-        this.$defines.setSelect_time(new Date())
+      this.$defines.setSelect_time(new Date());
     }
     _this.select_time = this.$defines.select_time;
-    
   }
 };
 </script>
@@ -544,12 +507,9 @@ export default {
 }
 .outReasons {
   height: 50px;
-
   width: 100%;
   font-size: 15px;
-
   /* padding: 10px; */
-
   border: 0;
 }
 .sure {
@@ -622,7 +582,7 @@ export default {
   width: 20px;
   height: 20px;
 }
-.lookRecords{
+.lookRecords {
   font-size: 18px;
   border-radius: 15px;
   background-color: rgb(18, 31, 214);
@@ -630,11 +590,10 @@ export default {
   margin-left: 10px;
   display: flex;
   width: 100px;
-  color:antiquewhite;
+  color: antiquewhite;
   /* float: right; */
-
 }
-.iconRecord{
+.iconRecord {
   width: 25px;
   height: 25px;
 }

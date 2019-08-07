@@ -26,7 +26,7 @@
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
           <div class="sheeImage" v-for="i in item.vacationRecordPic" v-bind:key="i.id">
-            <img class="image" :src="getURL(i.url)">
+            <img class="image" :src="getURL(i.url)" />
           </div>
         </div>
       </div>
@@ -43,13 +43,15 @@
         <div v-for="i in item.vacationAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-            <template v-if="i.audit_status==0">待审批</template>
+            <template
+              v-if="i.audit_status==0"
+            >待审批</template>
             <template v-else-if="i.audit_status==1">审批中</template>
             <template v-else-if="i.audit_status==2">审批通过</template>
             <template v-else-if="i.audit_status==3">审批不通过</template>
-            <br>
+            <br />
             审批意见：{{i.audit_remarks}}
-            <br>
+            <br />
             审批时间：{{i.audit_time}}
           </div>
         </div>
@@ -59,8 +61,6 @@
       <div class="words">审批结果</div>
       <div class="information">{{item.result}}</div>
     </div>
-    
-    
   </div>
 </template>
 <script>
@@ -70,11 +70,10 @@ export default {
   components: {},
   data() {
     return {
-      defaultparam:2,
-      opinions:"",//审批意见
-      approved:"",//审批状态
-
-      item: "",
+      defaultparam: 2,
+      opinions: "", //审批意见
+      approved: "", //审批状态
+      item: ""
     };
   },
   methods: {
@@ -88,7 +87,6 @@ export default {
       });
     },
     getURL(url) {
-      
       var urlNew = (
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -97,14 +95,13 @@ export default {
         url
       ).replace(new RegExp(/(\\)/g), "/");
       return urlNew;
-    },
+    }
   },
-  mounted(){
+  mounted() {
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
-
   },
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
@@ -153,7 +150,6 @@ export default {
   margin-left: 10px;
   text-align: right;
   width: 75%;
-  
 }
 .auditRecord {
   text-align: left;
@@ -167,7 +163,6 @@ export default {
   width: 50px;
   height: 50px;
   margin: 6px;
-  
   background-color: #4debd0;
   color: #fff;
   font-size: 34px;
@@ -181,13 +176,11 @@ export default {
   display: flex;
   background-color: #fff;
   margin-bottom: 2px;
-  
 }
 .surediv {
   vertical-align: middle;
   background-color: #fff;
   margin-bottom: 20px;
-  
 }
 .Opinions {
   height: 60px;

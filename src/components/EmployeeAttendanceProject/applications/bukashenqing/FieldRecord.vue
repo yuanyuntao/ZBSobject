@@ -1,50 +1,48 @@
 <template>
-
   <div class="fieldRecord" ref="fieldRecord">
     <div style="height:5px"></div>
-
     <div
       v-for="item in approvalList"
       v-bind:key="item.id"
       style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
-      @touchstart="touchin(item)" @touchmove="touchmove()" @touchend="cleartime(item)"
-      
+      @touchstart="touchin(item)"
+      @touchmove="touchmove()"
+      @touchend="cleartime(item)"
     >
-    <template v-if="item.effective==0">
-      <img
+      <template v-if="item.effective==0">
+        <img
           src="../../../../assets/littleimg/yishixiao.png"
           style=" position: absolute;padding:5px;right:10px;
                 width: 60px;
                 height: 50px;"
         />
-    </template>
-    <template v-else>
-
-      <template v-if="item.result_id==7">
-        <img
-          src="../../../../assets/littleimg/shenpitongguo.png"
-          style=" position: absolute;padding:5px;right:10px;
+      </template>
+      <template v-else>
+        <template v-if="item.result_id==7">
+          <img
+            src="../../../../assets/littleimg/shenpitongguo.png"
+            style=" position: absolute;padding:5px;right:10px;
                 width: 60px;
                 height: 60px;"
-        />
-      </template>
-      <template v-else-if="item.result_id==8">
-        <img
-          src="../../../../assets/littleimg/butongguo.png"
-          style=" position: absolute;padding:10px;right:10px;
+          />
+        </template>
+        <template v-else-if="item.result_id==8">
+          <img
+            src="../../../../assets/littleimg/butongguo.png"
+            style=" position: absolute;padding:10px;right:10px;
                 width: 60px;
                 height: 60px;"
-        />
-      </template>
-      <template v-else-if="item.result_id==5">
-        <img
-          src="../../../../assets/littleimg/zhengzaishenhe.png"
-          style=" position: absolute;padding:10px;right:10px;
+          />
+        </template>
+        <template v-else-if="item.result_id==5">
+          <img
+            src="../../../../assets/littleimg/zhengzaishenhe.png"
+            style=" position: absolute;padding:10px;right:10px;
                 width: 60px;
                 height: 52px;"
-        />
+          />
+        </template>
       </template>
-    </template>
       <span style="font-size: 14px;font-weight: bold;">{{item.user_name}}</span>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <span
@@ -71,33 +69,30 @@
 <script>
 import { encrypt, decrypt } from "../../../js/utils.js";
 import dialogBar from "../../toolsComponent/dialog";
-import Vue from 'vue'
+import Vue from "vue";
 export default {
   name: "fieldRecord",
   components: { "dialog-bar": dialogBar },
   data() {
     return {
-      sendVal: false ,
+      sendVal: false,
       userId: "",
       isAdministrator: "",
       userName: "",
       company_id: "",
       serverPublicKey: "",
-
       bNum: 0, //从第几条开始
       rows: 50, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
       applicatUserId: "",
       approved: false,
-
       approvalList: [], //审批列表
-
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date(), //时间
-      Loop:0,
-      selectedItem:"",
+      Loop: 0,
+      selectedItem: ""
     };
   },
   methods: {
@@ -110,58 +105,47 @@ export default {
         }
       });
     },
-    touchin(item){
-        var that=this;
-        this.Loop = setTimeout(function() {
-          that.Loop = 0;
-          //执行长按要执行的内容，如弹出菜单
-          if (item.effective == 0) {
-              alert("该条申请已经失效！");
-              return;
-            }
-            if (item.result_id == 7) {
-              alert("该条申请已经审批完，无法撤回！");
-              return;
-            }
-          that.openMask(item)
-        }, 500);
-        return false;
-
-      },
-      touchmove(){
-        clearTimeout(this.Loop);//清除定时器
-        this.Loop = 0;
-      },
-      cleartime(item) {
-        var that=this;
-        clearTimeout(this.Loop);
-        if(that.Loop!=0){
-        that.goLeaveRequestInformation(item)
+    touchin(item) {
+      var that = this;
+      this.Loop = setTimeout(function() {
+        that.Loop = 0;
+        //执行长按要执行的内容，如弹出菜单
+        if (item.effective == 0) {
+          alert("该条申请已经失效！");
+          return;
         }
-        return false;
-
-      },
+        if (item.result_id == 7) {
+          alert("该条申请已经审批完，无法撤回！");
+          return;
+        }
+        that.openMask(item);
+      }, 500);
+      return false;
+    },
+    touchmove() {
+      clearTimeout(this.Loop); //清除定时器
+      this.Loop = 0;
+    },
+    cleartime(item) {
+      var that = this;
+      clearTimeout(this.Loop);
+      if (that.Loop != 0) {
+        that.goLeaveRequestInformation(item);
+      }
+      return false;
+    },
     openMask(item) {
-      this.selectedItem = item
+      this.selectedItem = item;
       this.sendVal = true;
-      
     },
     clickCancel() {
       return;
     },
     clickDanger() {
-       var item = this.selectedItem
-      // if (item.effective == 0) {
-      //   alert("该条申请已经失效！");
-      //   return 
-      // }
-      // if (item.result_id == 7) {
-      //   alert("该条申请已经审批完，无法撤回！");
-      //   return
-      // }
-       var content = {
+      var item = this.selectedItem;
+      var content = {
         userId: this.userId,
-        id:item.appeal_attendance_id
+        id: item.appeal_attendance_id
       };
       var contentData = JSON.stringify(content);
       var headerAndBody = this.getHeaderAndBody(
@@ -193,15 +177,12 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-          // console.log("returnData....." + returnData);
-          debugger
           var returnData = JSON.parse(returnData);
-
           if (returnData.code == 1001) {
-            location.reload()
-            alert("撤销成功！")
+            location.reload();
+            alert("撤销成功！");
           } else {
-            alert("撤销失败，请稍后再试！")
+            alert("撤销失败，请稍后再试！");
             return;
           }
         });
@@ -209,7 +190,6 @@ export default {
     clickConfirm() {
       alert("点击了confirm");
     },
-    
     getDay(date, num) {
       var date2 = new Date(date);
       date2.setDate(date.getDate() + num);
@@ -269,10 +249,7 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-          // console.log("returnData....." + returnData);
-
           var returnData = JSON.parse(returnData);
-
           if (returnData.code == 1001) {
             this.approvalList = returnData.data.appealAttendanceInfo;
           } else if (returnData.code == 1014) {
@@ -291,18 +268,13 @@ export default {
         }
       });
     },
-
     changeFixed(clientHeight) {
       //动态修改样式
       this.$refs.fieldRecord.style.height = clientHeight + "px";
-    },
+    }
   },
   mounted() {
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // // console.log(self);
-    // window.onresize = function temp() {
-    //   this.clientHeight = `${document.documentElement.clientHeight}`;
-    // };
+    this.clientHeight = `${document.documentElement.clientHeight}`;
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
@@ -315,7 +287,6 @@ export default {
     _this.isAdministrator = localStorage.getItem("isAdministrator");
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
-
     _this.getListData();
   },
   destroyed() {
@@ -329,7 +300,7 @@ export default {
         this.clientHeight = this.totalHeight + 20;
       }
       this.changeFixed(this.clientHeight);
-    },
+    }
   }
 };
 </script>

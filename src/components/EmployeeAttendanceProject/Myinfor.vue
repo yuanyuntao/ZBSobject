@@ -93,7 +93,6 @@ export default {
   },
   created: function() {
     var _this = this;
-    debugger
     _this.userName = localStorage.getItem("userName");
     _this.department = localStorage.getItem("department");
   }

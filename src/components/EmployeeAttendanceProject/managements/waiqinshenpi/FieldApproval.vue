@@ -160,8 +160,6 @@ export default {
       return urlNew;
     },
     sure(){
-      console.log("this.item"+this.item)
-      debugger
       var content = {
         userId: localStorage.getItem("userId"),
         resultId: this.item.result_id,
@@ -202,7 +200,6 @@ export default {
           var returnData = decrypt(encrypt, returnKey, this.getIV());
 
           var returnData = JSON.parse(returnData);
-          debugger
 
           if (returnData.code == 1001) {
             alert("审批成功！")
@@ -233,7 +230,6 @@ export default {
   created: function() {
     var _this = this;
     _this.item = this.$route.query.item;
-    debugger
     if (localStorage.getItem("approved")=="false") {
       _this.approved = false;
       

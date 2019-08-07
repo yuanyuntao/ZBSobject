@@ -59,8 +59,6 @@
     </div>
     <div class="moduls">
       <div class="words">审批结果</div>
-      
-
       <div class="information" style="display: flex; text-align: right">
         <template v-if="approved">
         <div >
@@ -124,7 +122,6 @@
     <div class="surediv" v-show="!approved">
       <button class="sure" @click="sure" type="primary" round>提交审批</button>
     </div>
-    
   </div>
 </template>
 <script>
@@ -137,7 +134,6 @@ export default {
       defaultparam:2,
       opinions:"",//审批意见
       approved:"",//审批状态
-
       item: "",
     };
   },
@@ -152,7 +148,6 @@ export default {
       });
     },
     getURL(url) {
-      
       var urlNew = (
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -164,7 +159,6 @@ export default {
     },
     sure(){
       console.log("this.item"+this.item)
-      debugger
       var content = {
         userId: localStorage.getItem("userId"),
         resultId: this.item.result_id,
@@ -203,14 +197,10 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-
           var returnData = JSON.parse(returnData);
-          debugger
-
           if (returnData.code == 1001) {
             alert("审批成功！")
             this.goBack();
-
           } else if (returnData.code == 1014) {
             alert("审批失败！")
             return;
@@ -219,8 +209,6 @@ export default {
             return;
           }
         });
-
-
     },
   },
   mounted(){
@@ -228,7 +216,6 @@ export default {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
-
   },
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
@@ -236,18 +223,13 @@ export default {
   created: function() {
     var _this = this;
     _this.item = this.$route.query.item;
-    debugger
     if (localStorage.getItem("travelRequestapproved")=="false") {
       _this.approved = false;
-      
     }else if(localStorage.getItem("travelRequestapproved")=="true"){
       _this.approved = true;
       _this.defaultparam = _this.item.audit_status
       _this.opinions = _this.item.audit_remarks
     }
-    
-
-    // console.log("用户名" + _this.userName);
   }
 };
 </script>
@@ -288,7 +270,6 @@ export default {
   margin-left: 10px;
   text-align: right;
   width: 75%;
-  
 }
 .auditRecord {
   text-align: left;
@@ -302,7 +283,6 @@ export default {
   width: 50px;
   height: 50px;
   margin: 6px;
-  
   background-color: #4debd0;
   color: #fff;
   font-size: 34px;
@@ -316,13 +296,11 @@ export default {
   display: flex;
   background-color: #fff;
   margin-bottom: 2px;
-  
 }
 .surediv {
   vertical-align: middle;
   background-color: #fff;
   margin-bottom: 20px;
-  
 }
 .Opinions {
   height: 60px;

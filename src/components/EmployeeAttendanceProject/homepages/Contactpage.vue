@@ -1,13 +1,5 @@
 <template>
   <div class="contactpage">
-    <!-- <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 25px;letter-spacing:5px">
-      <span>公司通讯录</span>
-    </div>-->
-    <!-- <div style="color: #fff;background-color: #45d4c1;">
-      <div style="padding:10px;font-size:25px;letter-spacing:5px;">
-        <span>公司通讯录</span>
-    </div>-->
-    <!-- </div> -->
     <div class="search_guide">
       <div style="height:7px;background-color: #45d4c1;"></div>
       <div style="height:70px;background-color: #45d4c1;">
@@ -23,14 +15,14 @@
             placeholder="Search..."
             v-model="searchsth"
             @keyup="dosearch"
-          >
+          />
           <div style="width=10%;padding-top:0px">
             <img
               src="../../../assets/littleimg/cancle.png"
               alt
               style="width:25px;height:25px;margin: 8px;"
               @click="inputClear"
-            >
+            />
           </div>
         </div>
       </div>
@@ -49,7 +41,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import Contactlist from "../toolsComponent/Contactlist.vue";
 import { encrypt, decrypt } from "../../js/utils.js";
@@ -65,7 +56,6 @@ export default {
       userId: "",
       company_id: "",
       serverPublicKey: "",
-
       searchsth: "",
       shownone: false,
       showList: false,
@@ -111,7 +101,6 @@ export default {
                     this.searchsth
                   ) != -1
                 ) {
-                  // console.log(this.sheetList[i].users[j].user_name);
                   if (!have) {
                     this.displaysheetList.push({
                       department: this.sheetLists[i].department,
@@ -146,7 +135,6 @@ export default {
           }
         }
       }
-
       if (this.displaysheetList.length == 0) {
         this.shownone = true;
       } else {
@@ -167,21 +155,13 @@ export default {
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
-
   created: function() {
-    // console.log("开始");
     var _this = this;
-    //  _this.userId = this.$defines.userId;
-    // _this.userName = this.$defines.userName;
-    // _this.isAdministrator = this.$defines.isAdministrator;
-    // _this.company_id = this.$defines.companyId;
-    // _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.userId = localStorage.getItem("userId");
     _this.userName = localStorage.getItem("userName");
     _this.isAdministrator = localStorage.getItem("isAdministrator");
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
-
     var url =
       "http://" +
       this.getSERVER_HOST_MAIN() +
@@ -190,7 +170,6 @@ export default {
       "/" +
       this.getPROJECT_MAIN() +
       "/user/searchAllUser.do";
-
     var content = {
       companyId: _this.company_id,
       authority: ""
@@ -218,7 +197,6 @@ export default {
         let returnResponseData = response.data;
         let encrypt = returnResponseData.replace(/[\r\n]/g, "");
         var returnData = decrypt(encrypt, returnKey, _this.getIV());
-
         var returnData = JSON.parse(returnData);
         var resultdata = returnData.data.departmentList;
         for (let i = 0; i < resultdata.length; i++) {
@@ -243,7 +221,6 @@ export default {
                 icon_url
               ).replace(new RegExp(/(\\)/g), "/");
             }
-
             _this.sheetLists[i].users.push({
               user_id: resultdata[i].users[j].user_id, //姓名
               user_name: resultdata[i].users[j].user_name, //姓名
@@ -259,8 +236,6 @@ export default {
           }
         }
       });
-
-    // this.getcontactlist();
     this.displaysheetList = _this.sheetLists;
   }
 };

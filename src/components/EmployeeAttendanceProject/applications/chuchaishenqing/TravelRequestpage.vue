@@ -534,7 +534,6 @@ export default {
             let encrypt = returnResponseData.replace(/[\r\n]/g, "");
             var returnData = decrypt(encrypt, returnKey, _this.getIV());
             var returnData = JSON.parse(returnData);
-            debugger
             if (returnData.code != 1001) {
               alert("连接错误，请检查网络！");
               return;
@@ -709,7 +708,6 @@ export default {
         audit_user: choseListApproveData,
         copy_user: choseListCCData
       };
-      debugger
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       for (let i = 0; i < this.$defines.travelRequestFileData.length; i++) {
@@ -753,7 +751,6 @@ export default {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
-          debugger
           if (response.data.code == 1001) {
             alert("申请成功！");
             _this.goBack();

@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     changepage(addressUrl){
-      debugger
       window.location.href = addressUrl
 
     },

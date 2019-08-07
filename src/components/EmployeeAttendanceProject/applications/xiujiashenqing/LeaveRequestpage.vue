@@ -25,7 +25,6 @@
           </select>
         </div>
       </div>
-
       <div
         type="primary"
         round
@@ -34,7 +33,6 @@
         <div style=" width: 60%;text-align: left">
           <span style="font-size: 18px;font-weight: bold;">起止时间</span>
         </div>
-
         <div style=" margin: 10px;display: flex;">
           <span style="font-size: 16px;">开始时间：</span>
           <div class="startTime" @click="showDatePicker(6, 5)">{{startTime}}</div>
@@ -43,7 +41,6 @@
           <span style="font-size: 16px;">结束时间：</span>
           <div class="endTime" @click="showDatePicker(7, 5)">{{endTime}}</div>
         </div>
-
         <div style=" margin: 10px;display: flex;padding-top:10px">
           共&nbsp;
           <input type="number" class="inputTime" v-model="leaveDays" min="0" />
@@ -113,7 +110,6 @@
           <span
             style="float: right; width: 70px;height: 28px;padding-right:1px;font-size: 18px"
           >{{canUseTime}}&nbsp;小时</span>
-
           <!-- <img
           class="imge"
           style="float: right; width: 28px;height: 28px;padding-right:20px;"
@@ -123,7 +119,6 @@
           >-->
         </div>
       </div>
-
       <div
         type="primary"
         round
@@ -145,7 +140,6 @@
               <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
               <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
             </div>
-
             <img
               class="arrow"
               v-show="index != (choseListApprove.length-1) "
@@ -155,7 +149,6 @@
           </div>
         </div>
       </div>
-
       <div
         type="primary"
         round
@@ -184,13 +177,14 @@
         <button class="sure" @click="sure" type="primary" round>提交申请</button>
       </div>
     </template>
-
     <template v-else>
       <div
         v-for="item in approvalList"
         v-bind:key="item.id"
         style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
-        @touchstart="touchin(item)" @touchmove="touchmove()" @touchend="cleartime(item)"
+        @touchstart="touchin(item)"
+        @touchmove="touchmove()"
+        @touchend="cleartime(item)"
       >
         <template v-if="item.effective==0">
           <img
@@ -233,9 +227,8 @@
         >{{item.vacation_type_name}}</span>
         <br />
         <span style="font-size: 14px;">{{item.start_time}} ~ {{item.stop_time}}</span>
-        <br>
+        <br />
         <span style="font-size: 14px;">共{{item.day}}天{{item.hour}}小时</span>
-
         <br />
         <span style="font-size: 13px;color:#91918c">{{item.createTime}}</span>
       </div>
@@ -265,22 +258,18 @@ export default {
       userId: "",
       isAdministrator: "",
       userName: "",
-      //新增
       isNew: true,
-      sendVal: false ,
+      sendVal: false,
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date(), //现在时间                display: flex;
       address: "", //打卡地点
-
       leaveReasons: "", //外出事由
-
       choseListApprove: [], //审批人
       sheetListsApprove: [], //审批人选择列表
       choseListCC: [], //抄送人
       sheetListsCC: [], //抄送人选择列表
       defaultType: 1, //默认休假类型
-
       startTime: "", //开始时间
       endTime: "", //结束时间
       canUseTime: 0, //可调休时间
@@ -290,17 +279,12 @@ export default {
       showChinese: false,
       resetTime: [],
       type: null,
-
       leaveDays: "", //请假天数
       leaveHours: "", //请假小时数
-
       imgs: [], //上传的图片列表
       fileData: [],
-
       options: [],
-      Loop:0,
-
-      //记录
+      Loop: 0,
       approvalList: [] //记录列表
     };
   },
@@ -316,58 +300,47 @@ export default {
         }
       });
     },
-    touchin(item){
-        var that=this;
-        this.Loop = setTimeout(function() {
-          that.Loop = 0;
-          //执行长按要执行的内容，如弹出菜单
-          if (item.effective == 0) {
-              alert("该条申请已经失效！");
-              return;
-            }
-            if (item.result_id == 7) {
-              alert("该条申请已经审批完，无法撤回！");
-              return;
-            }
-          that.openMask(item)
-        }, 500);
-        return false;
-
-      },
-      touchmove(){
-        clearTimeout(this.Loop);//清除定时器
-        this.Loop = 0;
-      },
-      cleartime(item) {
-        var that=this;
-        clearTimeout(this.Loop);
-        if(that.Loop!=0){
-        that.goLeaveRequestInformation(item)
+    touchin(item) {
+      var that = this;
+      this.Loop = setTimeout(function() {
+        that.Loop = 0;
+        //执行长按要执行的内容，如弹出菜单
+        if (item.effective == 0) {
+          alert("该条申请已经失效！");
+          return;
         }
-        return false;
-
-      },
+        if (item.result_id == 7) {
+          alert("该条申请已经审批完，无法撤回！");
+          return;
+        }
+        that.openMask(item);
+      }, 500);
+      return false;
+    },
+    touchmove() {
+      clearTimeout(this.Loop); //清除定时器
+      this.Loop = 0;
+    },
+    cleartime(item) {
+      var that = this;
+      clearTimeout(this.Loop);
+      if (that.Loop != 0) {
+        that.goLeaveRequestInformation(item);
+      }
+      return false;
+    },
     openMask(item) {
-      this.selectedItem = item
+      this.selectedItem = item;
       this.sendVal = true;
-      
     },
     clickCancel() {
       return;
     },
     clickDanger() {
-       var item = this.selectedItem
-      // if (item.effective == 0) {
-      //   alert("该条申请已经失效！");
-      //   return 
-      // }
-      // if (item.result_id == 7) {
-      //   alert("该条申请已经审批完，无法撤回！");
-      //   return
-      // }
-       var content = {
+      var item = this.selectedItem;
+      var content = {
         userId: this.userId,
-        id:item.appeal_attendance_id
+        id: item.appeal_attendance_id
       };
       var contentData = JSON.stringify(content);
       var headerAndBody = this.getHeaderAndBody(
@@ -399,14 +372,12 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-          // console.log("returnData....." + returnData);
           var returnData = JSON.parse(returnData);
-
           if (returnData.code == 1001) {
-            location.reload()
-            alert("撤销成功！")
+            location.reload();
+            alert("撤销成功！");
           } else {
-            alert("撤销失败，请稍后再试！")
+            alert("撤销失败，请稍后再试！");
             return;
           }
         });
@@ -414,12 +385,10 @@ export default {
     clickConfirm() {
       alert("点击了confirm");
     },
-    
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
       this.fileData.splice(index, 1);
-
       this.$defines.setLeaveRequestImges(this.imgs);
       this.$defines.setLeaveRequestFileData(this.fileData);
     },
@@ -432,14 +401,12 @@ export default {
     readLocalFile: function() {
       var local = document.getElementById("uploadFile");
       var localFile = document.getElementById("uploadFile").files[0];
-
       this.fileData.push(local);
       this.$defines.setLeaveRequestFileData(this.fileData);
       var current = this;
       var reader = new FileReader();
       var content;
       reader.onload = function(event) {
-        console.log("event:" + event);
         content = event.target.result;
         current.imgs.push(content); //获取图片base64代码
         current.$defines.setLeaveRequestImges(current.imgs);
@@ -447,13 +414,10 @@ export default {
       reader.onerror = function(event) {
         alert("error");
       };
-
       content = reader.readAsDataURL(localFile, "UTF-8");
       var sss = document.getElementById("uploadFile").value;
       var dd = document.getElementById("uploadFile").files[0];
-      //   console.log(sss);
     },
-
     //新增
     pendingTrial() {
       if (localStorage.getItem("leaveRequestApproved") == "true") {
@@ -462,7 +426,6 @@ export default {
         this.$refs.pendingTrial.style.background = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.color = "#eee";
         this.$refs.pendingTrial.style.border = "1px solid #fff";
-
         this.$refs.examined.style.background = "#eee";
         this.$refs.examined.style.color = "rgb(58, 190, 98)";
         this.$refs.examined.style.border = "1px solid rgb(58, 190, 98)";
@@ -478,7 +441,6 @@ export default {
         this.$refs.examined.style.background = "rgb(58, 190, 98)";
         this.$refs.examined.style.color = "#eee";
         this.$refs.examined.style.border = "1px solid #fff";
-
         this.$refs.pendingTrial.style.background = "#eee";
         this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
@@ -557,7 +519,6 @@ export default {
             }
           })
           .then(function(response) {
-
             var returnKey = _this.RSAdecrypt(
               response.headers.serverencryptedkey,
               _this.getPrivatekey()
@@ -604,8 +565,6 @@ export default {
             }
           })
           .then(function(response) {
-            debugger
-
             var returnKey = _this.RSAdecrypt(
               response.headers.serverencryptedkey,
               _this.getPrivatekey()
@@ -636,7 +595,6 @@ export default {
       return year + "-" + month + "-" + day;
     },
     getRecordListData() {},
-
     // 获取当前时间
     getCurTime(minTime) {
       var date;
@@ -651,7 +609,6 @@ export default {
       } else {
         date = new Date();
       }
-
       var dafultTiemEnd = new Date(date);
       dafultTiemEnd.setDate(date.getDate() + 30);
       var y1 = dafultTiemEnd.getFullYear() + 1;
@@ -696,7 +653,6 @@ export default {
         max: this.maxTime,
         showChinese: this.showChinese
       };
-
       let init = JSON.parse(JSON.stringify(this.time));
       dataObj.value = init;
       this.$datepicker(dataObj)
@@ -722,7 +678,6 @@ export default {
           // console.log(e)
         });
     },
-
     selectApprover() {
       this.$router.push({
         path: "/selectApproverpage",
@@ -732,7 +687,6 @@ export default {
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
-
           leaveReasons: this.leaveReasons, //休假原因
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
@@ -752,7 +706,6 @@ export default {
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
-
           leaveReasons: this.leaveReasons, //休假原因
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
@@ -768,13 +721,11 @@ export default {
       for (let i = 0; i < this.choseListApprove.length; i++) {
         choseListApproveData.push(this.choseListApprove[i].userId.toString());
       }
-
       if (this.choseListCC.length > 0) {
         for (let i = 0; i < this.choseListCC.length; i++) {
           choseListCCData.push(this.choseListCC[i].userId.toString());
         }
       }
-      debugger
       let signWords = {
         user_id: parseInt(this.userId),
         start_time: this.startTime,
@@ -812,9 +763,7 @@ export default {
         return;
       }
       var _this = this;
-
       var information = _this.getAttendanceRecord();
-
       var url =
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -823,7 +772,6 @@ export default {
         "/" +
         this.getPROJECT_MAIN() +
         "/user/addVacationRecord.do";
-
       _this.$ajax
         .post(url, information, {
           headers: { "Content-type": "multipart/form-data" }
@@ -850,7 +798,7 @@ export default {
           item: item
         }
       });
-    },
+    }
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
@@ -867,15 +815,12 @@ export default {
       this.$refs.examined.style.background = "rgb(58, 190, 98)";
       this.$refs.examined.style.color = "#eee";
       this.$refs.examined.style.border = "1px solid #fff";
-
       this.$refs.pendingTrial.style.background = "#eee";
       this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
       this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
-      
     }
     this.getCurTime();
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // console.log(self);
+    this.clientHeight = `${document.documentElement.clientHeight}`;
     // window.onresize = function temp() {
     //   this.clientHeight = `${document.documentElement.clientHeight}`;
     // };
@@ -884,13 +829,10 @@ export default {
       window.addEventListener("popstate", this.goBack, false);
     }
   },
-  
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
-
   created: function() {
-    // console.log("开始");
     var _this = this;
     _this.userId = localStorage.getItem("userId");
     _this.userName = localStorage.getItem("userName");
@@ -902,32 +844,25 @@ export default {
       localStorage.setItem("leaveRequestApproved", true);
       _this.isNew = true;
     }
-    debugger
     if (this.$route.query.pagename == "leaveRequestInformation") {
       localStorage.setItem("leaveRequestApproved", false);
       _this.isNew = false;
-      
     }
-    _this.getListData()
-
+    _this.getListData();
     _this.fileData = this.$defines.leaveRequestFileData;
     _this.imgs = this.$defines.leaveRequestImges;
     if (
       this.$route.query.pagename == "selectApproverpage" ||
       this.$route.query.pagename == "selectCCpage"
     ) {
-      // _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      // _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
-debugger
       _this.leaveReasons = this.$route.query.leaveReasons;
       _this.defaultType = this.$route.query.defaultType;
       _this.startTime = this.$route.query.startTime;
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-
       //将被选中的抄送人与审批人重合的删除
       var choseListApproveTemporary = this.$route.query.choseListApprove;
       var choseListCCTemporary = this.$route.query.choseListCC;

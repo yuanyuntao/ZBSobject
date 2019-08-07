@@ -1,12 +1,6 @@
-
-
-
 <template>
   <div class="rules">
-    <!-- <div style="padding-top:10px;font-weight: bold;color:#fff;font-size: 25px;letter-spacing:5px"><span >考勤规则</span></div> -->
     <div style="height:1px"></div>
-    <!-- <div v-for="item in ruledata" v-bind:key="item.id" type="primary" round style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;" > -->
-
     <div
       v-for="item in ruledata"
       v-bind:key="item.id"
@@ -15,23 +9,16 @@
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
     >
       <span style="font-size: 16px;font-weight: bold;">{{item.rule_name}}</span>
-      <br>
+      <br />
       <span style="font-size: 16px;font-weight: bold;">{{item.rule_time}}</span>
-      <br>
+      <br />
       <span style="font-size: 13px;color:#91918c">{{item.rule_range}}</span>
     </div>
   </div>
 </template>
-
-
-
-
-
-
 <script>
 import Divtool from "../toolsComponent/Divtool.vue";
 import { encrypt, decrypt } from "../../js/utils.js";
-
 export default {
   name: "rulespage",
   components: {
@@ -48,7 +35,6 @@ export default {
       ruledata: []
     };
   },
-
   methods: {
     //监听返回按钮
     goBack() {
@@ -82,7 +68,6 @@ export default {
         "/" +
         this.getPROJECT_MAIN() +
         "/user/searchAttendanceRules.do";
-
       _this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
@@ -101,7 +86,6 @@ export default {
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, _this.getIV());
           var returnData = JSON.parse(returnData);
-
           var total = returnData.data.attendanceRule;
           for (let i = 0; i < total.length; i++) {
             _this.ruledata.push({
@@ -121,21 +105,14 @@ export default {
   },
   created: function() {
     var _this = this;
-    // _this.userId = this.$defines.userId;
-    // _this.userName = this.$defines.userName;
-    // _this.isAdministrator = this.$defines.isAdministrator;
-    // _this.company_id = this.$defines.companyId;
-    // _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.userId = localStorage.getItem("userId");
     _this.userName = localStorage.getItem("userName");
     _this.isAdministrator = localStorage.getItem("isAdministrator");
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
-
     _this.appPrivateKey = this.getPrivatekey();
     _this.creatData(_this);
   },
-
   mounted() {
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
@@ -149,7 +126,6 @@ export default {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
       this.totalHeight = this.$refs.outsignpage.offsetHeight;
-      debugger
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }

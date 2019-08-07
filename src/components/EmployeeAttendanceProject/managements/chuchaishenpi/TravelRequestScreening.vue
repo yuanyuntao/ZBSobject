@@ -10,10 +10,8 @@
         <div style="font-size: 18px;font-weight: bold;width: 80%;">
           <span style="font-size: 22px;font-weight: bold;">起止时间</span>
         </div>
-
         <button class="sure" @click="sure" type="primary" round>完成</button>
       </div>
-
       <div style=" margin: 10px;display: flex;">
         <span style="font-size: 20px;">开始时间：</span>
         <div
@@ -30,13 +28,12 @@
         >{{endTime}}</div>
         <!-- <span style="border-radius: 5px;text-align:left;height:20px;width:60px;border: 1px solid rgb(83, 83, 83)" @click="showDatePicker(7, 5)" >{{endTime}}</span> -->
       </div>
-
       <div style=" margin: 10px;display: flex;padding-top:10px;font-size: 20px">
         &ensp;申请人&ensp;：
         <input
           v-model="applicatUserId"
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 18px"
-        >
+        />
       </div>
     </div>
   </div>
@@ -52,7 +49,6 @@ export default {
       userName: "",
       nowtime: new Date(), //现在时间
       applicatUserId: "",
-
       startTime: "", //开始时间
       endTime: "", //结束时间
       time: [2018, 1, 1, 0, 0],
@@ -61,7 +57,6 @@ export default {
       showChinese: false,
       resetTime: [],
       type: null,
-
       form: ""
     };
   },
@@ -89,7 +84,6 @@ export default {
       } else {
         date = new Date();
       }
-
       var dafultTiemEnd = new Date(date);
       dafultTiemEnd.setDate(date.getDate() + 30);
       var y1 = dafultTiemEnd.getFullYear() + 1;
@@ -117,7 +111,8 @@ export default {
         this.minTime = [2019, 1, 1, 0, 0];
       }
       if (demo === 7) {
-        if (!this.resetTime[0] && this.startTime=="") return alert("请先选择开始时间！");
+        if (!this.resetTime[0] && this.startTime == "")
+          return alert("请先选择开始时间！");
         var resetTime = [];
         if (this.showChinese) {
           this.resetTime.forEach((item, index) => {
@@ -134,7 +129,6 @@ export default {
         max: this.maxTime,
         showChinese: this.showChinese
       };
-
       let init = JSON.parse(JSON.stringify(this.time));
       dataObj.value = init;
       this.$datepicker(dataObj)
@@ -184,12 +178,20 @@ export default {
   },
   watch: {},
   created: function() {
-    debugger
     var _this = this;
     _this.form = this.$route.query.pagename;
-    _this.startTime = localStorage.getItem("travelRequeststartTime")==null?"":localStorage.getItem("travelRequeststartTime");
-    _this.endTime = localStorage.getItem("travelRequestendTime")==null?"":localStorage.getItem("travelRequestendTime");
-    _this.applicatUserId = localStorage.getItem("travelRequestApplicatUserId")==null?"":localStorage.getItem("travelRequestApplicatUserId");
+    _this.startTime =
+      localStorage.getItem("travelRequeststartTime") == null
+        ? ""
+        : localStorage.getItem("travelRequeststartTime");
+    _this.endTime =
+      localStorage.getItem("travelRequestendTime") == null
+        ? ""
+        : localStorage.getItem("travelRequestendTime");
+    _this.applicatUserId =
+      localStorage.getItem("travelRequestApplicatUserId") == null
+        ? ""
+        : localStorage.getItem("travelRequestApplicatUserId");
   }
 };
 </script>
@@ -198,7 +200,6 @@ export default {
   width: 100%;
   height: 100%;
   /* background-color: rgb(240, 240, 240); */
-
   background-size: 100% 100%;
   background-attachment: fixed;
   /* padding:10px; */

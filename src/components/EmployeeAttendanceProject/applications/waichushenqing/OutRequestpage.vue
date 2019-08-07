@@ -9,23 +9,6 @@
       </div>
     </div>
     <template v-if="isNew">
-      <!-- <div
-        type="primary"
-        round
-        style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;background-color:rgb(250, 250, 250)"
-      >
-        <span style="font-size: 18px;font-weight: bold;">加班类型</span>
-        <div style="float: right;padding-right:20px">
-          <select v-model="defaultType" style="width:100px;height:30px;">
-            <option
-              v-for="item in options"
-              :value="item.overtime_type_id"
-              :key="item.id"
-            >{{item.overtime_type_name}}</option>
-          </select>
-        </div>
-      </div>-->
-
       <div
         type="primary"
         round
@@ -34,7 +17,6 @@
         <div style=" width: 60%;text-align: left">
           <span style="font-size: 18px;font-weight: bold;">起止时间</span>
         </div>
-
         <div style=" margin: 10px;display: flex;">
           <span style="font-size: 16px;">开始时间：</span>
           <div class="startTime" @click="showDatePicker(6, 5)">{{startTime}}</div>
@@ -43,13 +25,11 @@
           <span style="font-size: 16px;">结束时间：</span>
           <div class="endTime" @click="showDatePicker(7, 5)">{{endTime}}</div>
         </div>
-
         <div style=" margin: 10px;display: flex;padding-top:10px">
           共&nbsp;
           <input type="number" class="inputTime" v-model="leaveHours" min="0" />
           &nbsp;小时
         </div>
-        <!-- <p style="font-size: 10px;color:#000">&nbsp;&nbsp; 注：一天 8 小时</p> -->
       </div>
       <div
         type="primary"
@@ -108,19 +88,6 @@
           />
         </div>
       </div>
-      <!-- <div
-        type="primary"
-        round
-        style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;background-color:rgb(250, 250, 250)"
-      >
-        <div>
-          <span style="font-size: 18px;font-weight: bold;">可调休时间</span>
-          <span
-            style="float: right; width: 70px;height: 28px;padding-right:1px;font-size: 18px"
-          >{{canUseTime}}&nbsp;小时</span>
-        </div>
-      </div>-->
-
       <div
         type="primary"
         round
@@ -142,7 +109,6 @@
               <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
               <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
             </div>
-
             <img
               class="arrow"
               v-show="index != (choseListApprove.length-1) "
@@ -152,7 +118,6 @@
           </div>
         </div>
       </div>
-
       <div
         type="primary"
         round
@@ -181,13 +146,14 @@
         <button class="sure" @click="sure" type="primary" round>提交申请</button>
       </div>
     </template>
-
     <template v-else>
       <div
         v-for="item in approvalList"
         v-bind:key="item.id"
         style=" border-radius: 10px;text-align:left;background-color: #fff;color:#000;padding:10px;margin: 10px;"
-        @touchstart="touchin(item)" @touchmove="touchmove()" @touchend="cleartime(item)"
+        @touchstart="touchin(item)"
+        @touchmove="touchmove()"
+        @touchend="cleartime(item)"
       >
         <template v-if="item.effective==0">
           <img
@@ -225,14 +191,11 @@
         </template>
         <span style="font-size: 14px;font-weight: bold;">{{item.user_name}}</span>
         <br />
-        <span
-          style="font-size: 13px;color:#91918c;"
-        >{{item.address}}</span>
+        <span style="font-size: 13px;color:#91918c;">{{item.address}}</span>
         <br />
         <span style="font-size: 14px;">{{item.start_time}} ~ {{item.start_time}}</span>
         <br />
         <span style="font-size: 14px;">共{{item.hour}}小时</span>
-
         <br />
         <span style="font-size: 13px;color:#91918c">{{item.createTime}}</span>
       </div>
@@ -262,23 +225,19 @@ export default {
       userId: "",
       isAdministrator: "",
       userName: "",
-      //新增
       isNew: true,
       sendVal: false,
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date(), //现在时间                display: flex;
       address: "", //打卡地点
-
       leaveReasons: "", //外出事由
-      outGingAddress:"",
-
+      outGingAddress: "",
       choseListApprove: [], //审批人
       sheetListsApprove: [], //审批人选择列表
       choseListCC: [], //抄送人
       sheetListsCC: [], //抄送人选择列表
       defaultType: 1, //默认休假类型
-
       startTime: "", //开始时间
       endTime: "", //结束时间
       canUseTime: 0, //可调休时间
@@ -288,18 +247,12 @@ export default {
       showChinese: false,
       resetTime: [],
       type: null,
-
       leaveDays: "", //请假天数
       leaveHours: "", //请假小时数
-
-
       imgs: [], //上传的图片列表
       fileData: [],
-
       options: [],
       Loop: 0,
-
-      //记录
       approvalList: [] //记录列表
     };
   },
@@ -332,10 +285,10 @@ export default {
       }, 500);
       return false;
     },
-    touchmove(){
-        clearTimeout(this.Loop);//清除定时器
-        this.Loop = 0;
-      },
+    touchmove() {
+      clearTimeout(this.Loop); //清除定时器
+      this.Loop = 0;
+    },
     cleartime(item) {
       var that = this;
       clearTimeout(this.Loop);
@@ -353,14 +306,6 @@ export default {
     },
     clickDanger() {
       var item = this.selectedItem;
-      // if (item.effective == 0) {
-      //   alert("该条申请已经失效！");
-      //   return
-      // }
-      // if (item.result_id == 7) {
-      //   alert("该条申请已经审批完，无法撤回！");
-      //   return
-      // }
       var content = {
         userId: this.userId,
         id: item.id
@@ -395,9 +340,7 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-          // console.log("returnData....." + returnData);
           var returnData = JSON.parse(returnData);
-
           if (returnData.code == 1001) {
             location.reload();
             alert("撤销成功！");
@@ -410,12 +353,10 @@ export default {
     clickConfirm() {
       alert("点击了confirm");
     },
-
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
       this.fileData.splice(index, 1);
-
       this.$defines.setOutRequestImges(this.imgs);
       this.$defines.setOutRequestFileData(this.fileData);
     },
@@ -423,12 +364,10 @@ export default {
     imgClick: function() {
       document.getElementById("uploadFile").click();
     },
-    // uploadFile
     //点击选中图片
     readLocalFile: function() {
       var local = document.getElementById("uploadFile");
       var localFile = document.getElementById("uploadFile").files[0];
-
       this.fileData.push(local);
       this.$defines.setOutRequestFileData(this.fileData);
       var current = this;
@@ -443,13 +382,10 @@ export default {
       reader.onerror = function(event) {
         alert("error");
       };
-
       content = reader.readAsDataURL(localFile, "UTF-8");
       var sss = document.getElementById("uploadFile").value;
       var dd = document.getElementById("uploadFile").files[0];
-      //   console.log(sss);
     },
-
     //新增
     pendingTrial() {
       if (localStorage.getItem("outRequestApproved") == "true") {
@@ -458,7 +394,6 @@ export default {
         this.$refs.pendingTrial.style.background = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.color = "#eee";
         this.$refs.pendingTrial.style.border = "1px solid #fff";
-
         this.$refs.examined.style.background = "#eee";
         this.$refs.examined.style.color = "rgb(58, 190, 98)";
         this.$refs.examined.style.border = "1px solid rgb(58, 190, 98)";
@@ -474,7 +409,6 @@ export default {
         this.$refs.examined.style.background = "rgb(58, 190, 98)";
         this.$refs.examined.style.color = "#eee";
         this.$refs.examined.style.border = "1px solid #fff";
-
         this.$refs.pendingTrial.style.background = "#eee";
         this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
@@ -524,7 +458,6 @@ export default {
             let encrypt = returnResponseData.replace(/[\r\n]/g, "");
             var returnData = decrypt(encrypt, returnKey, _this.getIV());
             var returnData = JSON.parse(returnData);
-            debugger
             if (returnData.code != 1001) {
               alert("连接错误，请检查网络！");
               return;
@@ -547,7 +480,6 @@ export default {
       return year + "-" + month + "-" + day;
     },
     getRecordListData() {},
-
     // 获取当前时间
     getCurTime(minTime) {
       var date;
@@ -562,7 +494,6 @@ export default {
       } else {
         date = new Date();
       }
-
       var dafultTiemEnd = new Date(date);
       dafultTiemEnd.setDate(date.getDate() + 30);
       var y1 = dafultTiemEnd.getFullYear() + 1;
@@ -607,7 +538,6 @@ export default {
         max: this.maxTime,
         showChinese: this.showChinese
       };
-
       let init = JSON.parse(JSON.stringify(this.time));
       dataObj.value = init;
       this.$datepicker(dataObj)
@@ -633,7 +563,6 @@ export default {
           // console.log(e)
         });
     },
-
     selectApprover() {
       this.$router.push({
         path: "/selectApproverpage",
@@ -643,9 +572,8 @@ export default {
           sheetListsApprove: this.sheetListsApprove,
           choseListCC: this.choseListCC,
           sheetListsCC: this.sheetListsCC,
-
           leaveReasons: this.leaveReasons, //休假原因
-          outAddress:this.outGingAddress,
+          outAddress: this.outGingAddress,
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //结束时间
@@ -664,9 +592,8 @@ export default {
           sheetListsCC: this.sheetListsCC,
           choseListApprove: this.choseListApprove,
           sheetListsApprove: this.sheetListsApprove,
-
           leaveReasons: this.leaveReasons, //休假原因
-          outAddress:this.outGingAddress,
+          outAddress: this.outGingAddress,
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //结束时间
@@ -681,7 +608,6 @@ export default {
       for (let i = 0; i < this.choseListApprove.length; i++) {
         choseListApproveData.push(this.choseListApprove[i].userId.toString());
       }
-
       if (this.choseListCC.length > 0) {
         for (let i = 0; i < this.choseListCC.length; i++) {
           choseListCCData.push(this.choseListCC[i].userId.toString());
@@ -694,7 +620,7 @@ export default {
         vacation_type_id: this.defaultType,
         day: this.leaveDays,
         hour: this.leaveHours,
-        address:this.outGingAddress,
+        address: this.outGingAddress,
         remarks: this.leaveReasons,
         audit_user: choseListApproveData,
         copy_user: choseListCCData
@@ -725,9 +651,7 @@ export default {
         return;
       }
       var _this = this;
-
       var information = _this.getAttendanceRecord();
-
       var url =
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -736,13 +660,11 @@ export default {
         "/" +
         this.getPROJECT_MAIN() +
         "/user/addOutGoingRecord.do";
-
       _this.$ajax
         .post(url, information, {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
-          debugger;
           if (response.data.code == 1001) {
             alert("申请成功！");
             _this.goBack();
@@ -787,23 +709,16 @@ export default {
       this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
     }
     this.getCurTime();
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // console.log(self);
-    // window.onresize = function temp() {
-    //   this.clientHeight = `${document.documentElement.clientHeight}`;
-    // };
+    this.clientHeight = `${document.documentElement.clientHeight}`;
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
   },
-
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
-
   created: function() {
-    // console.log("开始");
     var _this = this;
     _this.userId = localStorage.getItem("userId");
     _this.userName = localStorage.getItem("userName");
@@ -820,16 +735,13 @@ export default {
       _this.isNew = false;
     }
     _this.getListData();
-
     _this.fileData = this.$defines.outRequestFileData;
     _this.imgs = this.$defines.outRequestImges;
     if (
       this.$route.query.pagename == "selectApproverpage" ||
       this.$route.query.pagename == "selectCCpage"
     ) {
-      // _this.choseListApprove = this.$route.query.choseListApprove;
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      // _this.choseListCC = this.$route.query.choseListCC;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.leaveReasons = this.$route.query.leaveReasons;
       _this.defaultType = this.$route.query.defaultType;
@@ -837,8 +749,7 @@ export default {
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-      _this.outGingAddress=this.$route.query.outAddress;
-
+      _this.outGingAddress = this.$route.query.outAddress;
       //将被选中的抄送人与审批人重合的删除
       var choseListApproveTemporary = this.$route.query.choseListApprove;
       var choseListCCTemporary = this.$route.query.choseListCC;
@@ -885,7 +796,6 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgb(240, 240, 240);
-
   background-size: 100% 100%;
   background-attachment: fixed;
   /* padding:10px; */

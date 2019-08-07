@@ -2,95 +2,97 @@
   <div id="calendar">
     <!-- 年份 月份 -->
     <div class="calendarPart">
-    <div class="month">
-      <ul>
-        <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
-        <li class="arrow" @click="pickPre(currentYear,currentMonth)">❮</li>
-        <li class="year-month" @click="pickYear(currentYear,currentMonth)">
-          <span class="choose-year">{{ currentYear }}</span>
-          <span class="choose-month">{{ currentMonth }}月</span>
+      <div class="month">
+        <ul>
+          <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
+          <li class="arrow" @click="pickPre(currentYear,currentMonth)">❮</li>
+          <li class="year-month" @click="pickYear(currentYear,currentMonth)">
+            <span class="choose-year">{{ currentYear }}</span>
+            <span class="choose-month">{{ currentMonth }}月</span>
+          </li>
+          <li class="arrow" @click="pickNext(currentYear,currentMonth)">❯</li>
+        </ul>
+      </div>
+      <!-- 星期 -->
+      <ul class="weekdays">
+        <li>一</li>
+        <li>二</li>
+        <li>三</li>
+        <li>四</li>
+        <li>五</li>
+        <li style="color:red">六</li>
+        <li style="color:red">日</li>
+      </ul>
+      <!-- 日期 -->
+      <ul class="days">
+        <!-- 核心 v-for循环 每一次循环用<li>标签创建一天 -->
+        <li
+          v-for="dayobject in days"
+          :key="dayobject.id"
+          @click="queryAttendance(dayobject.day.getFullYear(),dayobject.day.getMonth(),dayobject.day.getDate())"
+        >
+          <!--本月-->
+          <!--如果不是本月  改变类名加灰色-->
+          <span
+            v-if="dayobject.day.getMonth()+1 != currentMonth"
+            class="other-month"
+          >{{ dayobject.day.getDate() }}</span>
+          <!--如果是本月  还需要判断是不是这一天-->
+          <span v-else>
+            <!--今天  同年同月同日-->
+            <span
+              v-if="dayobject.day.getFullYear() == new Date().getFullYear() && dayobject.day.getMonth() == new Date().getMonth() && dayobject.day.getDate() == new Date().getDate()"
+              class="active"
+            >{{ dayobject.day.getDate() }}</span>
+            <span v-else>{{ dayobject.day.getDate() }}</span>
+            <!-- 需要判断当天是什么状态 -->
+            <div class="situation">
+              <p>
+                到：
+                <img class="situationImg" src="../../../assets/littleimg/weiqiandao.png" alt />
+              </p>
+              <br />
+              <p>
+                退：
+                <img class="situationImg" src="../../../assets/littleimg/zhengchang.png" alt />
+              </p>
+            </div>
+          </span>
         </li>
-        <li class="arrow" @click="pickNext(currentYear,currentMonth)">❯</li>
       </ul>
     </div>
-    <!-- 星期 -->
-    <ul class="weekdays">
-      <li>一</li>
-      <li>二</li>
-      <li>三</li>
-      <li>四</li>
-      <li>五</li>
-      <li style="color:red">六</li>
-      <li style="color:red">日</li>
-    </ul>
-    <!-- 日期 -->
-    <ul class="days">
-      <!-- 核心 v-for循环 每一次循环用<li>标签创建一天 -->
-      <li v-for="dayobject in days" :key="dayobject.id" @click="queryAttendance(dayobject.day.getFullYear(),dayobject.day.getMonth(),dayobject.day.getDate())">
-        <!--本月-->
-        <!--如果不是本月  改变类名加灰色-->
-
-        <span
-          v-if="dayobject.day.getMonth()+1 != currentMonth"
-          class="other-month"
-        >{{ dayobject.day.getDate() }}</span>
-
-        <!--如果是本月  还需要判断是不是这一天-->
-        <span v-else>
-          <!--今天  同年同月同日-->
-          <span
-            v-if="dayobject.day.getFullYear() == new Date().getFullYear() && dayobject.day.getMonth() == new Date().getMonth() && dayobject.day.getDate() == new Date().getDate()"
-            class="active" 
-          >{{ dayobject.day.getDate() }}
-          </span>
-          <span v-else>{{ dayobject.day.getDate() }}</span>
-
-
-
-          <!-- 需要判断当天是什么状态 -->
-          <div class="situation">
-          <p>到：<img class="situationImg" src="../../../assets/littleimg/weiqiandao.png" alt=""></p>
-          <br>
-          <p>退：<img class="situationImg" src="../../../assets/littleimg/zhengchang.png" alt=""></p>
-          </div>
-          
-        
-
-        </span>
-      </li>
-    </ul>
-    </div>
     <div style="padding-top:10px">
-      <img class="situationImg" src="../../../assets/littleimg/zhengchang.png" alt="">
+      <img class="situationImg" src="../../../assets/littleimg/zhengchang.png" alt />
       正常&nbsp;&nbsp;&nbsp;&nbsp;
-      <img class="situationImg" src="../../../assets/littleimg/chizao.png" alt="">
+      <img
+        class="situationImg"
+        src="../../../assets/littleimg/chizao.png"
+        alt
+      />
       迟到或早退&nbsp;&nbsp;&nbsp;&nbsp;
-      <img class="situationImg" src="../../../assets/littleimg/weiqiandao.png" alt="">
+      <img
+        class="situationImg"
+        src="../../../assets/littleimg/weiqiandao.png"
+        alt
+      />
       未签到
-
     </div>
-    
   </div>
-  
 </template>
-
-
-
 <script>
 export default {
   name: "calendar",
   components: {},
   data() {
     return {
-      userId: "",//用户ID
+      userId: "", //用户ID
       userName: "", //用户名
       isAdministrator: "", //密码
-
       currentDay: 1,
       currentMonth: 1,
       currentYear: 1970,
       currentWeek: 1,
-      days: [],
+      days: []
     };
   },
   created: function() {
@@ -104,7 +106,6 @@ export default {
     initData: function(cur) {
       var leftcount = 0; //存放剩余数量
       var date;
-
       if (cur) {
         date = new Date(cur);
       } else {
@@ -161,7 +162,6 @@ export default {
     pickYear: function(year, month) {
       alert(year + "," + month);
     },
-
     // 返回 类似 2016-01-02 格式的字符串
     formatDate: function(year, month, day) {
       var y = year;
@@ -171,11 +171,9 @@ export default {
       if (d < 10) d = "0" + d;
       return y + "-" + m + "-" + d;
     },
-    queryAttendance:function(year, month, day) {
-      alert(year + "-" + (month + 1)+ "-" +day);
-
-    },
-
+    queryAttendance: function(year, month, day) {
+      alert(year + "-" + (month + 1) + "-" + day);
+    }
   }
 };
 </script>
@@ -184,16 +182,14 @@ export default {
 * {
   box-sizing: border-box;
 }
-
 ul {
   list-style-type: none;
 }
-
 body {
   font-family: Verdana, sans-serif;
   background: #e8f0f3;
-} 
- .calendarPart {
+}
+.calendarPart {
   width: 100%;
   margin-bottom: 10px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.1),
@@ -203,50 +199,41 @@ body {
   width: 100%;
   background: #00b8ec;
 }
-
 .month ul {
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: space-between;
 }
-
 .year-month {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
 }
-
 /* .year-month:hover {
   background: rgba(150, 2, 12, 0.1);
 } */
-
 .choose-year {
   padding-left: 20px;
   padding-right: 20px;
 }
-
 .choose-month {
   text-align: center;
   font-size: 1.5rem;
 }
-
 .arrow {
   padding: 30px;
 }
-
 /* .arrow:hover {
   background: rgba(100, 2, 12, 0.1);
 } */
-
 .month ul li {
   color: white;
   font-size: 20px;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
-
 .weekdays {
   margin: 0;
   padding: 10px 0;
@@ -256,13 +243,11 @@ body {
   color: #ffffff;
   justify-content: space-around;
 }
-
 .weekdays li {
   display: inline-block;
   width: 13.6%;
   text-align: center;
 }
-
 .days {
   padding: 0;
   background: #ffffff;
@@ -271,7 +256,6 @@ body {
   flex-wrap: wrap;
   justify-content: space-around;
 }
-
 .days li {
   list-style-type: none;
   display: inline-block;
@@ -283,30 +267,25 @@ body {
   font-size: 1rem;
   color: #000;
 }
-
 .days li .active {
   padding: 6px 10px;
   border-radius: 50%;
   background: #00b8ec;
   color: #fff;
 }
-
 .days li .other-month {
   padding: 5px;
   color: gainsboro;
 }
-.situation{
+.situation {
   margin-top: 5px;
   font-size: 10px;
-
 }
-.situationImg{
+.situationImg {
   width: 13px;
   height: 13px;
-  vertical-align:middle;
-
+  vertical-align: middle;
 }
-
 /* .days li:hover {
   background: #e1e1e1;
 } */

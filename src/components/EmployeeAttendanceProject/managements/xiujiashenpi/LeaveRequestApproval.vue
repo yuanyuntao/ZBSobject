@@ -119,7 +119,6 @@ export default {
     },
     //待审批
     pendingTrial() {
-      debugger
       if (localStorage.getItem("leaveRequestapproved") == "false") {
         return;
       } else {
@@ -160,8 +159,6 @@ export default {
     },
     getListData() {
 
-      
-debugger
       var content = {
         userId: this.userId,
         bNum: 0, //从第几条开始
@@ -194,7 +191,6 @@ debugger
           }
         })
         .then(response => {
-            debugger
           var returnKey = this.RSAdecrypt(
             response.headers.serverencryptedkey,
             this.getPrivatekey()

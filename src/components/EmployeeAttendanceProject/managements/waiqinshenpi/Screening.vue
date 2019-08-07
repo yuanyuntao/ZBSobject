@@ -184,7 +184,6 @@ export default {
   },
   watch: {},
   created: function() {
-    debugger
     var _this = this;
     _this.form = this.$route.query.pagename;
     _this.startTime = localStorage.getItem("startTime")==null?"":localStorage.getItem("startTime");

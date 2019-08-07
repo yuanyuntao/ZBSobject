@@ -42,16 +42,13 @@ export default {
       userName: "",
       company_id: "",
       serverPublicKey: "",
-
       bNum: 0, //从第几条开始
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
       applicatUserId: "",
       approved: false,
-
       approvalList: [], //审批列表
-
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date() //时间
@@ -72,7 +69,6 @@ export default {
     },
     //待审批
     pendingTrial() {
-      debugger
       if (localStorage.getItem("mackUpCardapproved") == "false") {
         return;
       } else {
@@ -95,7 +91,6 @@ export default {
         this.$refs.examined.style.background = "rgb(58, 190, 98)";
         this.$refs.examined.style.color = "#eee";
         this.$refs.examined.style.border = "1px solid #fff";
-
         this.$refs.pendingTrial.style.background = "#eee";
         this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
@@ -112,9 +107,6 @@ export default {
       });
     },
     getListData() {
-
-      
-
       var content = {
         userId: this.userId,
         bNum: 0, //从第几条开始
@@ -154,10 +146,7 @@ export default {
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
           var returnData = decrypt(encrypt, returnKey, this.getIV());
-          // console.log("returnData....." + returnData);
-
           var returnData = JSON.parse(returnData);
-
           if (returnData.code == 1001) {
             this.approvalList = returnData.data.appealAttendanceInfo;
           } else if (returnData.code == 1014) {
@@ -175,11 +164,7 @@ export default {
           item:item
         }
       });
-
-
-
     },
-
     changeFixed(clientHeight) {
       //动态修改样式
       this.$refs.makeUpCardApproval.style.height = clientHeight + "px";
@@ -195,8 +180,7 @@ export default {
         this.$refs.pendingTrial.style.color = "rgb(58, 190, 98)";
         this.$refs.pendingTrial.style.border = "1px solid rgb(58, 190, 98)";
       }
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // console.log(self);
+    this.clientHeight = `${document.documentElement.clientHeight}`; 
     window.onresize = function temp() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
     };
@@ -212,7 +196,6 @@ export default {
     _this.isAdministrator = localStorage.getItem("isAdministrator");
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
-   
     _this.getListData();
   },
   destroyed() {

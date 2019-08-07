@@ -168,7 +168,6 @@ export default {
             localStorage.setItem("company_id", returnData.data.user.company_id);
             localStorage.setItem("serverPublicKey", this.serverPublicKey);
             localStorage.setItem("department", returnData.data.user.department);
-            debugger
             
             
 

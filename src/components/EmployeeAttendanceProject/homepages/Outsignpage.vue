@@ -7,12 +7,12 @@
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
     >
       <span style="font-size: 20px;font-weight: bold;">考勤详情</span>
-      <br>
+      <br />
       <div style="padding-top:10px;text-align:left">
         <span style="font-size: 15px;color:#91918c">时间：</span>
         <span style="font-size: 15px;font-weight: bold;">{{this.getTIME(nowtime,6)}}</span>
       </div>
-      <br>
+      <br />
       <span style="font-size: 15px;color:#91918c">地点：{{address}}</span>
     </div>
 
@@ -33,7 +33,7 @@
             v-model="defaultparam"
             style="vertical-align: middle"
             disabled
-          >
+          />
         </template>
         <template v-else>
           <input
@@ -42,7 +42,7 @@
             value="1"
             v-model="defaultparam"
             style="vertical-align: middle"
-          >
+          />
         </template>
 
         <span style="vertical-align: middle">签到</span>
@@ -56,7 +56,7 @@
             v-model="defaultparam"
             style="vertical-align: middle"
             disabled
-          >
+          />
         </template>
         <template v-else>
           <input
@@ -65,7 +65,7 @@
             value="2"
             v-model="defaultparam"
             style="vertical-align: middle"
-          >
+          />
         </template>
         <span style="vertical-align: middle">签退</span>
       </div>
@@ -83,7 +83,7 @@
           src="../../../assets/littleimg/xiangji.png"
           alt
           @click="imgClick()"
-        >
+        />
       </div>
       <div>
         <textarea type="text" class="outReasons" placeholder="请输入外出事由" v-model="outReasons"></textarea>
@@ -103,8 +103,8 @@
                 width: 20px;
                 height: 20px;"
             v-on:click="deleteImg(index)"
-          >
-          <img :src="urls" style="width: 80px;height: 80px;">
+          />
+          <img :src="urls" style="width: 80px;height: 80px;" />
         </div>
         <input
           style="float: left;  display: none;"
@@ -112,10 +112,9 @@
           id="uploadFile"
           accept="image/*"
           v-on:change="readLocalFile()"
-        >
+        />
       </div>
     </div>
-
     <div
       type="primary"
       round
@@ -129,7 +128,7 @@
           src="../../../assets/littleimg/jiahao.png"
           alt
           @click="selectApprover"
-        >
+        />
       </div>
       <div class="showApproveAndCC" v-show="choseListApprove.length>0">
         <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
@@ -137,17 +136,15 @@
             <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
             <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
           </div>
-
           <img
             class="arrow"
             v-show="index != (choseListApprove.length-1) "
             src="../../../assets/littleimg/jiantou.png"
             alt
-          >
+          />
         </div>
       </div>
     </div>
-
     <div
       type="primary"
       round
@@ -161,7 +158,7 @@
           src="../../../assets/littleimg/jiahao.png"
           alt
           @click="selectCC"
-        >
+        />
       </div>
       <div class="showApproveAndCC" v-show="choseListCC.length > 0">
         <div v-for="item in choseListCC" :key="item.id" style="display:flex;padding-right:15px">
@@ -189,7 +186,6 @@ export default {
       serverPublicKey: "",
       attendance_longitude: "",
       attendance_latitude: "",
-
       clientHeight: "", //屏幕高度
       totalHeight: "", //总的高度
       nowtime: new Date(), //现在时间
@@ -213,7 +209,7 @@ export default {
       this.$router.push({
         path: "/signpage",
         query: {
-          pagename: "outsignpage",
+          pagename: "outsignpage"
         }
       });
     },
@@ -234,7 +230,6 @@ export default {
     readLocalFile: function() {
       var local = document.getElementById("uploadFile");
       var localFile = document.getElementById("uploadFile").files[0];
-
       this.fileData.push(local);
       this.$defines.setFileData(this.fileData);
       //   debugger
@@ -250,11 +245,9 @@ export default {
       reader.onerror = function(event) {
         alert("error");
       };
-
       content = reader.readAsDataURL(localFile, "UTF-8");
       var sss = document.getElementById("uploadFile").value;
       var dd = document.getElementById("uploadFile").files[0];
-      //   console.log(sss);
     },
     selectApprover() {
       this.$router.push({
@@ -291,7 +284,6 @@ export default {
         }
       });
     },
-
     getAttendanceRecord() {
       var choseListApproveData = [];
       var choseListCCData = [];
@@ -323,27 +315,11 @@ export default {
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       for (let i = 0; i < this.$defines.fileData.length; i++) {
-        // let file = this.imgs[i].file
         let file = this.$defines.fileData[i].files[0];
-        // console.log(file.size())
         fileFormData.append("picture", file, file.name);
       }
-      // var _this = this
-      //   for (let i = 0; i < _this.fileData.length; i++) {
-      //       let file = _this.fileData[i]
-      //       _this.fileFormData.append("picture", file,file.name);
-      //   }
-      // debugger
       return fileFormData;
     },
-    //   dataURLtoBlob(dataurl) {
-    // 	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    //       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    // 	while(n--){
-    // 		u8arr[n] = bstr.charCodeAt(n);
-    // 	}
-    // 	return new Blob([u8arr], {type:mime});
-    // },
     sure() {
       var _this = this;
       var information = _this.getAttendanceRecord();
@@ -355,13 +331,11 @@ export default {
         "/" +
         this.getPROJECT_MAIN() +
         "/user/addAttendanceRecord.do";
-
       _this.$ajax
         .post(url, information, {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
-          debugger;
           if (response.data.code == 1001) {
             if (_this.defaultparam == 1) {
               alert("签到成功！");
@@ -379,7 +353,6 @@ export default {
             } else {
               alert("错误！");
             }
-
             return;
           }
         });
@@ -394,8 +367,7 @@ export default {
     this.timer = setInterval(function() {
       _this.nowtime = new Date(); //修改数据date
     }, 1000);
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
-    // console.log(self);
+    this.clientHeight = `${document.documentElement.clientHeight}`;
     window.onresize = function temp() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
     };
@@ -404,7 +376,6 @@ export default {
       window.addEventListener("popstate", this.goBack, false);
     }
   },
-
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
   },
@@ -424,28 +395,19 @@ export default {
     }
   },
   created: function() {
-    console.log("开始");
     var _this = this;
-    // _this.userId = this.$defines.userId;
-    // _this.userName = this.$defines.userName;
-    // _this.isAdministrator = this.$defines.isAdministrator;
-    // _this.company_id = this.$defines.companyId;
-    // _this.serverPublicKey = this.$defines.serverPublicKey;
     _this.userId = localStorage.getItem("userId");
     _this.userName = localStorage.getItem("userName");
     _this.isAdministrator = localStorage.getItem("isAdministrator");
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
-
     _this.fileData = this.$defines.fileData;
     _this.imgs = this.$defines.imges;
-
     _this.attendance_longitude = this.$route.query.attendance_longitude;
     _this.attendance_latitude = this.$route.query.attendance_latitude;
     _this.address = this.$route.query.address;
     _this.defaultparam = this.$route.query.defaultparam;
     _this.attendanceType = this.$route.query.type;
-
     if (
       this.$route.query.pagename == "selectApproverpage" ||
       this.$route.query.pagename == "selectCCpage"
@@ -453,7 +415,6 @@ export default {
       _this.sheetListsApprove = this.$route.query.sheetListsApprove;
       _this.sheetListsCC = this.$route.query.sheetListsCC;
       _this.outReasons = this.$route.query.outReasons;
-
       //将被选中的抄送人与审批人重合的删除
       var choseListApproveTemporary = this.$route.query.choseListApprove;
       var choseListCCTemporary = this.$route.query.choseListCC;
@@ -492,14 +453,6 @@ export default {
       _this.choseListApprove = choseListApproveTemporary;
       _this.choseListCC = choseListCCTemporary;
     }
-    // else if (this.$route.query.pagename == "selectCCpage") {
-
-    //   _this.choseListApprove = this.$route.query.choseListApprove;
-    //   _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-    //   _this.choseListCC = this.$route.query.choseListCC;
-    //   _this.sheetListsCC = this.$route.query.sheetListsCC;
-    //   _this.outReasons = this.$route.query.outReasons;
-    // }
   }
 };
 </script>
@@ -515,12 +468,9 @@ export default {
 }
 .outReasons {
   height: 50px;
-
   width: 100%;
   font-size: 15px;
-
   /* padding: 10px; */
-
   border: 0;
 }
 .sure {
