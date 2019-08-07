@@ -4,10 +4,7 @@
       <div class="words">申请人</div>
       <div class="information">{{item.user_name}}</div>
     </div>
-     <div class="moduls">
-      <div class="words">假期类型</div>
-      <div class="information">{{item.vacation_type_name}}</div>
-    </div>
+     
     <div class="moduls">
       <div class="words">开始时间</div>
       <div class="information">{{item.start_time}}</div>
@@ -17,16 +14,20 @@
       <div class="information">{{item.stop_time}}</div>
     </div>
     <div class="moduls">
-      <div class="words">可调休时间</div>
-      <div class="information">{{item.type_name}}</div>
+      <div class="words">出差时长</div>
+      <div class="information">{{item.day}}天{{item.hour}}小时</div>
+    </div>
+    <div class="moduls">
+      <div class="words">出差地点</div>
+      <div class="information">{{item.address}}</div>
     </div>
     
     <div class="moduls">
-      <div class="words">休假事由</div>
+      <div class="words">出差事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
-          <div class="sheeImage" v-for="i in item.vacationRecordPic" v-bind:key="i.id">
+          <div class="sheeImage" v-for="i in item.businessTraveIRecordPic" v-bind:key="i.id">
             <img class="image" :src="getURL(i.url)">
           </div>
         </div>
@@ -41,7 +42,7 @@
         <p style=" margin: 25px 0px;">审批流程</p>
       </div>
       <div class="information">
-        <div v-for="i in item.vacationAuditRecord" :key="i.id">
+        <div v-for="i in item.businessTraveIAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
             <template v-if="i.audit_status==0">未审批</template>

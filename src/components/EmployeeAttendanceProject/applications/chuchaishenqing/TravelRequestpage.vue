@@ -655,7 +655,7 @@ export default {
           sheetListsCC: this.sheetListsCC,
 
           leaveReasons: this.leaveReasons, //休假原因
-          address:this.travelAddress,
+          outAddress:this.travelAddress,
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //结束时间
@@ -676,7 +676,7 @@ export default {
           sheetListsApprove: this.sheetListsApprove,
 
           leaveReasons: this.leaveReasons, //休假原因
-          address:this.travelAddress,
+          outAddress:this.travelAddress,
           defaultType: this.defaultType, //休假类型
           startTime: this.startTime, //开始时间
           endTime: this.endTime, //结束时间
@@ -704,10 +704,12 @@ export default {
         vacation_type_id: this.defaultType,
         day: this.leaveDays,
         hour: this.leaveHours,
+        address:this.travelAddress,
         remarks: this.leaveReasons,
         audit_user: choseListApproveData,
         copy_user: choseListCCData
       };
+      debugger
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       for (let i = 0; i < this.$defines.travelRequestFileData.length; i++) {
@@ -849,7 +851,7 @@ export default {
       _this.endTime = this.$route.query.endTime;
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
-      _this.travelAddress = this.$route.query.address;
+      _this.travelAddress = this.$route.query.outAddress;
 
       //将被选中的抄送人与审批人重合的删除
       var choseListApproveTemporary = this.$route.query.choseListApprove;

@@ -21,7 +21,7 @@
       <div class="information">{{item.address}}</div>
     </div>
     <div class="moduls">
-      <div class="words">休假事由</div>
+      <div class="words">外出事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">

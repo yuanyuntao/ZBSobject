@@ -26,11 +26,11 @@ export default {
     return {
       mark: 0, //比对图片索引的变量
       imgArray: [
-        require("../../../assets/oynn/timg1.jpg"),
-        require("../../../assets/oynn/timg2.jpg"),
-        require("../../../assets/oynn/timg3.jpg"),
-        require("../../../assets/oynn/timg4.jpg"),
-        require("../../../assets/oynn/timg5.jpg"),
+        // require("../../../assets/oynn/timg1.jpg"),
+        // require("../../../assets/oynn/timg2.jpg"),
+        // require("../../../assets/oynn/timg3.jpg"),
+        // require("../../../assets/oynn/timg4.jpg"),
+        // require("../../../assets/oynn/timg5.jpg"),
 
       ]
     };
@@ -100,7 +100,6 @@ export default {
           // console.log("returnData....." + returnData);
 
           var returnData = JSON.parse(returnData);
-          debugger
 
           if (returnData.code == 1001) {
             _this.imgArray = returnData.data.homePagePictureList;
@@ -113,7 +112,6 @@ export default {
                   + _this.imgArray[i].addressUrl.replace(new RegExp(/(\\)/g), "/")
                   _this.imgArray[i].addressUrl= addressUrl
                 }else{
-                  debugger
                   if (_this.imgArray[i].addressUrl.search("https://") == -1 && _this.imgArray[i].addressUrl.search("http://") == -1) {
                     _this.imgArray[i].addressUrl= "http://"+_this.imgArray[i].addressUrl
                   }

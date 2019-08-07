@@ -694,6 +694,7 @@ export default {
         vacation_type_id: this.defaultType,
         day: this.leaveDays,
         hour: this.leaveHours,
+        address:this.outGingAddress,
         remarks: this.leaveReasons,
         audit_user: choseListApproveData,
         copy_user: choseListCCData
@@ -708,15 +709,15 @@ export default {
     },
     sure() {
       if (this.startTime == "") {
-        alert("请输入加班开始时间！");
+        alert("请输入外出开始时间！");
         return;
       }
       if (this.endTime == "") {
-        alert("请输入加班结束时间！");
+        alert("请输入外出结束时间！");
         return;
       }
       if (this.leaveDays == "" && this.leaveHours == "") {
-        alert("请输入加班时间！");
+        alert("请输入外出时间！");
         return;
       }
       if (this.choseListApprove.length == 0) {
