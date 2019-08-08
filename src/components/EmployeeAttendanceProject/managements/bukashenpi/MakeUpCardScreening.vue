@@ -31,7 +31,7 @@
       <div style=" margin: 10px;display: flex;padding-top:10px;font-size: 20px">
         &ensp;申请人&ensp;：
         <input
-          v-model="applicatUserId"
+          v-model="applicantUserId"
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 18px"
         />
       </div>
@@ -48,7 +48,7 @@ export default {
       isAdministrator: "",
       userName: "",
       nowtime: new Date(), //现在时间
-      applicatUserId: "",
+      applicantUserId: "",
       startTime: "", //开始时间
       endTime: "", //结束时间
       time: [2018, 1, 1, 0, 0],
@@ -158,7 +158,7 @@ export default {
     sure() {
       localStorage.setItem("mackUpCardstartTime", this.startTime);
       localStorage.setItem("mackUpCardendTime", this.endTime);
-      localStorage.setItem("mackUpCardApplicatUserId", this.applicatUserId);
+      localStorage.setItem("mackUpCardApplicantUserId", this.applicantUserId);
       this.$router.push({
         path: "/" + this.form,
         query: {
@@ -189,10 +189,10 @@ export default {
       localStorage.getItem("mackUpCardendTime") == null
         ? ""
         : localStorage.getItem("mackUpCardendTime");
-    _this.applicatUserId =
-      localStorage.getItem("mackUpCardApplicatUserId") == null
+    _this.applicantUserId =
+      localStorage.getItem("mackUpCardApplicantUserId") == null
         ? ""
-        : localStorage.getItem("mackUpCardApplicatUserId");
+        : localStorage.getItem("mackUpCardApplicantUserId");
   }
 };
 </script>

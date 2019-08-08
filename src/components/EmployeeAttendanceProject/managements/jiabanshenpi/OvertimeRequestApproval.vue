@@ -93,7 +93,7 @@ export default {
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
-      applicatUserId: "",
+      applicantUserId: "",
       approved: false,
       approvalList: [], //审批列表
       clientHeight: "", //屏幕高度
@@ -104,9 +104,9 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
-      localStorage.setItem("startTime", "");
-      localStorage.setItem("endTime", "");
-      localStorage.setItem("applicatUserId", "");
+      localStorage.setItem("overtimeRequeststartTime", "");
+      localStorage.setItem("overtimeRequestendTime", "");
+      localStorage.setItem("overtimeRequestApplicantUserId", "");
       this.$router.push({
         path: "/management",
         query: {
@@ -169,10 +169,10 @@ export default {
           localStorage.getItem("overtimeRequestendTime") == ""
             ? this.getTIME(this.nowtime, 4)
             : localStorage.getItem("overtimeRequestendTime"), //结束时间
-        applicatUserId:
-          localStorage.getItem("overtimeRequestApplicatUserId") == null
+        applicantUserId:
+          localStorage.getItem("overtimeRequestApplicantUserId") == null
             ? ""
-            : localStorage.getItem("overtimeRequestApplicatUserId"),
+            : localStorage.getItem("overtimeRequestApplicantUserId"),
         approved:
           localStorage.getItem("overtimeRequestapproved") == "true"
             ? true
@@ -210,7 +210,7 @@ export default {
           var returnData = decrypt(encrypt, returnKey, this.getIV());
           var returnData = JSON.parse(returnData);
           if (returnData.code == 1001) {
-            this.approvalList = returnData.data.vacationRecordList;
+            this.approvalList = returnData.data.overtimeRecordList;
           } else {
             alert("连接错误，请检查网络！");
             return;

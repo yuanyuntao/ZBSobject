@@ -17,6 +17,10 @@
       <div class="information">{{item.stop_time}}</div>
     </div>
     <div class="moduls">
+      <div class="words">加班时长</div>
+      <div class="information">{{item.day}}天{{item.hour}}小时</div>
+    </div>
+    <div class="moduls">
       <div class="words">加班事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>

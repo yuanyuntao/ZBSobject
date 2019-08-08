@@ -34,7 +34,7 @@
       <div style=" margin: 10px;display: flex;padding-top:10px;font-size: 20px">
         &ensp;申请人&ensp;：
         <input
-          v-model="applicatUserId"
+          v-model="applicantUserId"
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 18px"
         >
       </div>
@@ -51,7 +51,7 @@ export default {
       isAdministrator: "",
       userName: "",
       nowtime: new Date(), //现在时间
-      applicatUserId: "",
+      applicantUserId: "",
 
       startTime: "", //开始时间
       endTime: "", //结束时间
@@ -163,7 +163,7 @@ export default {
     sure() {
       localStorage.setItem("leaveRequeststartTime", this.startTime);
       localStorage.setItem("leaveRequestendTime", this.endTime);
-      localStorage.setItem("leaveRequestApplicatUserId", this.applicatUserId);
+      localStorage.setItem("leaveRequestApplicantUserId", this.applicantUserId);
       this.$router.push({
         path: "/" + this.form,
         query: {
@@ -188,7 +188,7 @@ export default {
     _this.form = this.$route.query.pagename;
     _this.startTime = localStorage.getItem("leaveRequeststartTime")==null?"":localStorage.getItem("leaveRequeststartTime");
     _this.endTime = localStorage.getItem("leaveRequestendTime")==null?"":localStorage.getItem("leaveRequestendTime");
-    _this.applicatUserId = localStorage.getItem("leaveRequestApplicatUserId")==null?"":localStorage.getItem("leaveRequestApplicatUserId");
+    _this.applicantUserId = localStorage.getItem("leaveRequestApplicantUserId")==null?"":localStorage.getItem("leaveRequestApplicantUserId");
   }
 };
 </script>

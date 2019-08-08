@@ -180,7 +180,7 @@ export default {
         this.getSERVER_PORT_MAIN() +
         "/" +
         this.getPROJECT_MAIN() +
-        "/user/submitApprovalVacation.do";
+        "/user/submitApprovalOutGoing.do";
       this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
@@ -200,6 +200,7 @@ export default {
           var returnData = decrypt(encrypt, returnKey, this.getIV());
 
           var returnData = JSON.parse(returnData);
+          debugger
 
           if (returnData.code == 1001) {
             alert("审批成功！");

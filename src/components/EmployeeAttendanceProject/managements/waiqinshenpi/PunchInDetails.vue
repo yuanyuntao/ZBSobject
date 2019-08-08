@@ -47,7 +47,7 @@ export default {
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
-      applicatUserId: "",
+      applicantUserId: "",
       approved: false,
 
       approvalList: [], //审批列表
@@ -60,6 +60,9 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
+      localStorage.setItem("startTime", "");
+      localStorage.setItem("endTime", "");
+      localStorage.setItem("applicantUserId", "");
       this.$router.push({
         path: "/management",
         query: {
@@ -120,7 +123,8 @@ export default {
         rows: 20, //查询条数
         bt: localStorage.getItem("startTime")==null||localStorage.getItem("startTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("startTime"), //开始时间
         et: localStorage.getItem("endTime")==null||localStorage.getItem("endTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("endTime"), //结束时间
-        applicatUserId: localStorage.getItem("applicatUserId")==null?"":localStorage.getItem("applicatUserId"),
+        
+        applicantUserId: localStorage.getItem("applicantUserId")==null?"":localStorage.getItem("applicantUserId"),
         approved: localStorage.getItem("approved")
       };
       var contentData = JSON.stringify(content);

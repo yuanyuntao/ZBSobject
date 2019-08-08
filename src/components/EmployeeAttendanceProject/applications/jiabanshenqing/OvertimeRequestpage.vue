@@ -714,7 +714,7 @@ export default {
         user_id: parseInt(this.userId),
         start_time: this.startTime,
         stop_time: this.endTime,
-        overtime_type_id: this.defaultType,
+        overTimeType_id: this.defaultType,
         day: this.leaveDays,
         hour: this.leaveHours,
         remarks: this.leaveReasons,

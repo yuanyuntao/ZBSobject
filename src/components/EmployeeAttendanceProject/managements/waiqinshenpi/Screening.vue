@@ -34,7 +34,7 @@
       <div style=" margin: 10px;display: flex;padding-top:10px;font-size: 20px">
         &ensp;申请人&ensp;：
         <input
-          v-model="applicatUserId"
+          v-model="applicantUserId"
           style="border-radius: 5px;text-align:center;height:30px;width:185px;border: 1px solid rgb(83, 83, 83);font-size: 18px"
         >
       </div>
@@ -51,7 +51,7 @@ export default {
       isAdministrator: "",
       userName: "",
       nowtime: new Date(), //现在时间
-      applicatUserId: "",
+      applicantUserId: "",
 
       startTime: "", //开始时间
       endTime: "", //结束时间
@@ -163,7 +163,7 @@ export default {
     sure() {
       localStorage.setItem("startTime", this.startTime);
       localStorage.setItem("endTime", this.endTime);
-      localStorage.setItem("applicatUserId", this.applicatUserId);
+      localStorage.setItem("applicantUserId", this.applicantUserId);
       this.$router.push({
         path: "/" + this.form,
         query: {
@@ -188,7 +188,7 @@ export default {
     _this.form = this.$route.query.pagename;
     _this.startTime = localStorage.getItem("startTime")==null?"":localStorage.getItem("startTime");
     _this.endTime = localStorage.getItem("endTime")==null?"":localStorage.getItem("endTime");
-    _this.applicatUserId = localStorage.getItem("applicatUserId")==null?"":localStorage.getItem("applicatUserId");
+    _this.applicantUserId = localStorage.getItem("applicantUserId")==null?"":localStorage.getItem("applicantUserId");
   }
 };
 </script>

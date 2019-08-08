@@ -46,7 +46,7 @@ export default {
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
-      applicatUserId: "",
+      applicantUserId: "",
       approved: false,
       approvalList: [], //审批列表
       clientHeight: "", //屏幕高度
@@ -57,9 +57,9 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
-      localStorage.setItem("startTime", "");
-      localStorage.setItem("endTime", "");
-      localStorage.setItem("applicatUserId", "");
+      localStorage.setItem("mackUpCardstartTime", "");
+      localStorage.setItem("mackUpCardendTime", "");
+      localStorage.setItem("mackUpCardApplicantUserId", "");
       this.$router.push({
         path: "/management",
         query: {
@@ -113,7 +113,7 @@ export default {
         rows: 20, //查询条数
         bt: localStorage.getItem("mackUpCardstartTime")==null||localStorage.getItem("mackUpCardstartTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("startTime"), //开始时间
         et: localStorage.getItem("mackUpCardendTime")==null||localStorage.getItem("mackUpCardendTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("endTime"), //结束时间
-        applicatUserId: localStorage.getItem("mackUpCardApplicatUserId")==null?"":localStorage.getItem("mackUpCardApplicatUserId"),
+        applicantUserId: localStorage.getItem("mackUpCardApplicantUserId")==null?"":localStorage.getItem("mackUpCardApplicantUserId"),
         approved: localStorage.getItem("mackUpCardapproved")
       };
       var contentData = JSON.stringify(content);

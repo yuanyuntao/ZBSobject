@@ -94,7 +94,7 @@ export default {
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
-      applicatUserId: "",
+      applicantUserId: "",
       approved: false,
 
       approvalList: [], //审批列表
@@ -107,9 +107,9 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
-      localStorage.setItem("startTime", "");
-      localStorage.setItem("endTime", "");
-      localStorage.setItem("applicatUserId", "");
+      localStorage.setItem("leaveRequeststartTime", "");
+      localStorage.setItem("leaveRequestendTime", "");
+      localStorage.setItem("leaveRequestApplicantUserId", "");
       this.$router.push({
         path: "/management",
         query: {
@@ -165,7 +165,7 @@ export default {
         rows: 20, //查询条数
         bt: localStorage.getItem("leaveRequeststartTime")==null||localStorage.getItem("leaveRequeststartTime")==""?this.getTIME(this.nowtime, 7):localStorage.getItem("leaveRequeststartTime"), //开始时间
         et: localStorage.getItem("leaveRequestendTime")==null||localStorage.getItem("leaveRequestendTime")==""?this.getTIME(this.nowtime, 4):localStorage.getItem("leaveRequestendTime"), //结束时间
-        applicatUserId: localStorage.getItem("leaveRequestApplicatUserId")==null?"":localStorage.getItem("leaveRequestApplicatUserId"),
+        applicantUserId: localStorage.getItem("leaveRequestApplicantUserId")==null?"":localStorage.getItem("leaveRequestApplicantUserId"),
         approved: localStorage.getItem("leaveRequestapproved")=="true"?true:false
       };
       var contentData = JSON.stringify(content);

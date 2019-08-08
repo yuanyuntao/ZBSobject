@@ -92,7 +92,7 @@ export default {
       rows: 20, //查询条数
       bt: "", //开始时间
       et: "", //结束时间
-      applicatUserId: "",
+      applicantUserId: "",
       approved: false,
       approvalList: [], //审批列表
       clientHeight: "", //屏幕高度
@@ -103,9 +103,9 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
-      localStorage.setItem("startTime", "");
-      localStorage.setItem("endTime", "");
-      localStorage.setItem("applicatUserId", "");
+      localStorage.setItem("travelRequeststartTime", "");
+      localStorage.setItem("travelRequestendTime", "");
+      localStorage.setItem("travelRequestApplicantUserId", "");
       this.$router.push({
         path: "/management",
         query: {
@@ -166,10 +166,10 @@ export default {
           localStorage.getItem("travelRequestendTime") == ""
             ? this.getTIME(this.nowtime, 4)
             : localStorage.getItem("travelRequestendTime"), //结束时间
-        applicatUserId:
-          localStorage.getItem("travelRequestApplicatUserId") == null
+        applicantUserId:
+          localStorage.getItem("travelRequestApplicantUserId") == null
             ? ""
-            : localStorage.getItem("travelRequestApplicatUserId"),
+            : localStorage.getItem("travelRequestApplicantUserId"),
         approved:
           localStorage.getItem("travelRequestapproved") == "true" ? true : false
       };

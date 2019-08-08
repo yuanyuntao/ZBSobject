@@ -5,8 +5,8 @@
       <div class="information">{{item.user_name}}</div>
     </div>
     <div class="moduls">
-      <div class="words">假期类型</div>
-      <div class="information">{{item.vacation_type_name}}</div>
+      <div class="words">加班类型</div>
+      <div class="information">{{item.overTimeType}}</div>
     </div>
     <div class="moduls">
       <div class="words">开始时间</div>
@@ -17,16 +17,16 @@
       <div class="information">{{item.stop_time}}</div>
     </div>
     <div class="moduls">
-      <div class="words">可调休时间</div>
-      <div class="information">{{item.type_name}}</div>
+      <div class="words">加班时长</div>
+      <div class="information">{{item.day}}天{{item.hour}}小时</div>
     </div>
 
     <div class="moduls">
-      <div class="words">休假事由</div>
+      <div class="words">加班事由</div>
       <div class="information">
         <div class="outRemarks">{{item.remarks}}</div>
         <div class="outPics" style="display: flex;">
-          <div class="sheeImage" v-for="i in item.vacationRecordPic" v-bind:key="i.id">
+          <div class="sheeImage" v-for="i in item.overTimeRecordPic" v-bind:key="i.id">
             <img class="image" :src="getURL(i.url)" />
           </div>
         </div>
@@ -41,7 +41,7 @@
         <p style=" margin: 25px 0px;">审批流程</p>
       </div>
       <div class="information">
-        <div v-for="i in item.vacationAuditRecord" :key="i.id">
+        <div v-for="i in item.overTimeAuditRecord" :key="i.id">
           <div class="auditRecord">
             {{i.user_name}}&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
             <template
@@ -224,6 +224,7 @@ export default {
   created: function() {
     var _this = this;
     _this.item = this.$route.query.item;
+    debugger
     if (localStorage.getItem("overtimeRequestapproved") == "false") {
       _this.approved = false;
     } else if (localStorage.getItem("overtimeRequestapproved") == "true") {
