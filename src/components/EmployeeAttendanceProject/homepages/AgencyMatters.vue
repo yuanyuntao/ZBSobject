@@ -3,7 +3,7 @@
     <div class="appfeaturlists">
       <div style="text-align: left;margin:10px">考勤假期</div>
       <div class="appfeaturlist" ref="appfeaturlist1">
-        <div class="icon" @click="changePage('/notificationpage')">
+        <div class="icon" @click="changePage('/leaveRequestApproval')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/vacation_apply.png" />
           </span>
@@ -12,7 +12,7 @@
             <span>休假审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/leaveRequestpage')">
+        <div class="icon" @click="changePage('/overtimeRequestApproval')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/overtime_apply.png" />
           </span>
@@ -21,7 +21,7 @@
             <span>加班审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/overtimeRequestpage')">
+        <div class="icon" @click="changePage('/outRequestApproval')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/outing_apply.png" />
           </span>
@@ -30,7 +30,7 @@
             <span>外出审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/outRequestpage')">
+        <div class="icon" @click="changePage('/travelRequestApproval')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/business_trip_apply.png" />
           </span>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="appfeaturlist" ref="appfeaturlist2">
-        <div class="icon" @click="changePage('/travelRequestpage')">
+        <div class="icon" @click="changePage('/makeUpCardApproval')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/sign_appeal_apply.png" />
           </span>
@@ -50,13 +50,13 @@
             <span>补卡审批</span>
           </div>
         </div>
-        <div class="icon" @click="changePage('/')">
+        <div class="icon" @click="changePage('/punchInDetails')">
           <span>
             <img class="imgs" src="../../../assets/littleimg/out_sign_approve.png" />
           </span>
           <br />
           <div class="words">
-            <span>外出考勤</span>
+            <span>外勤审批</span>
           </div>
         </div>
         <div class="icon">
@@ -94,9 +94,7 @@ export default {
         path: "/homepage",
         query: {
           pagename: "application",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName
+         
         }
       });
     },
@@ -106,9 +104,7 @@ export default {
         path: page,
         query: {
           pagename: "application",
-          userId: this.userId,
-          isAdministrator: this.isAdministrator,
-          userName: this.userName
+          
         }
       });
     }
@@ -124,9 +120,6 @@ export default {
   },
   created: function() {
     var _this = this;
-    _this.userId = this.$route.query.userId;
-    _this.userName = this.$route.query.userName;
-    _this.isAdministrator = this.$route.query.isAdministrator;
   }
 };
 </script>

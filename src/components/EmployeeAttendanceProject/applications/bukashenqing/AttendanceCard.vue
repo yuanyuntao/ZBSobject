@@ -175,6 +175,7 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
+      this.$defines.setSelect_time(new Date());
       this.$router.push({
         path: "/application",
         query: {
@@ -486,12 +487,13 @@ export default {
       _this.outReasons = this.$route.query.outReasons;
       _this.choseListApprove = this.$route.query.choseListApprove;
     }
-    _this.selectTime = this.getTIME(_this.nowtime, 8);
-    _this.getRecordData(_this);
     if (this.$defines.select_time == "") {
       this.$defines.setSelect_time(new Date());
     }
     _this.select_time = this.$defines.select_time;
+    _this.selectTime = this.getTIME(_this.select_time, 8);
+    // _this.selectTime = this.getTIME(_this.nowtime, 8);
+    _this.getRecordData(_this);
   }
 };
 </script>
