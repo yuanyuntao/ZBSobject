@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      //   '/user': {
-      //    target: 'http://192.168.2.130:8080/ZBSAttendance/user',
-      //  changeOrigin: true,
-      //   pathRewrite: {
-      //    '^/user': ''
-      //    }
-      //  }
+        '/api': {
+         target: 'https://api.weixin.qq.com',
+       changeOrigin: true,
+        pathRewrite: {
+         '^/api': ''
+         }
+       }
     },
 
     // Various Dev Server settings

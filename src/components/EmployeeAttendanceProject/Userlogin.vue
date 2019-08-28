@@ -2,11 +2,11 @@
 <template>
   <div>
     <div class="userlogin">
-      <img class="inner_label login_logo" src="../../assets/logo.png">
+      <img class="inner_label login_logo" src="../../assets/logo.png" />
     </div>
     <div class="login_form">
-      <input type="text" class="qxs-ic_user qxs-icon" placeholder="用户名" v-model="userId">
-      <input type="password" class="qxs-ic_password qxs-icon" placeholder="密码" v-model="password">
+      <input type="text" class="qxs-ic_user qxs-icon" placeholder="用户名" v-model="userId" />
+      <input type="password" class="qxs-ic_password qxs-icon" placeholder="密码" v-model="password" />
       <!-- <button class="login_btn el-button el-button&#45;&#45;primary is-round" type="primary" round>登录</button> -->
       <button
         class="login_btn"
@@ -25,6 +25,7 @@
 </template>
 <script>
 import { encrypt, decrypt } from "../js/utils.js";
+import { getOpenID } from "../js/wx-getOpendID.js";
 export default {
   name: "userlogin",
   data() {
@@ -32,6 +33,8 @@ export default {
       userId: "",
       password: "",
       isBtnLoading: false,
+      // secret:c13d263a5e63274ae3361668aee9f005,
+      openid: "",
 
       appEncryptedKey: "", //使用服务器RSA公钥加密后的AES密钥
       appSignature: "", //APP使用RSA密钥对请求体的签名
@@ -43,6 +46,104 @@ export default {
     };
   },
   created() {
+    var _this = this;
+    if (typeof this.$route.query.code == "undefined") {
+      let url = "zhrdi9.natappfree.cc";
+      window.location.href =
+        "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbd38640dfe24b6d5&redirect_uri=http%3A%2F%2F" +
+        url +
+        "/static&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+    } else {
+      let url =
+        "/api/sns/oauth2/access_token?appid=wxbd38640dfe24b6d5&secret=c13d263a5e63274ae3361668aee9f005&code=" +
+        this.$route.query.code +
+        "&grant_type=authorization_code";
+      this.$http
+        .get(url)
+        .then(function(reponse) {
+          _this.openid = reponse.data.openid;
+          if (_this.openid != "" && typeof(_this.openid) != undefined) {
+            var content = {
+              openId: _this.openid
+            };
+            var contentData = JSON.stringify(content);
+            var headerAndBody = this.getHeaderAndBody(
+              contentData,
+              this.serverPublicKey
+            );
+            let url =
+              "http://" +
+              this.getSERVER_HOST_MAIN() +
+              ":" +
+              this.getSERVER_PORT_MAIN() +
+              "/" +
+              this.getPROJECT_MAIN() +
+              "/user/searchOpenId.do";
+            // this.getPROJECT_MAIN() + "/user/login.do?content=" +
+            // encodeURIComponent(contentData);
+            this.$ajax
+              .post(url, headerAndBody.contentDataByKey, {
+                headers: {
+                  appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+                  appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+                  appPublicKey: headerAndBody.appPublicKey,
+                  serverPublicKey: headerAndBody.serverPublicKey
+                }
+              })
+              .then(response => {
+                var returnKey = this.RSAdecrypt(
+                  response.headers.serverencryptedkey,
+                  this.appPrivateKey
+                );
+                let returnResponseData = response.data;
+                let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+                var returnData = decrypt(encrypt, returnKey, this.getIV());
+                // console.log("returnData....." + returnData);
+
+                var returnData = JSON.parse(returnData);
+                debugger;
+                if (returnData.code == 1001) {
+                  if (returnData.data.userInfo.length > 0) {
+                    var isAdministrator = false;
+                    if (
+                      returnData.data.userInfo[0].company_id == 0 ||
+                      returnData.data.userInfo[0].role == 1
+                    ) {
+                      isAdministrator = true;
+                    }
+                    localStorage.setItem(
+                      "userId",
+                      returnData.data.userInfo[0].user_id
+                    );
+                    localStorage.setItem(
+                      "userName",
+                      returnData.data.userInfo[0].user_name
+                    );
+                    localStorage.setItem("isAdministrator", isAdministrator);
+                    localStorage.setItem(
+                      "company_id",
+                      returnData.data.userInfo[0].company_id
+                    );
+                    localStorage.setItem(
+                      "serverPublicKey",
+                      this.serverPublicKey
+                    );
+                    localStorage.setItem(
+                      "department",
+                      returnData.data.userInfo[0].department
+                    );
+                    this.$router.push("/homepage");
+                  }
+                }
+              });
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+
+    // console.log(localStorage.getItem('WXInfo'))
     // let test = encrypt("abc",num,this.getIV())
     // let sing = decrypt(test,num,this.getIV())
     // console.log("生成的sing:"+ sing)
@@ -89,7 +190,8 @@ export default {
         alert("请输入密码");
         return;
       }
-      this.isBtnLoadingText = "登录中..."
+      this.isBtnLoadingText = "登录中...";
+      var _this = this;
       var content = {
         userId: this.userId,
         password: this.password
@@ -99,17 +201,6 @@ export default {
         contentData,
         this.serverPublicKey
       );
-      // this.getServerPublicKey().then(function(response) {
-      // _this.serverPublicKey = response;
-      //  alert(response);
-      // console.log("serverPublicKey:"+ _this.serverPublicKey)
-      // });
-
-      // var AESKey = getRandom(32);
-      // var contentDataByKey = encrypt(contentData, AESKey, this.getIV());
-      // this.appPublicKey = this.getPublicKey();
-      // this.appEncryptedKey = this.RSAencrypt(AESKey, this.serverPublicKey);
-      // this.appSignature = this.getSignsig(contentData, this.appPrivateKey);
       let url =
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -118,8 +209,6 @@ export default {
         "/" +
         this.getPROJECT_MAIN() +
         "/user/login.do";
-      // this.getPROJECT_MAIN() + "/user/login.do?content=" +
-      // encodeURIComponent(contentData);
       this.$ajax
         .post(url, headerAndBody.contentDataByKey, {
           headers: {
@@ -130,13 +219,6 @@ export default {
           }
         })
         .then(response => {
-          // console.log("response....." + response.headers.serverencryptedkey);
-          // console.log(
-          //   "response....." +
-
-          //     this.RSAdecrypt(response.headers.serverencryptedkey, this.appPrivateKey)
-          // );
-
           var returnKey = this.RSAdecrypt(
             response.headers.serverencryptedkey,
             this.appPrivateKey
@@ -149,45 +231,96 @@ export default {
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
-            var isAdministrator = false;
-            if (
-              returnData.data.user.company_id == 0 ||
-              returnData.data.user.role == 1
-            ) {
-              isAdministrator = true;
+            debugger
+            if (_this.openid != "" && typeof _this.openid != undefined) {
+              var content = {
+                openId: _this.openid,
+                userId: _this.userId
+              };
+              var contentData = JSON.stringify(content);
+              var headerAndBody = this.getHeaderAndBody(
+                contentData,
+                this.serverPublicKey
+              );
+              let url =
+                "http://" +
+                this.getSERVER_HOST_MAIN() +
+                ":" +
+                this.getSERVER_PORT_MAIN() +
+                "/" +
+                this.getPROJECT_MAIN() +
+                "/user/bindingOpenId.do";
+              // this.getPROJECT_MAIN() + "/user/login.do?content=" +
+              // encodeURIComponent(contentData);
+              this.$ajax
+                .post(url, headerAndBody.contentDataByKey, {
+                  headers: {
+                    appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+                    appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+                    appPublicKey: headerAndBody.appPublicKey,
+                    serverPublicKey: headerAndBody.serverPublicKey
+                  }
+                })
+                .then(response => {
+                  debugger
+                  var returnKey = this.RSAdecrypt(
+                    response.headers.serverencryptedkey,
+                    this.appPrivateKey
+                  );
+                  let returnResponseData = response.data;
+                  let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+                  var returnData = decrypt(encrypt, returnKey, this.getIV());
+                  // console.log("returnData....." + returnData);
+
+                  var returnData = JSON.parse(returnData);
+                  if (returnData.code == 1001) {
+                    alert("微信绑定成功！");
+                  }
+                });
             }
-            // this.$defines.setUserId(returnData.data.user.user_id);
-            // this.$defines.setUserName(returnData.data.user.user_name);
-            // this.$defines.setIsAdministrator(isAdministrator);
-            // this.$defines.setCompanyId(returnData.data.user.company_id);
-            // this.$defines.setServerPublicKey(this.serverPublicKey);
+              var isAdministrator = false;
+              if (
+                returnData.data.user.company_id == 0 ||
+                returnData.data.user.role == 1
+              ) {
+                isAdministrator = true;
+              }
+              // this.$defines.setUserId(returnData.data.user.user_id);
+              // this.$defines.setUserName(returnData.data.user.user_name);
+              // this.$defines.setIsAdministrator(isAdministrator);
+              // this.$defines.setCompanyId(returnData.data.user.company_id);
+              // this.$defines.setServerPublicKey(this.serverPublicKey);
 
-            localStorage.setItem("userId", returnData.data.user.user_id);
-            localStorage.setItem("userName", returnData.data.user.user_name);
-            localStorage.setItem("isAdministrator", isAdministrator);
-            localStorage.setItem("company_id", returnData.data.user.company_id);
-            localStorage.setItem("serverPublicKey", this.serverPublicKey);
-            localStorage.setItem("department", returnData.data.user.department);
-            
-            
+              localStorage.setItem("userId", returnData.data.user.user_id);
+              localStorage.setItem("userName", returnData.data.user.user_name);
+              localStorage.setItem("isAdministrator", isAdministrator);
+              localStorage.setItem(
+                "company_id",
+                returnData.data.user.company_id
+              );
+              localStorage.setItem("serverPublicKey", this.serverPublicKey);
+              localStorage.setItem(
+                "department",
+                returnData.data.user.department
+              );
 
-            this.$router.push("/homepage");
+              this.$router.push("/homepage");
+            
           } else if (returnData.code == 1014) {
-            this.isBtnLoadingText = "登录"
+            this.isBtnLoadingText = "登录";
             alert("用户名或密码不正确！");
-            return
-            
+            return;
           } else {
-            this.isBtnLoadingText = "登录"
+            this.isBtnLoadingText = "登录";
             alert("连接错误,请检查网络！");
-            return
+            return;
           }
         })
         .catch(reason => {
           console.log("reason" + reason);
           alert("错误,请稍后再试！");
-          this.isBtnLoadingText = "登录"
-          return
+          this.isBtnLoadingText = "登录";
+          return;
         });
     }
   }
