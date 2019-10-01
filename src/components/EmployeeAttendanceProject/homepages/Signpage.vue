@@ -26,26 +26,29 @@
       <br />
       <span style="font-size:12px;color:#91918c">注：默认使用距离您最近的考勤点</span>
     </div>
+
     <div class="signbutton">
-      <div style="display: flex;width: 100% ">
-        <div style=" width: 80%;text-align: left">
-          <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt />
-          <br />
-          <span style="color:#000">上班打卡</span>
-          <br />
-          <span style="color:#91918c">{{work}}</span>
-          <br />
-          <template v-if="isIn">
+      <div style="display: flex;">
+        <div style="display: flex;text-align: left;width:40%;margin-left: 20px">
+          <div style>
+            <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt />
+            <br />
+            <span style="color:#000">上班时间</span>
+            <br />
+            <span style="color:#91918c">{{work}}</span>
+            <br />
+            <!-- <template v-if="isIn">
             <template v-if="isInNormal">
               <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psIn}}</span>
             </template>
             <template v-else>
               <span style="color:#f72d4e;font-weight: normal;font-size: 15px">{{psIn}}</span>
             </template>
-          </template>
-        </div>
-        <div class="signtext">
-          <template v-if="ifInOk">
+            </template>-->
+          </div>
+
+          <div class="signtext">
+            <!-- <template v-if="ifInOk">
             <button
               style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               @click="signin"
@@ -62,28 +65,43 @@
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >签到</button>
             </template>
+            </template>-->
+          </div>
+        </div>
+        <div>
+          <template v-if="isSignOk">
+            <button
+              style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              @click="sign"
+            >打卡</button>
+          </template>
+          <template v-else>
+            <button
+              style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+            >打卡</button>
           </template>
         </div>
-      </div>
-      <div style="display: flex;padding-top:20px;width: 100%">
-        <div style="width: 80%;text-align: left">
-          <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt />
-          <br />
-          <span style="color:#000">下班打卡</span>
-          <br />
-          <span style="color:#91918c">{{offDuty}}</span>
-          <br />
-          <template v-if="isOut">
+        <div
+          style="display: flex;width: 100%;float: right;text-align: right;width:40%;margin-left: 20px"
+        >
+          <div style="float: right;text-align: right;">
+            <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt />
+            <br />
+            <span style="color:#000">下班时间</span>
+            <br />
+            <span style="color:#91918c">{{offDuty}}</span>
+            <br />
+            <!-- <template v-if="isOut">
             <template v-if="isOutNormal">
               <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psOut}}</span>
             </template>
             <template v-else>
               <span style="color:#f72d4e;font-weight: normal;font-size: 15px">{{psOut}}</span>
             </template>
-          </template>
-        </div>
-        <div class="signtext">
-          <template v-if="ifOutOk">
+            </template>-->
+          </div>
+          <div class="signtext">
+            <!-- <template v-if="ifOutOk">
             <button
               style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               @click="signout"
@@ -100,10 +118,22 @@
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >签退</button>
             </template>
-          </template>
+            </template>-->
+          </div>
         </div>
       </div>
+
+      <div style="font-size:14px;margin-top: 20px;margin-bottom: 20px">
+        <div style="border-bottom: 1px solid rgb(240, 240, 240);">{{psIn}}&ensp;{{psInAddress}}</div>
+        <div>{{psOut}}&ensp;{{psOutAddress}}</div>
+      </div>
+
+      <div style="display: flex;">
+        <div style="font-size:12px;color:#91918c">注：记录只显示当天最早和最晚的信息</div>&ensp;&ensp;
+        <div style="font-size:12px;color:rgb(37, 175, 100)">详细记录</div>
+      </div>
     </div>
+
     <div class="out" @click="outSign" aria-disabled="true">
       <img class="out_attendance" src="../../../assets/littleimg/add_out_attendance.png" alt />
       <span style="vertical-align: middle;">外勤打卡</span>
@@ -129,18 +159,21 @@ export default {
       ps: "", //注释
       psIn: "",
       psOut: "",
+      psInAddress: "",
+      psOutAddress: "",
       userId: "",
       userName: "", //用户名
       company_id: "", //公司
       isAdministrator: "", //是否是管理员
-      ifInOk: false, //可以签到判断
-      ifOutOk: false, //可以签退判断
-      isInOk: true, //是否可以签到
-      isOutOk: true, //是否可以签退
-      isIn: false, //是否已签到
-      isOut: false, //是否已签退
-      isInNormal: true, //是否签到正常
-      isOutNormal: true, //是否签退正常
+      isSignOk: false, //是否可以打卡（进入打卡范围）
+      // ifInOk: false, //可以签到判断
+      // ifOutOk: false, //可以签退判断
+      // isInOk: true, //是否可以签到
+      // isOutOk: true, //是否可以签退
+      // isIn: false, //是否已签到
+      // isOut: false, //是否已签退
+      // isInNormal: true, //是否签到正常
+      // isOutNormal: true, //是否签退正常
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
 
       signWords: {
@@ -250,24 +283,6 @@ export default {
             "/" +
             _this.getPROJECT_MAIN() +
             "/user/searchAttendanceRulesAndRecord.do";
-          // _this.$http
-          //   .get(
-          // "http://" +
-          //   _this.getSERVER_HOST_MAIN() +
-          //   ":" +
-          //   _this.getSERVER_PORT_MAIN() +
-          //   "/" +
-          //   _this.getPROJECT_MAIN() +
-          //   "/user/searchAttendanceRulesAndRecord.do
-          //   ?userId=" +
-          //   _this.userId +
-          //   "&startTime=" +
-          //   _this.getTIME(_this.nowtime, 4) +
-          //   "%2000%3A00%3A00&endTime=" +
-          //   _this.getTIME(_this.nowtime, 4) +
-          //   "%2023%3A59%3A59"
-          //   url,
-          // )
           _this.$ajax
             .post(url, headerAndBody.contentDataByKey, {
               headers: {
@@ -286,6 +301,7 @@ export default {
               let encrypt = returnResponseData.replace(/[\r\n]/g, "");
               var returnData = decrypt(encrypt, returnKey, _this.getIV());
               var returnData = JSON.parse(returnData);
+              debugger;
               if (returnData.code != 1001) {
                 alert("连接错误，请检查网络！");
                 return;
@@ -293,34 +309,31 @@ export default {
               _this.ruledata = returnData.data.attendanceRule;
               var record = returnData.data.attendanceRecord;
               if (record.length > 0) {
-                for (let i = 0; i < record.length; i++) {
-                  if (record[i].attendance_type == 1) {
-                    var date = record[i].attendance_time
-                      .toString()
-                      .substr(11, 5);
-                    _this.psIn = record[i].result + " " + date;
-                    _this.isInOk = false;
-                    _this.isIn = true;
-                    _this.canInField = false;
-                    if (record[i].result_id == 3) {
-                      _this.isInNormal = false;
-                    } else {
-                      _this.isInNormal = true;
-                    }
-                  } else if (record[i].attendance_type == 2) {
-                    var date = record[i].attendance_time
-                      .toString()
-                      .substr(11, 5);
-                    _this.psOut = record[i].result + " " + date;
-                    _this.isOutOk = false;
-                    _this.isOut = true;
-                    if (record[i].result_id == 4) {
-                      _this.isOutNormal = false;
-                    } else {
-                      _this.isOutNormal = true;
-                    }
-                  }
-                }
+                var date = record[0].attendance_time.toString().substr(11, 5);
+                _this.psIn = date;
+                _this.psInAddress = record[0].attendance_address;
+                var date = record[record.length - 1].attendance_time
+                  .toString()
+                  .substr(11, 5);
+                _this.psOut = date;
+                _this.psOutAddress =
+                  record[record.length - 1].attendance_address;
+                // _this.isInOk = false;
+                // _this.isIn = true;
+                // _this.canInField = false;
+                // if (record[i].result_id == 3) {
+                //   _this.isInNormal = false;
+                // } else {
+                //   _this.isInNormal = true;
+                // }
+
+                // _this.isOutOk = false;
+                // _this.isOut = true;
+                // if (record[i].result_id == 4) {
+                //   _this.isOutNormal = false;
+                // } else {
+                //   _this.isOutNormal = true;
+                // }
               }
               var longitude;
               var latitude;
@@ -342,35 +355,36 @@ export default {
                   _this.work = _this.ruledata[i].rule_time_work;
                   _this.offDuty = _this.ruledata[i].rule_time_off_work;
                   _this.ps = "（您已进入考勤范围）";
-                  var timeNow = new Date();
-                  var hours =
-                    timeNow.getHours() < 10
-                      ? "0" + timeNow.getHours()
-                      : timeNow.getHours();
-                  var minutes =
-                    timeNow.getMinutes() < 10
-                      ? "0" + timeNow.getMinutes()
-                      : timeNow.getMinutes();
-                  timeNow = hours + ":" + minutes;
-                  timeNow = new Date(timeNow).getTime();
-                  var timeruleIn = new Date(_this.offDuty).getTime();
-                  if (timeNow < timeruleIn) {
-                    _this.isInOk = false;
-                  }
-                  var timeruleOut = new Date(_this.work).getTime();
-                  if (timeNow > timeruleOut) {
-                    _this.isOutOk = false;
-                  }
-                  if (_this.isInOk == true) {
-                    _this.ifInOk = true;
-                  } else {
-                    _this.ifInOk = false;
-                  }
-                  if (_this.isOutOk == true) {
-                    _this.ifOutOk = true;
-                  } else {
-                    _this.ifOutOk = false;
-                  }
+                  _this.isSignOk = true;
+                  // var timeNow = new Date();
+                  // var hours =
+                  //   timeNow.getHours() < 10
+                  //     ? "0" + timeNow.getHours()
+                  //     : timeNow.getHours();
+                  // var minutes =
+                  //   timeNow.getMinutes() < 10
+                  //     ? "0" + timeNow.getMinutes()
+                  //     : timeNow.getMinutes();
+                  // timeNow = hours + ":" + minutes;
+                  // timeNow = new Date(timeNow).getTime();
+                  // var timeruleIn = new Date(_this.offDuty).getTime();
+                  // if (timeNow < timeruleIn) {
+                  //   _this.isInOk = false;
+                  // }
+                  // var timeruleOut = new Date(_this.work).getTime();
+                  // if (timeNow > timeruleOut) {
+                  //   _this.isOutOk = false;
+                  // }
+                  // if (_this.isInOk == true) {
+                  //   _this.ifInOk = true;
+                  // } else {
+                  //   _this.ifInOk = false;
+                  // }
+                  // if (_this.isOutOk == true) {
+                  //   _this.ifOutOk = true;
+                  // } else {
+                  //   _this.ifOutOk = false;
+                  // }
                   return;
                 } else {
                   if (minimumdistance > distance) {
@@ -392,18 +406,19 @@ export default {
                 _this.ps =
                   "（您距离最近的考勤范围" + minimumdistance.toFixed(0) + "m）";
               }
-              _this.isInOk = false;
-              _this.isOutOk = false;
-              if (_this.isInOk == true) {
-                _this.ifInOk = true;
-              } else {
-                _this.ifInOk = false;
-              }
-              if (_this.isOutOk == true) {
-                _this.ifOutOk = true;
-              } else {
-                _this.ifOutOk = false;
-              }
+              _this.isSignOk = false;
+              // _this.isInOk = false;
+              // _this.isOutOk = false;
+              // if (_this.isInOk == true) {
+              //   _this.ifInOk = true;
+              // } else {
+              //   _this.ifInOk = false;
+              // }
+              // if (_this.isOutOk == true) {
+              //   _this.ifOutOk = true;
+              // } else {
+              //   _this.ifOutOk = false;
+              // }
             });
         } else {
           alert("failed" + this.getStatus());
@@ -411,118 +426,168 @@ export default {
       });
     },
     /**
+     * 打卡
+     */
+    sign() {
+      if (this.isSignOk) {
+        var _this = this;
+        debugger;
+        var information = _this.getAttendanceRecord(1);
+        var url =
+          "http://" +
+          this.getSERVER_HOST_MAIN() +
+          ":" +
+          this.getSERVER_PORT_MAIN() +
+          "/" +
+          this.getPROJECT_MAIN() +
+          "/user/addAttendanceRecord.do";
+        this.$ajax
+          .post(url, information, {
+            headers: { "Content-type": "multipart/form-data" }
+          })
+          .then(function(response) {
+            debugger;
+            if (response.data.code == 1001) {
+              alert("打卡成功！");
+              _this.getLocations();
+            } else {
+              alert("打卡失败，请检查网络！");
+              return;
+            }
+          });
+      } else {
+        alert("不在考勤范围内！");
+        return;
+      }
+    },
+    /**
      * 签到
      */
-    signin() {
-      var _this = this;
-      var information = _this.getAttendanceRecord(1);
-      var url =
-        "http://" +
-        this.getSERVER_HOST_MAIN() +
-        ":" +
-        this.getSERVER_PORT_MAIN() +
-        "/" +
-        this.getPROJECT_MAIN() +
-        "/user/addAttendanceRecord.do";
-      _this.$ajax
-        .post(url, information, {
-          headers: { "Content-type": "multipart/form-data" }
-        })
-        .then(function(response) {
-          if (response.data.code == 1001) {
-            location.reload();
-            alert("签到成功！");
-          } else {
-            alert("签到失败，请检查网络！");
-            location.reload();
-          }
-        });
-    },
+    // signin() {
+    //   var _this = this;
+    //   var information = _this.getAttendanceRecord(1);
+    //   var url =
+    //     "http://" +
+    //     this.getSERVER_HOST_MAIN() +
+    //     ":" +
+    //     this.getSERVER_PORT_MAIN() +
+    //     "/" +
+    //     this.getPROJECT_MAIN() +
+    //     "/user/addAttendanceRecord.do";
+    //   _this.$ajax
+    //     .post(url, information, {
+    //       headers: { "Content-type": "multipart/form-data" }
+    //     })
+    //     .then(function(response) {
+    //       if (response.data.code == 1001) {
+    //         location.reload();
+    //         alert("签到成功！");
+    //       } else {
+    //         alert("签到失败，请检查网络！");
+    //         location.reload();
+    //       }
+    //     });
+    // },
     /**
      * 签退
      */
-    signout() {
-      var _this = this;
-      var information = _this.getAttendanceRecord(2);
-      var url =
-        "http://" +
-        this.getSERVER_HOST_MAIN() +
-        ":" +
-        this.getSERVER_PORT_MAIN() +
-        "/" +
-        this.getPROJECT_MAIN() +
-        "/user/addAttendanceRecord.do";
-      _this.$http
-        .post(url, information, {
-          headers: { "Content-type": "multipart/form-data" }
-        })
-        .then(function(response) {
-          if (response.data.code == 1001) {
-            location.reload();
-            alert("签退成功！");
-          } else {
-            alert("签退失败，请检查网络！");
-            location.reload();
-          }
-        });
-    },
+    // signout() {
+    //   var _this = this;
+    //   var information = _this.getAttendanceRecord(2);
+    //   var url =
+    //     "http://" +
+    //     this.getSERVER_HOST_MAIN() +
+    //     ":" +
+    //     this.getSERVER_PORT_MAIN() +
+    //     "/" +
+    //     this.getPROJECT_MAIN() +
+    //     "/user/addAttendanceRecord.do";
+    //   _this.$http
+    //     .post(url, information, {
+    //       headers: { "Content-type": "multipart/form-data" }
+    //     })
+    //     .then(function(response) {
+    //       if (response.data.code == 1001) {
+    //         location.reload();
+    //         alert("签退成功！");
+    //       } else {
+    //         alert("签退失败，请检查网络！");
+    //         location.reload();
+    //       }
+    //     });
+    // },
+
     /**
      * 外勤
      */
     outSign() {
-      var _this = this;
-      if (_this.isIn && _this.isOut) {
-        alert("不可重复打卡！");
-        return;
-        //   this.$router.push({
-        //   path: "/Outsignpage",
-        //   query: {
-        //     pagename: "signpage",
-        //     defaultparam:1,
-        //     type:0,
-        //     address: _this.attendance_address,
-        //     attendance_longitude: this.attendance_longitude,
-        //     attendance_latitude: this.attendance_latitude,
-        //   }
-        // });
-      } else if (_this.isIn && !_this.isOut) {
-        this.$router.push({
-          path: "/Outsignpage",
-          query: {
-            pagename: "signpage",
-            defaultparam: 2,
-            type: 1,
-            address: _this.attendance_address,
-            attendance_longitude: this.attendance_longitude,
-            attendance_latitude: this.attendance_latitude
-          }
-        });
-      } else if (!_this.isIn && _this.isOut) {
-        this.$router.push({
-          path: "/Outsignpage",
-          query: {
-            pagename: "signpage",
-            defaultparam: 1,
-            type: 2,
-            address: _this.attendance_address,
-            attendance_longitude: this.attendance_longitude,
-            attendance_latitude: this.attendance_latitude
-          }
-        });
-      } else if (!_this.isIn && !_this.isOut) {
-        this.$router.push({
-          path: "/outsignpage",
-          query: {
-            pagename: "signpage",
-            address: _this.attendance_address,
-            defaultparam: 1,
-            type: 0,
-            attendance_longitude: this.attendance_longitude,
-            attendance_latitude: this.attendance_latitude
-          }
-        });
-      }
+      this.$router.push({
+        path: "/Outsignpage",
+        query: {
+          pagename: "signpage",
+          // defaultparam: 2,
+          // type: 1,
+          address: this.attendance_address,
+          attendance_longitude: this.attendance_longitude,
+          attendance_latitude: this.attendance_latitude
+        }
+      });
     },
+
+    // outSign() {
+    //   var _this = this;
+    //   if (_this.isIn && _this.isOut) {
+    //     alert("不可重复打卡！");
+    //     return;
+    //     //   this.$router.push({
+    //     //   path: "/Outsignpage",
+    //     //   query: {
+    //     //     pagename: "signpage",
+    //     //     defaultparam:1,
+    //     //     type:0,
+    //     //     address: _this.attendance_address,
+    //     //     attendance_longitude: this.attendance_longitude,
+    //     //     attendance_latitude: this.attendance_latitude,
+    //     //   }
+    //     // });
+    //   } else if (_this.isIn && !_this.isOut) {
+    //     this.$router.push({
+    //       path: "/Outsignpage",
+    //       query: {
+    //         pagename: "signpage",
+    //         defaultparam: 2,
+    //         type: 1,
+    //         address: _this.attendance_address,
+    //         attendance_longitude: this.attendance_longitude,
+    //         attendance_latitude: this.attendance_latitude
+    //       }
+    //     });
+    //   } else if (!_this.isIn && _this.isOut) {
+    //     this.$router.push({
+    //       path: "/Outsignpage",
+    //       query: {
+    //         pagename: "signpage",
+    //         defaultparam: 1,
+    //         type: 2,
+    //         address: _this.attendance_address,
+    //         attendance_longitude: this.attendance_longitude,
+    //         attendance_latitude: this.attendance_latitude
+    //       }
+    //     });
+    //   } else if (!_this.isIn && !_this.isOut) {
+    //     this.$router.push({
+    //       path: "/outsignpage",
+    //       query: {
+    //         pagename: "signpage",
+    //         address: _this.attendance_address,
+    //         defaultparam: 1,
+    //         type: 0,
+    //         attendance_longitude: this.attendance_longitude,
+    //         attendance_latitude: this.attendance_latitude
+    //       }
+    //     });
+    //   }
+    // },
     /**
      * 获取接口json数据
      */
@@ -530,7 +595,7 @@ export default {
       let signWords = {
         user_id: parseInt(this.userId),
         user_name: this.userName,
-        attendance_type: type,
+        // attendance_type: type,
         attendance_longitude: parseFloat(this.attendance_longitude),
         attendance_latitude: parseFloat(this.attendance_latitude),
         attendance_address: this.attendance_address,
@@ -605,10 +670,10 @@ export default {
   },
   beforeDestroy() {
     if (this.timer) {
-      clearInterval(this.timer); //在vue实例销毁钱，清除我们的定时器
+      clearInterval(this.timer); //在vue实例销毁前，清除我们的定时器
     }
     if (this.displayer) {
-      clearInterval(this.displayer); //在vue实例销毁钱，清除我们的定时器
+      clearInterval(this.displayer); //在vue实例销毁前，清除我们的定时器
     }
   }
 };

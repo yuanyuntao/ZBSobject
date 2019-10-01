@@ -31,7 +31,6 @@ export default {
         // require("../../../assets/oynn/timg3.jpg"),
         // require("../../../assets/oynn/timg4.jpg"),
         // require("../../../assets/oynn/timg5.jpg"),
-
       ]
     };
   },

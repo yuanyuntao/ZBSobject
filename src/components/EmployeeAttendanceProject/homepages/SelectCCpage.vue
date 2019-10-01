@@ -273,6 +273,7 @@ export default {
     var _this = this;
     _this.from = this.$route.query.pagename;
     var isRefresh = false;
+    debugger
     if (typeof this.$route.query.sheetListsCC[0] == "string") {
       isRefresh = true;
     }
@@ -319,7 +320,15 @@ export default {
       _this.leaveDays = this.$route.query.leaveDays;
       _this.leaveHours = this.$route.query.leaveHours;
       _this.outAddress = this.$route.query.outAddress;
+    } else if(_this.from == "visitorsPage" || _this.from == "visitorsRequestInformation"){
+      _this.defaultparam=this.$route.query.id;
+      _this.defaultType = this.$route.query.defaultType;
+      _this.leaveReasons = this.$route.query.leaveReasons;
+      _this.startTime = this.$route.query.startTime;
+      _this.endTime = this.$route.query.endTime;
+      _this.company_id = 1
     }
+
     this.selectednum = _this.choseList.length;
     if (this.selectednum > 0) {
       this.ifshowselected = true;
@@ -365,8 +374,8 @@ export default {
           var resultdata = returnData.data.departmentList;
           for (let i = 0; i < resultdata.length; i++) {
             _this.sheetLists.push({
-              department_id: resultdata[i].department_id,
-              department: resultdata[i].department, //部门
+              department_id: resultdata[i].department_id_all,
+              department: resultdata[i].department_all, //部门
               num: resultdata[i].users.length, //人数
               users: []
             });

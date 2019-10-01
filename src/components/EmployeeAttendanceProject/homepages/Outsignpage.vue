@@ -16,7 +16,7 @@
       <span style="font-size: 15px;color:#91918c">地点：{{address}}</span>
     </div>
 
-    <div
+    <!-- <div
       type="primary"
       round
       style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;display: flex;"
@@ -69,7 +69,7 @@
         </template>
         <span style="vertical-align: middle">签退</span>
       </div>
-    </div>
+    </div> -->
     <div
       type="primary"
       round
@@ -190,7 +190,7 @@ export default {
       totalHeight: "", //总的高度
       nowtime: new Date(), //现在时间
       address: "", //打卡地点
-      defaultparam: 1, //默认选择签到类型
+      // defaultparam: 1, //默认选择签到类型
       attendanceType: 0, //打卡类型
       outReasons: "", //外出事由
       canIn: true, //是否可以签到
@@ -336,23 +336,26 @@ export default {
           headers: { "Content-type": "multipart/form-data" }
         })
         .then(function(response) {
+          debugger
           if (response.data.code == 1001) {
-            if (_this.defaultparam == 1) {
-              alert("签到成功！");
-            } else if (_this.defaultparam == 2) {
-              alert("签退成功！");
-            } else {
-              alert("错误！");
-            }
+            alert("外勤打卡成功！");
+            // if (_this.defaultparam == 1) {
+            //   alert("签到成功！");
+            // } else if (_this.defaultparam == 2) {
+            //   alert("签退成功！");
+            // } else {
+            //   alert("错误！");
+            // }
             _this.goBack();
           } else {
-            if (_this.defaultparam == 1) {
-              alert("签到失败，请检查网络！");
-            } else if (_this.defaultparam == 2) {
-              alert("签退失败，请检查网络！");
-            } else {
-              alert("错误！");
-            }
+            // if (_this.defaultparam == 1) {
+            //   alert("签到失败，请检查网络！");
+            // } else if (_this.defaultparam == 2) {
+            //   alert("签退失败，请检查网络！");
+            // } else {
+            //   alert("错误！");
+            // }
+            alert("错误！");
             return;
           }
         });
@@ -407,7 +410,7 @@ export default {
     _this.attendance_latitude = this.$route.query.attendance_latitude;
     _this.address = this.$route.query.address;
     _this.defaultparam = this.$route.query.defaultparam;
-    _this.attendanceType = this.$route.query.type;
+    // _this.attendanceType = this.$route.query.type;
     if (
       this.$route.query.pagename == "selectApproverpage" ||
       this.$route.query.pagename == "selectCCpage"

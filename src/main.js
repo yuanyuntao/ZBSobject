@@ -93,6 +93,18 @@ import Dynamic from "./components/EmployeeAttendanceProject/dynamic"
 import Myinfor from "./components/EmployeeAttendanceProject/myinfor"
 import Accountinformation from "./components/EmployeeAttendanceProject/myinfor/accountinformation"
 
+
+//访客登记
+import VisitorRegistration from "./components/EmployeeAttendanceProject/visitors/visitorRegistration"
+import VisitorInfoPage from "./components/EmployeeAttendanceProject/visitors/visitorInfoPage"
+import VisitorsPage from "./components/EmployeeAttendanceProject/visitors/visitorsPage"
+import VisitorsRequestInformation from "./components/EmployeeAttendanceProject/visitors/visitorsRequestInformation"
+import VisitorAddFace from "./components/EmployeeAttendanceProject/visitors/visitorAddFace"
+
+
+
+
+
 import JsEncrypt from 'jsencrypt'
 import Jsrsasign from 'jsrsasign'
 import { getRandom, encrypt, decrypt } from "./components/js/utils.js";
@@ -116,9 +128,13 @@ Vue.config.productionTip = false
 //设置路由
 const router = new VueRouter({
   mode: 'history',
-  base: __dirname,
+  // mode: 'hsah',
+
+  // base: __dirname,
+  base: "/dist/",
+  // base: "/visitor/",
   routes: [
-    { path: "/static", component: Userlogin },
+    { path: "/", component: Userlogin },
     //首页
     { path: "/homepage", component: Homepage, meta: { title: '首页' } },
     { path: "/signpage", component: Signpage, meta: { title: '考勤打卡' } },
@@ -187,6 +203,17 @@ const router = new VueRouter({
     //个人中心
     { path: "/myinfor", component: Myinfor, meta: { title: '个人中心' } },
     { path: "/accountinformation", component: Accountinformation, meta: { title: '账号信息' } },
+
+    //访客
+    
+    // { path: "/static", component: VisitorRegistration, meta: { title: '访客登记' } },
+    // { path: "/", component: VisitorRegistration, meta: { title: '访客登记' } },
+    { path: "/visitorInfoPage", component: VisitorInfoPage, meta: { title: '访客信息' } },
+    { path: "/visitorsPage", component: VisitorsPage, meta: { title: '来访申请' } },
+    { path: "/visitorsRequestInformation", component: VisitorsRequestInformation, meta: { title: '来访申请编辑' } },
+    { path: "/visitorAddFace", component: VisitorAddFace, meta: { title: '上传照片' } },
+
+    
 
 
 
@@ -338,14 +365,14 @@ Vue.prototype.getHeaderAndBody = function (contentData, serverPublicKey) {
 Vue.prototype.getSERVER_HOST_MAIN = function () {
   //  return  "47.99.72.90"
   return "106.12.55.177"
-  // return  "192.168.2.200"
+  // return  "192.168.2.133"
 
 }
 Vue.prototype.getSERVER_PORT_MAIN = function () {
   return "80"
 }
 Vue.prototype.getPROJECT_MAIN = function () {
-  return "ZBSAttendance_v1"
+  return "ZBSAttendance"
 }
 
 

@@ -9,6 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
+    // assetsPublicPath: '/dist/',
     assetsPublicPath: '/',
     proxyTable: {
         '/api': {
@@ -22,9 +23,9 @@ module.exports = {
 
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
-    // host: '192.168.2.201',
-    host: '192.168.2.192',
-    // host: '192.168.5.186',
+    // host: '172.20.10.12',
+    // host: '106.12.55.177',
+    host: '192.168.2.188',
     // host: '192.168.50.73',
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
@@ -51,17 +52,22 @@ module.exports = {
   build: {
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
+    // index: path.resolve(__dirname, '../visitor/index.html'),
+
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
+    // assetsRoot: path.resolve(__dirname, '../visitor'),
+
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/dist/',
+    // assetsPublicPath: '/visitor/',
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
@@ -77,5 +83,8 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
+  },
+
+
+
 }

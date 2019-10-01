@@ -97,6 +97,11 @@ export default {
     };
   },
   methods: {
+    //监听返回按钮
+    goBack() {
+      
+      return
+    },
     changePage: function(page) {
       //点击跳转对应的页面
       var _this = this;
@@ -109,6 +114,10 @@ export default {
     this.timer = setInterval(function() {
       _this.date = new Date(); //修改数据date
     }, 1000);
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", this.goBack, false);
+    }
   },
   created: function() {
     var _this = this;
@@ -123,6 +132,9 @@ export default {
     _this.company_id = localStorage.getItem("company_id")
     _this.serverPublicKey = localStorage.getItem("serverPublicKey")
 
+  },
+  destroyed() {
+    window.removeEventListener("popstate", this.goBack, false);
   },
   beforeDestroy() {
     if (this.timer) {

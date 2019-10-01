@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div v-show="ifShow">
     <div class="userlogin">
       <img class="inner_label login_logo" src="../../assets/logo.png" />
     </div>
@@ -42,100 +42,100 @@ export default {
       appPrivateKey: "",
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
       isBtnLoading: false,
-      isBtnLoadingText: "登录"
+      isBtnLoadingText: "登录",
+      ifShow:false
     };
   },
   created() {
     var _this = this;
+     _this.appPrivateKey = this.getPrivatekey();
+    
     if (typeof this.$route.query.code == "undefined") {
-      let url = "zhrdi9.natappfree.cc";
+      _this.getServerPublicKey().then(function(response) {
+       localStorage.setItem("serverPublicKey", response);
+    });
+     
+      let url = "www.zhongbenshuo.com/dist";
+      // let url = "nnpqz2.natappfree.cc/static";
+
       window.location.href =
         "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbd38640dfe24b6d5&redirect_uri=http%3A%2F%2F" +
         url +
-        "/static&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+        "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
     } else {
-      let url =
-        "/api/sns/oauth2/access_token?appid=wxbd38640dfe24b6d5&secret=c13d263a5e63274ae3361668aee9f005&code=" +
-        this.$route.query.code +
-        "&grant_type=authorization_code";
-      this.$http
-        .get(url)
-        .then(function(reponse) {
-          _this.openid = reponse.data.openid;
-          if (_this.openid != "" && typeof(_this.openid) != undefined) {
-            var content = {
-              openId: _this.openid
-            };
-            var contentData = JSON.stringify(content);
-            var headerAndBody = this.getHeaderAndBody(
-              contentData,
-              this.serverPublicKey
-            );
-            let url =
-              "http://" +
-              this.getSERVER_HOST_MAIN() +
-              ":" +
-              this.getSERVER_PORT_MAIN() +
-              "/" +
-              this.getPROJECT_MAIN() +
-              "/user/searchOpenId.do";
-            // this.getPROJECT_MAIN() + "/user/login.do?content=" +
-            // encodeURIComponent(contentData);
-            this.$ajax
-              .post(url, headerAndBody.contentDataByKey, {
-                headers: {
-                  appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
-                  appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
-                  appPublicKey: headerAndBody.appPublicKey,
-                  serverPublicKey: headerAndBody.serverPublicKey
-                }
-              })
-              .then(response => {
-                var returnKey = this.RSAdecrypt(
-                  response.headers.serverencryptedkey,
-                  this.appPrivateKey
-                );
-                let returnResponseData = response.data;
-                let encrypt = returnResponseData.replace(/[\r\n]/g, "");
-                var returnData = decrypt(encrypt, returnKey, this.getIV());
-                // console.log("returnData....." + returnData);
+      var content = {
+        code: this.$route.query.code,
+        type:"staff"
+      };
 
-                var returnData = JSON.parse(returnData);
-                debugger;
-                if (returnData.code == 1001) {
-                  if (returnData.data.userInfo.length > 0) {
-                    var isAdministrator = false;
-                    if (
-                      returnData.data.userInfo[0].company_id == 0 ||
-                      returnData.data.userInfo[0].role == 1
-                    ) {
-                      isAdministrator = true;
-                    }
-                    localStorage.setItem(
-                      "userId",
-                      returnData.data.userInfo[0].user_id
-                    );
-                    localStorage.setItem(
-                      "userName",
-                      returnData.data.userInfo[0].user_name
-                    );
-                    localStorage.setItem("isAdministrator", isAdministrator);
-                    localStorage.setItem(
-                      "company_id",
-                      returnData.data.userInfo[0].company_id
-                    );
-                    localStorage.setItem(
-                      "serverPublicKey",
-                      this.serverPublicKey
-                    );
-                    localStorage.setItem(
-                      "department",
-                      returnData.data.userInfo[0].department
-                    );
-                    this.$router.push("/homepage");
-                  }
-                }
-              });
+      var contentData = JSON.stringify(content);
+      var headerAndBody = this.getHeaderAndBody(
+        contentData,
+        localStorage.getItem("serverPublicKey")
+      );
+      let geturl =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/access_token.do";
+      // this.getPROJECT_MAIN() + "/user/login.do?content=" +
+      // encodeURIComponent(contentData);
+      this.$ajax
+        .post(geturl, headerAndBody.contentDataByKey, {
+          headers: {
+            appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+            appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+            appPublicKey: headerAndBody.appPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
+          }
+        })
+        .then(response => {
+          var returnKey = this.RSAdecrypt(
+            response.headers.serverencryptedkey,
+            this.appPrivateKey
+          );
+          let returnResponseData = response.data;
+          let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          var returnData = decrypt(encrypt, returnKey, this.getIV());
+          // console.log("returnData....." + returnData);
+          var returnData = JSON.parse(returnData);
+          if (returnData.code == 1001) {
+            if (returnData.data.userInfo.length > 0) {
+              var isAdministrator = false;
+              if (
+                returnData.data.userInfo[0].company_id == 0 ||
+                returnData.data.userInfo[0].role == 1
+              ) {
+                isAdministrator = true;
+              }
+              localStorage.setItem(
+                "userId",
+                returnData.data.userInfo[0].user_id
+              );
+              localStorage.setItem(
+                "userName",
+                returnData.data.userInfo[0].user_name
+              );
+              localStorage.setItem("isAdministrator", isAdministrator);
+              localStorage.setItem(
+                "company_id",
+                returnData.data.userInfo[0].company_id
+              );
+              localStorage.setItem("serverPublicKey", this.serverPublicKey);
+              localStorage.setItem(
+                "department",
+                returnData.data.userInfo[0].department
+              );
+              this.$router.push("/homepage");
+            }
+            else{
+              this.openid = returnData.data.openId
+              this.ifShow = true
+            }
+
           }
         })
         .catch(function(error) {
@@ -174,8 +174,6 @@ export default {
   },
   mounted() {
     var _this = this;
-    _this.appPrivateKey = this.getPrivatekey();
-
     _this.getServerPublicKey().then(function(response) {
       _this.serverPublicKey = response;
     });
@@ -231,7 +229,6 @@ export default {
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
-            debugger
             if (_this.openid != "" && typeof _this.openid != undefined) {
               var content = {
                 openId: _this.openid,
@@ -262,7 +259,6 @@ export default {
                   }
                 })
                 .then(response => {
-                  debugger
                   var returnKey = this.RSAdecrypt(
                     response.headers.serverencryptedkey,
                     this.appPrivateKey
@@ -278,34 +274,27 @@ export default {
                   }
                 });
             }
-              var isAdministrator = false;
-              if (
-                returnData.data.user.company_id == 0 ||
-                returnData.data.user.role == 1
-              ) {
-                isAdministrator = true;
-              }
-              // this.$defines.setUserId(returnData.data.user.user_id);
-              // this.$defines.setUserName(returnData.data.user.user_name);
-              // this.$defines.setIsAdministrator(isAdministrator);
-              // this.$defines.setCompanyId(returnData.data.user.company_id);
-              // this.$defines.setServerPublicKey(this.serverPublicKey);
+            var isAdministrator = false;
+            if (
+              returnData.data.user.company_id == 0 ||
+              returnData.data.user.role == 1
+            ) {
+              isAdministrator = true;
+            }
+            // this.$defines.setUserId(returnData.data.user.user_id);
+            // this.$defines.setUserName(returnData.data.user.user_name);
+            // this.$defines.setIsAdministrator(isAdministrator);
+            // this.$defines.setCompanyId(returnData.data.user.company_id);
+            // this.$defines.setServerPublicKey(this.serverPublicKey);
 
-              localStorage.setItem("userId", returnData.data.user.user_id);
-              localStorage.setItem("userName", returnData.data.user.user_name);
-              localStorage.setItem("isAdministrator", isAdministrator);
-              localStorage.setItem(
-                "company_id",
-                returnData.data.user.company_id
-              );
-              localStorage.setItem("serverPublicKey", this.serverPublicKey);
-              localStorage.setItem(
-                "department",
-                returnData.data.user.department
-              );
+            localStorage.setItem("userId", returnData.data.user.user_id);
+            localStorage.setItem("userName", returnData.data.user.user_name);
+            localStorage.setItem("isAdministrator", isAdministrator);
+            localStorage.setItem("company_id", returnData.data.user.company_id);
+            localStorage.setItem("serverPublicKey", this.serverPublicKey);
+            localStorage.setItem("department", returnData.data.user.department);
 
-              this.$router.push("/homepage");
-            
+            this.$router.push("/homepage");
           } else if (returnData.code == 1014) {
             this.isBtnLoadingText = "登录";
             alert("用户名或密码不正确！");

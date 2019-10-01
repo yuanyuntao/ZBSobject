@@ -201,8 +201,8 @@ export default {
         var resultdata = returnData.data.departmentList;
         for (let i = 0; i < resultdata.length; i++) {
           _this.sheetLists.push({
-            department_id: resultdata[i].department_id,
-            department: resultdata[i].department, //部门
+            department_id: resultdata[i].department_id_all,
+            department: resultdata[i].department_all, //部门
             num: resultdata[i].users.length, //人数
             users: []
           });
