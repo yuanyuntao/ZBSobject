@@ -2,10 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // import router from './router'
 // import VueParticles from 'vue-particles'
-// import AMap from 'vue-amap'
+import AMap from 'vue-amap'
 import FaceDetection from "./components/faceDetection"
 // Vue.use(VueParticles)
-// Vue.use(AMap)
+Vue.use(AMap)
 
 
 
@@ -36,6 +36,8 @@ import SelectApproverpage from "./components/EmployeeAttendanceProject/homepages
 import SelectCCpage from "./components/EmployeeAttendanceProject/homepages/selectCCpage"
 import AgencyMatters from "./components/EmployeeAttendanceProject/homepages/agencyMatters"
 import Calendar from "./components/EmployeeAttendanceProject/homepages/calendar"
+import PunchRecord from "./components/EmployeeAttendanceProject/homepages/punchRecord"
+
 
 
 //application
@@ -118,6 +120,9 @@ Vue.prototype.$defines = defines
 //滑动测试
 import Refersh from './components/TestProject/refersh'
 
+import IosTest from './components/TestProject/iosTest'
+
+
 // Vue.prototype.$RSA = Jsrsasign
 
 import ttt from './components/EmployeeAttendanceProject/toolsComponent/ttt'
@@ -146,6 +151,8 @@ const router = new VueRouter({
     { path: "/selectCCpage", component: SelectCCpage, meta: { title: '选择抄送人' } },
     { path: "/agencyMatters", component: AgencyMatters, meta: { title: '待办事项' } },
     { path: "/calendar", component: Calendar, meta: { title: '考勤记录' } },
+    { path: "/punchRecord", component: PunchRecord, meta: { title: '今日考勤记录' } },
+    
 
     //应用中心
     { path: "/application", component: Application, meta: { title: '应用中心' } },
@@ -219,6 +226,7 @@ const router = new VueRouter({
 
     //测试用
     { path: "/refersh", component: Refersh, meta: { title: '人脸识别' } },
+    { path: "/iosTest", component: IosTest, meta: { title: '人脸识别' } },
 
     { path: "/ttt", component: ttt, meta: { title: '弹出框测试' } },
 

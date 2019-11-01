@@ -22,7 +22,7 @@
             <span >考勤打卡</span>
           </div>
         </div>
-        <div class="icon">
+        <div class="icon" @click="changePage('/iosTest')">
           <span>
             <img class="iconImg" src="../../assets/usedimg/mymessage_normal.png">
           </span>

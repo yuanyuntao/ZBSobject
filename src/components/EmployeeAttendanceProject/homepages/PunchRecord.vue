@@ -1,19 +1,16 @@
 <template>
-  <div class="attendanceCard" ref="attendanceCard">
+  <div class="punchRecord" ref="punchRecord">
     <div style="height:20px"></div>
-    <div type="primary" round class="lookRecords" @click="lookRecords">
-      <p>补卡记录</p>
-      <img class="iconRecord" src="../../../../assets/littleimg/jilu.png" alt />
-    </div>
+    
     <div class="top">
       <div type="primary" round class="dateSelect" @click="dayBefore">
-        <img class="arrowIcon" src="../../../../assets/littleimg/left.png" alt />
+        <img class="arrowIcon" src="../../../assets/littleimg/left.png" alt />
         <p>前一天</p>
       </div>
       <div type="primary" round class="selectedData" @click="showDatePicker(6, 3)">{{selectTime}}</div>
       <div type="primary" round class="dateSelect" @click="dayAfter">
         <p style="margin-left:10px">后一天</p>
-        <img class="arrowIcon" src="../../../../assets/littleimg/right.png" alt />
+        <img class="arrowIcon" src="../../../assets/littleimg/right.png" alt />
       </div>
     </div>
     <div
@@ -35,117 +32,16 @@
         </div>
       </div>
     </div>
-    <div
-      type="primary"
-      round
-      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;display: flex;"
-    >
-      <div style=" width: 60%;text-align: left">
-        <span class="words">补卡类型</span>
-      </div>
-      <div style>
-        <input
-          type="radio"
-          name="radios"
-          value="1"
-          v-model="defaultparam"
-          style="vertical-align: middle"
-        />
-        <span style="vertical-align: middle">签到</span>
-      </div>
-      <div style="padding-left:10px">
-        <input
-          type="radio"
-          name="radios"
-          value="2"
-          v-model="defaultparam"
-          style="vertical-align: middle"
-        />
-        <span style="vertical-align: middle">签退</span>
-      </div>
-    </div>
-    <div
-      type="primary"
-      round
-      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
-    >
-      <div>
-        <span class="words">补卡信息</span>
-        <img
-          class="imge"
-          style="float: right; width: 20px;height: 20px;padding-right:20px"
-          src="../../../../assets/littleimg/xiangji.png"
-          alt
-          @click="imgClick()"
-        />
-      </div>
-      <div>
-        <textarea type="text" class="outReasons" placeholder="请输入补卡事由" v-model="outReasons"></textarea>
-      </div>
-      <div class="photos" v-show="imgs.length > 0">
-        <!--照片区域-->
-        <div
-          v-for="(urls, index) in imgs "
-          :key="urls.id"
-          style=" display: inline-block;
-            position: relative;margin-right:10px"
-        >
-          <img
-            src="../../../../assets/littleimg/shanchu.png"
-            style=" position: absolute;top: 0px;
-                right: 0px;
-                width: 20px;
-                height: 20px;"
-            v-on:click="deleteImg(index)"
-          />
-          <img :src="urls" style="width: 80px;height: 80px;" />
-        </div>
-        <input
-          style="float: left;  display: none;"
-          type="file"
-          id="uploadFile"
-          accept="image/*"
-          v-on:change="readLocalFile()"
-        />
-      </div>
-    </div>
-    <div
-      type="primary"
-      round
-      style=" border-radius: 10px;text-align:left;background-color: #fff;padding:10px;margin: 10px;"
-    >
-      <div>
-        <span class="words">选择审批人</span>
-        <img
-          class="imge"
-          style="float: right; width: 28px;height: 28px;padding-right:20px;"
-          src="../../../../assets/littleimg/jiahao.png"
-          alt
-          @click="selectApprover"
-        />
-      </div>
-      <div class="showApproveAndCC" v-show="choseListApprove.length>0">
-        <div v-for="(item,index) in choseListApprove" :key="item.id" style="display:flex">
-          <div>
-            <div class="head_image" v-text="item.userName.substr(item.userName.length-1, 1)"></div>
-            <p v-text="item.userName" style="font-size: 12px;margin:5px"></p>
-          </div>
-          <img
-            class="arrow"
-            v-show="index != (choseListApprove.length-1) "
-            src="../../../../assets/littleimg/jiantou.png"
-            alt
-          />
-        </div>
-      </div>
-    </div>
-    <button class="sure" @click="sure" type="primary" round>提交申请</button>
+   
+    
+    
+   
   </div>
 </template>
 <script>
-import { encrypt, decrypt } from "../../../js/utils.js";
+import { encrypt, decrypt } from "../../js/utils.js";
 export default {
-  name: "attendanceCard",
+  name: "punchRecord",
   components: {},
   data() {
     return {
@@ -177,21 +73,13 @@ export default {
     goBack() {
       this.$defines.setSelect_time(new Date());
       this.$router.push({
-        path: "/application",
+        path: "/signpage",
         query: {
-          pagename: "attendanceCard"
+          pagename: "punchRecord"
         }
       });
     },
-    //查看记录
-    lookRecords() {
-      this.$router.push({
-        path: "/fieldRecord",
-        query: {
-          pagename: "attendanceCard"
-        }
-      });
-    },
+
     dayBefore() {
       this.selectTime = this.getDay(this.select_time, -1);
       this.getRecordData(this);
@@ -270,124 +158,7 @@ export default {
           }
         });
     },
-    //删除图片
-    deleteImg: function(index) {
-      this.imgs.splice(index, 1);
-      this.fileData.splice(index, 1);
-      this.$defines.setAttendanceCardImges(this.imgs);
-      this.$defines.setattendanceCardFileData(this.fileData);
-    },
-    //图片click
-    imgClick: function() {
-      document.getElementById("uploadFile").click();
-    },
-    //点击选中图片
-    readLocalFile: function() {
-      var local = document.getElementById("uploadFile");
-      var localFile = document.getElementById("uploadFile").files[0];
-      this.fileData.push(local);
-      this.$defines.setFileData(this.fileData);
-      var current = this;
-      var reader = new FileReader();
-      var content;
-      reader.onload = function(event) {
-        console.log("event:" + event);
-        content = event.target.result;
-        current.imgs.push(content); //获取图片base64代码
-        current.$defines.setImges(current.imgs);
-      };
-      reader.onerror = function(event) {
-        alert("error");
-      };
-      content = reader.readAsDataURL(localFile, "UTF-8");
-      var sss = document.getElementById("uploadFile").value;
-      var dd = document.getElementById("uploadFile").files[0];
-    },
-    selectApprover() {
-      this.$router.push({
-        path: "/selectApproverpage",
-        query: {
-          pagename: "attendanceCard",
-          choseListApprove: this.choseListApprove,
-          sheetListsApprove: this.sheetListsApprove,
-          outReasons: this.outReasons,
-          defaultparam: this.defaultparam
-        }
-      });
-    },
-
-    getAttendanceRecord() {
-      var choseListApproveData = [];
-      if (this.defaultparam != "1" && this.defaultparam != "2") {
-        alert("请选择补卡类型！");
-        return;
-      }
-      if (this.choseListApprove.length == 0) {
-        alert("审批人不能为空！");
-        return;
-      } else {
-        for (let i = 0; i < this.choseListApprove.length; i++) {
-          choseListApproveData.push(this.choseListApprove[i].userId.toString());
-        }
-      }
-      let signWords = {
-        user_id: localStorage.getItem("userId"),
-        attendance_type: this.defaultparam,
-        remarks: this.outReasons,
-        attendance_type: this.defaultparam,
-        appeal_time: this.selectTime
-          .replace("年", "-")
-          .replace("月", "-")
-          .replace("日", ""),
-        appeal_attendance: 1,
-        audit_user: choseListApproveData
-      };
-      let fileFormData = new FormData();
-      fileFormData.append("information", JSON.stringify(signWords));
-      for (let i = 0; i < this.$defines.fileData.length; i++) {
-        let file = this.$defines.fileData[i].files[0];
-        fileFormData.append("picture", file, file.name);
-      }
-      return fileFormData;
-    },
-    sure() {
-      var _this = this;
-      var information = _this.getAttendanceRecord();
-      var url =
-        "http://" +
-        this.getSERVER_HOST_MAIN() +
-        ":" +
-        this.getSERVER_PORT_MAIN() +
-        "/" +
-        this.getPROJECT_MAIN() +
-        "/user/addAppealAttendanceRecord.do";
-
-      _this.$ajax
-        .post(url, information, {
-          headers: { "Content-type": "multipart/form-data" }
-        })
-        .then(function(response) {
-          if (response.data.code == 1001) {
-            if (_this.defaultparam == 1) {
-              alert("签到补卡成功！");
-            } else if (_this.defaultparam == 2) {
-              alert("签退补卡成功！");
-            } else {
-              alert("错误！");
-            }
-            _this.goBack();
-          } else {
-            if (_this.defaultparam == 1) {
-              alert("签到补卡失败，请检查网络！");
-            } else if (_this.defaultparam == 2) {
-              alert("签退补卡失败，请检查网络！");
-            } else {
-              alert("错误！");
-            }
-            return;
-          }
-        });
-    },
+   
     showDatePicker(demo, type) {
       var _this = this;
       var date = new Date();
@@ -454,7 +225,7 @@ export default {
     },
     changeFixed(clientHeight) {
       //动态修改样式
-      this.$refs.attendanceCard.style.height = clientHeight + "px";
+      this.$refs.punchRecord.style.height = clientHeight + "px";
     }
   },
   mounted() {
@@ -477,7 +248,7 @@ export default {
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function() {
-      this.totalHeight = this.$refs.attendanceCard.offsetHeight;
+      this.totalHeight = this.$refs.punchRecord.offsetHeight;
       if (this.totalHeight > this.clientHeight) {
         this.clientHeight = this.totalHeight + 20;
       }
@@ -486,14 +257,7 @@ export default {
   },
   created: function() {
     var _this = this;
-    _this.fileData = this.$defines.attendanceCardfileData;
-    _this.imgs = this.$defines.attendanceCardimgs;
-    _this.defaultparam = this.$route.query.defaultparam;
-    if (this.$route.query.pagename == "selectApproverpage") {
-      _this.sheetListsApprove = this.$route.query.sheetListsApprove;
-      _this.outReasons = this.$route.query.outReasons;
-      _this.choseListApprove = this.$route.query.choseListApprove;
-    }
+    
     if (this.$defines.select_time == "") {
       this.$defines.setSelect_time(new Date());
     }
@@ -506,7 +270,7 @@ export default {
 </script>
 
 <style scoped>
-.attendanceCard {
+.punchRecord {
   width: 100%;
   height: 100%;
   background-color: #e3e9e7;

@@ -26,36 +26,37 @@
       <br />
       <span style="font-size:12px;color:#91918c">注：默认使用距离您最近的考勤点</span>
     </div>
-
-    <div class="signbutton">
-      <div style="display: flex;">
-        <div style="display: flex;text-align: left;width:40%;margin-left: 20px">
-          <div style>
-            <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt />
-            <br />
-            <span style="color:#000">上班时间</span>
-            <br />
-            <span style="color:#91918c">{{work}}</span>
-            <br />
-            <!-- <template v-if="isIn">
+        <div class="signbutton">
+      <div style="display: flex;width: 100% ">
+        <div style=" width: 80%;text-align: left">
+          <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt>
+          <br>
+          <span style="color:#000">上班打卡</span>
+          <br>
+          <span style="color:#91918c">{{work}}</span>
+          <br>
+          <template v-if="isIn">
             <template v-if="isInNormal">
               <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psIn}}</span>
             </template>
+
             <template v-else>
               <span style="color:#f72d4e;font-weight: normal;font-size: 15px">{{psIn}}</span>
             </template>
-            </template>-->
-          </div>
-
-          <div class="signtext">
-            <!-- <template v-if="ifInOk">
+          </template>
+        </div>
+        <div class="signtext">
+          <template v-if="isInOk">
             <button
               style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               @click="signin"
             >签到</button>
           </template>
           <template v-else>
-            <template v-if="isIn">
+            <button
+                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              >签到</button>
+            <!-- <template v-if="isIn">
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >已签到</button>
@@ -64,11 +65,60 @@
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >签到</button>
-            </template>
-            </template>-->
-          </div>
+            </template> -->
+          </template>
         </div>
-        <div>
+        
+      </div>
+      <div style="display: flex;padding-top:20px;width: 100%">
+        <div style="width: 80%;text-align: left">
+          <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt>
+          <br>
+          <span style="color:#000">下班打卡</span>
+          <br>
+          <span style="color:#91918c">{{offDuty}}</span>
+          <br>
+          <template v-if="isOut">
+            <template v-if="isOutNormal">
+              <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psOut}}</span>
+            </template>
+            <template v-else>
+              <span style="color:#f72d4e;font-weight: normal;font-size: 15px">{{psOut}}</span>
+            </template>
+          </template>
+        </div>
+        <div class="signtext">
+          <template v-if="isOutOk">
+            <button
+              style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              @click="signout"
+            >签退</button>
+          </template>
+          <template v-else>
+             <button
+                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              >签退</button>
+            <!-- <template v-if="isOut">
+              <button
+                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              >已签退</button>
+            </template>
+            <template v-else>
+              <button
+                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+              >签退</button>
+            </template> -->
+          </template>
+        </div>
+      </div>
+      <div style="font-size:12px;color:rgb(37, 175, 100);text-align: right; padding: 5px;margin: 10px;">
+        <span @click="detailsToday">今日详情</span>
+        </div>
+      
+      </div>
+
+    
+      <!-- <div>
           <template v-if="isSignOk">
             <button
               style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
@@ -80,50 +130,11 @@
               style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
             >打卡</button>
           </template>
-        </div>
-        <div
-          style="display: flex;width: 100%;float: right;text-align: right;width:40%;margin-left: 20px"
-        >
-          <div style="float: right;text-align: right;">
-            <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt />
-            <br />
-            <span style="color:#000">下班时间</span>
-            <br />
-            <span style="color:#91918c">{{offDuty}}</span>
-            <br />
-            <!-- <template v-if="isOut">
-            <template v-if="isOutNormal">
-              <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psOut}}</span>
-            </template>
-            <template v-else>
-              <span style="color:#f72d4e;font-weight: normal;font-size: 15px">{{psOut}}</span>
-            </template>
-            </template>-->
-          </div>
-          <div class="signtext">
-            <!-- <template v-if="ifOutOk">
-            <button
-              style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
-              @click="signout"
-            >签退</button>
-          </template>
-          <template v-else>
-            <template v-if="isOut">
-              <button
-                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
-              >已签退</button>
-            </template>
-            <template v-else>
-              <button
-                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
-              >签退</button>
-            </template>
-            </template>-->
-          </div>
-        </div>
-      </div>
+      </div>-->
+  
+      <!-- </div> -->
 
-      <div style="font-size:14px;margin-top: 20px;margin-bottom: 20px">
+      <!-- <div style="font-size:14px;margin-top: 20px;margin-bottom: 20px">
         <div style="border-bottom: 1px solid rgb(240, 240, 240);">{{psIn}}&ensp;{{psInAddress}}</div>
         <div>{{psOut}}&ensp;{{psOutAddress}}</div>
       </div>
@@ -131,8 +142,7 @@
       <div style="display: flex;">
         <div style="font-size:12px;color:#91918c">注：记录只显示当天最早和最晚的信息</div>&ensp;&ensp;
         <div style="font-size:12px;color:rgb(37, 175, 100)">详细记录</div>
-      </div>
-    </div>
+      </div>-->
 
     <div class="out" @click="outSign" aria-disabled="true">
       <img class="out_attendance" src="../../../assets/littleimg/add_out_attendance.png" alt />
@@ -143,7 +153,7 @@
   </div>
 </template>
 <script>
-import { MP } from "../../js/Map.js";
+import { MP,AMP,location } from "../../js/Map.js";
 import { encrypt, decrypt } from "../../js/utils.js";
 export default {
   name: "signpage",
@@ -166,14 +176,14 @@ export default {
       company_id: "", //公司
       isAdministrator: "", //是否是管理员
       isSignOk: false, //是否可以打卡（进入打卡范围）
-      // ifInOk: false, //可以签到判断
-      // ifOutOk: false, //可以签退判断
-      // isInOk: true, //是否可以签到
-      // isOutOk: true, //是否可以签退
-      // isIn: false, //是否已签到
-      // isOut: false, //是否已签退
-      // isInNormal: true, //是否签到正常
-      // isOutNormal: true, //是否签退正常
+      ifInOk: false, //可以签到判断
+      ifOutOk: false, //可以签退判断
+      isInOk: false, //是否可以签到
+      isOutOk: false, //是否可以签退
+      isIn: false, //是否已签到
+      isOut: false, //是否已签退
+      isInNormal: true, //是否签到正常
+      isOutNormal: true, //是否签退正常
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
 
       signWords: {
@@ -218,7 +228,7 @@ export default {
         }
       });
     },
-    /**获取地图定位*/
+    /**baidu获取地图定位*/
     getLocations() {
       var _this = this;
       if (typeof BMap != "undefined") {
@@ -233,6 +243,25 @@ export default {
         });
       }
     },
+
+    /**gaode获取地图定位*/
+       getLocation() {
+      var _this = this;
+      if (typeof AMap != "undefined") {
+        AMP().then(AMap => {
+          _this.getmap(_this);
+          return;
+        });
+        _this.getmap(_this);
+      } else {
+        AMP(_this.ak).then(AMP => {
+          _this.getmap(_this);
+        });
+      }
+    },
+
+
+    
     /**
      * 百度地图定位
      */
@@ -283,6 +312,144 @@ export default {
             "/" +
             _this.getPROJECT_MAIN() +
             "/user/searchAttendanceRulesAndRecord.do";
+          // _this.$ajax
+          //   .post(url, headerAndBody.contentDataByKey, {
+          //     headers: {
+          //       appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+          //       appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+          //       appPublicKey: headerAndBody.appPublicKey,
+          //       serverPublicKey: headerAndBody.serverPublicKey
+          //     }
+          //   })
+          //   .then(function(response) {
+          //     var returnKey = _this.RSAdecrypt(
+          //       response.headers.serverencryptedkey,
+          //       _this.appPrivateKey
+          //     );
+          //     let returnResponseData = response.data;
+          //     let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          //     var returnData = decrypt(encrypt, returnKey, _this.getIV());
+          //     var returnData = JSON.parse(returnData);
+          //     debugger
+          //     if (returnData.code != 1001) {
+          //       alert("连接错误，请检查网络！");
+          //       return;
+          //     }
+          //     _this.ruledata = returnData.data.attendanceRule;
+          //     var record = returnData.data.attendanceRecord;
+          //     if (record.length > 0) {
+          //       var date = record[0].attendance_time.toString().substr(11, 5);
+          //       _this.psIn = date;
+          //       _this.psInAddress = record[0].attendance_address;
+          //       var date = record[record.length - 1].attendance_time
+          //         .toString()
+          //         .substr(11, 5);
+          //       _this.psOut = date;
+          //       _this.psOutAddress =
+          //         record[record.length - 1].attendance_address;
+          //       _this.isInOk = false;
+          //       _this.isIn = true;
+          //       _this.canInField = false;
+          //       debugger
+          //       if (record[0].result_id == 3) {
+          //         _this.isInNormal = false;
+          //       } else {
+          //         _this.isInNormal = true;
+          //       }
+
+          //       _this.isOutOk = false;
+          //       _this.isOut = true;
+          //       if (record[i].result_id == 4) {
+          //         _this.isOutNormal = false;
+          //       } else {
+          //         _this.isOutNormal = true;
+          //       }
+          //     }
+          //     var longitude;
+          //     var latitude;
+          //     var minimumdistance = 1000000000;
+          //     var marking;
+          //     for (let i = 0; i < _this.ruledata.length; i++) {
+          //       longitude = _this.ruledata[i].rule_longitude;
+          //       latitude = _this.ruledata[i].rule_latitude;
+          //       var pointB = new BMap.Point(
+          //         parseFloat(longitude),
+          //         parseFloat(latitude)
+          //       );
+          //       var distance =
+          //         map.getDistance(r.point, pointB) -
+          //         _this.ruledata[i].rule_radius; // 保留小数点后两位
+          //       if (distance < 0) {
+          //         _this.nowRule = _this.ruledata[i].rule_address;
+          //         _this.rule_id = _this.ruledata[i].id;
+          //         _this.work = _this.ruledata[i].rule_time_work;
+          //         _this.offDuty = _this.ruledata[i].rule_time_off_work;
+          //         _this.ps = "（您已进入考勤范围）";
+          //         _this.isSignOk = true;
+          //         var timeNow = new Date();
+          //         var hours =
+          //           timeNow.getHours() < 10
+          //             ? "0" + timeNow.getHours()
+          //             : timeNow.getHours();
+          //         var minutes =
+          //           timeNow.getMinutes() < 10
+          //             ? "0" + timeNow.getMinutes()
+          //             : timeNow.getMinutes();
+          //         timeNow = hours + ":" + minutes;
+          //         timeNow = new Date(timeNow).getTime();
+          //         var timeruleIn = new Date(_this.offDuty).getTime();
+          //         if (timeNow < timeruleIn) {
+          //           _this.isInOk = false;
+          //         }
+          //         var timeruleOut = new Date(_this.work).getTime();
+          //         if (timeNow > timeruleOut) {
+          //           _this.isOutOk = false;
+          //         }
+          //         if (_this.isInOk == true) {
+          //           _this.ifInOk = true;
+          //         } else {
+          //           _this.ifInOk = false;
+          //         }
+          //         if (_this.isOutOk == true) {
+          //           _this.ifOutOk = true;
+          //         } else {
+          //           _this.ifOutOk = false;
+          //         }
+          //         return;
+          //       } else {
+          //         if (minimumdistance > distance) {
+          //           minimumdistance = distance;
+          //           marking = i;
+          //         }
+          //       }
+          //     }
+          //     _this.nowRule = _this.ruledata[marking].rule_address;
+          //     _this.rule_id = _this.ruledata[marking].id;
+          //     _this.work = _this.ruledata[marking].rule_time_work;
+          //     _this.offDuty = _this.ruledata[marking].rule_time_off_work;
+          //     if (minimumdistance > 1000) {
+          //       _this.ps =
+          //         "（您距离最近的考勤范围" +
+          //         (minimumdistance / 1000).toFixed(3) +
+          //         "km）";
+          //     } else {
+          //       _this.ps =
+          //         "（您距离最近的考勤范围" + minimumdistance.toFixed(0) + "m）";
+          //     }
+          //     _this.isSignOk = false;
+          //     _this.isInOk = false;
+          //     _this.isOutOk = false;
+          //     if (_this.isInOk == true) {
+          //       _this.ifInOk = true;
+          //     } else {
+          //       _this.ifInOk = false;
+          //     }
+          //     if (_this.isOutOk == true) {
+          //       _this.ifOutOk = true;
+          //     } else {
+          //       _this.ifOutOk = false;
+          //     }
+          //   });
           _this.$ajax
             .post(url, headerAndBody.contentDataByKey, {
               headers: {
@@ -301,40 +468,45 @@ export default {
               let encrypt = returnResponseData.replace(/[\r\n]/g, "");
               var returnData = decrypt(encrypt, returnKey, _this.getIV());
               var returnData = JSON.parse(returnData);
-              debugger;
               if (returnData.code != 1001) {
-                alert("连接错误，请检查网络！");
-                return;
+                alert("连接错误，请检查网络！")
+                return
               }
+
               _this.ruledata = returnData.data.attendanceRule;
               var record = returnData.data.attendanceRecord;
               if (record.length > 0) {
-                var date = record[0].attendance_time.toString().substr(11, 5);
-                _this.psIn = date;
-                _this.psInAddress = record[0].attendance_address;
-                var date = record[record.length - 1].attendance_time
-                  .toString()
-                  .substr(11, 5);
-                _this.psOut = date;
-                _this.psOutAddress =
-                  record[record.length - 1].attendance_address;
-                // _this.isInOk = false;
-                // _this.isIn = true;
-                // _this.canInField = false;
-                // if (record[i].result_id == 3) {
-                //   _this.isInNormal = false;
-                // } else {
-                //   _this.isInNormal = true;
-                // }
+                for (let i = record.length; i < 0; i--) {
+                  if (record[i].attendance_type == 1) {
+                    var date = record[i].attendance_time
+                      .toString()
+                      .substr(11, 5);
+                    _this.psIn = record[i].result + " " + date;
+                    _this.isInOk = false;
 
-                // _this.isOutOk = false;
-                // _this.isOut = true;
-                // if (record[i].result_id == 4) {
-                //   _this.isOutNormal = false;
-                // } else {
-                //   _this.isOutNormal = true;
-                // }
+                    _this.isIn = true;
+                    _this.canInField = false;
+                    if (record[i].result_id == 3) {
+                      _this.isInNormal = false;
+                    } else {
+                      _this.isInNormal = true;
+                    }
+                  } else if (record[i].attendance_type == 2) {
+                    var date = record[i].attendance_time
+                      .toString()
+                      .substr(11, 5);
+                    _this.psOut = record[i].result + " " + date;
+                    _this.isOutOk = false;
+                    _this.isOut = true;
+                    if (record[i].result_id == 4) {
+                      _this.isOutNormal = false;
+                    } else {
+                      _this.isOutNormal = true;
+                    }
+                  }
+                }
               }
+
               var longitude;
               var latitude;
               var minimumdistance = 1000000000;
@@ -355,7 +527,10 @@ export default {
                   _this.work = _this.ruledata[i].rule_time_work;
                   _this.offDuty = _this.ruledata[i].rule_time_off_work;
                   _this.ps = "（您已进入考勤范围）";
-                  _this.isSignOk = true;
+
+                  _this.isInOk = true;
+                  _this.isOutOk = true;
+
                   // var timeNow = new Date();
                   // var hours =
                   //   timeNow.getHours() < 10
@@ -368,10 +543,13 @@ export default {
                   // timeNow = hours + ":" + minutes;
                   // timeNow = new Date(timeNow).getTime();
                   // var timeruleIn = new Date(_this.offDuty).getTime();
+
                   // if (timeNow < timeruleIn) {
                   //   _this.isInOk = false;
                   // }
+
                   // var timeruleOut = new Date(_this.work).getTime();
+
                   // if (timeNow > timeruleOut) {
                   //   _this.isOutOk = false;
                   // }
@@ -385,6 +563,8 @@ export default {
                   // } else {
                   //   _this.ifOutOk = false;
                   // }
+                  console.log("_this.isInOk111:" + _this.isInOk);
+
                   return;
                 } else {
                   if (minimumdistance > distance) {
@@ -393,6 +573,7 @@ export default {
                   }
                 }
               }
+
               _this.nowRule = _this.ruledata[marking].rule_address;
               _this.rule_id = _this.ruledata[marking].id;
               _this.work = _this.ruledata[marking].rule_time_work;
@@ -406,116 +587,174 @@ export default {
                 _this.ps =
                   "（您距离最近的考勤范围" + minimumdistance.toFixed(0) + "m）";
               }
-              _this.isSignOk = false;
-              // _this.isInOk = false;
-              // _this.isOutOk = false;
-              // if (_this.isInOk == true) {
-              //   _this.ifInOk = true;
-              // } else {
-              //   _this.ifInOk = false;
-              // }
-              // if (_this.isOutOk == true) {
-              //   _this.ifOutOk = true;
-              // } else {
-              //   _this.ifOutOk = false;
-              // }
+              _this.isInOk = false;
+              _this.isOutOk = false;
+              if (_this.isInOk == true) {
+                _this.ifInOk = true;
+              } else {
+                _this.ifInOk = false;
+              }
+              if (_this.isOutOk == true) {
+                _this.ifOutOk = true;
+              } else {
+                _this.ifOutOk = false;
+              }
             });
         } else {
           alert("failed" + this.getStatus());
         }
       });
     },
+
+    getGodeMap(){
+      let _that = this;      
+      let geolocation = location.initMap("allmap"); //定位      
+      AMap.event.addListener(geolocation, "complete", result => {        
+        _that.lat = result.position.lat;        
+        _that.lng = result.position.lng;        
+        _that.province = result.addressComponent.province;        
+        _that.city = result.addressComponent.city;        
+        _that.district = result.addressComponent.district;      
+        });
+
+    },
+    qwe(){
+        let that = this
+        var map = new AMap.Map('allmap', {
+            resizeEnable: true
+        });
+        AMap.plugin('AMap.Geolocation', function() {
+            var geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                timeout: 10000,          //超过10秒后停止定位，默认：5s
+                buttonPosition:'RB',    //定位按钮的停靠位置
+                buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+
+            });
+            map.addControl(geolocation);
+            geolocation.getCurrentPosition(function(status,result){
+                if(status=='complete'){
+                  debugger
+                    that.onComplete(result)
+                }else{
+                    that.onError(result)
+                }
+            });
+        });
+      },
+      
+      //解析定位结果
+      onComplete(data) {
+          // document.getElementById('status').innerHTML='定位成功'
+          var str = [];
+          str.push('定位结果：' + data.position);
+          str.push('定位类别：' + data.location_type);
+          if(data.accuracy){
+              str.push('精度：' + data.accuracy + ' 米');
+          }//如为IP精确定位结果则没有精度信息
+          str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+          console.log(str)
+          alert('定位成功'+str)
+          // document.getElementById('result').innerHTML = str.join('<br>');
+      },
+      //解析定位错误信息
+      onError(data) {
+        console.log('定位失败')
+        console.log(data.message)
+        alert('定位失败'+data.message)
+          // document.getElementById('status').innerHTML='定位失败'
+          // document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
+      },
     /**
      * 打卡
      */
-    sign() {
-      if (this.isSignOk) {
-        var _this = this;
-        debugger;
-        var information = _this.getAttendanceRecord(1);
-        var url =
-          "http://" +
-          this.getSERVER_HOST_MAIN() +
-          ":" +
-          this.getSERVER_PORT_MAIN() +
-          "/" +
-          this.getPROJECT_MAIN() +
-          "/user/addAttendanceRecord.do";
-        this.$ajax
-          .post(url, information, {
-            headers: { "Content-type": "multipart/form-data" }
-          })
-          .then(function(response) {
-            debugger;
-            if (response.data.code == 1001) {
-              alert("打卡成功！");
-              _this.getLocations();
-            } else {
-              alert("打卡失败，请检查网络！");
-              return;
-            }
-          });
-      } else {
-        alert("不在考勤范围内！");
-        return;
-      }
-    },
+    // sign() {
+    //   if (this.isSignOk) {
+    //     var _this = this;
+    //     var information = _this.getAttendanceRecord(1);
+    //     var url =
+    //       "http://" +
+    //       this.getSERVER_HOST_MAIN() +
+    //       ":" +
+    //       this.getSERVER_PORT_MAIN() +
+    //       "/" +
+    //       this.getPROJECT_MAIN() +
+    //       "/user/addAttendanceRecord.do";
+    //     this.$ajax
+    //       .post(url, information, {
+    //         headers: { "Content-type": "multipart/form-data" }
+    //       })
+    //       .then(function(response) {
+    //         if (response.data.code == 1001) {
+    //           alert("打卡成功！");
+    //           _this.getLocations();
+    //         } else {
+    //           alert("打卡失败，请检查网络！");
+    //           return;
+    //         }
+    //       });
+    //   } else {
+    //     alert("不在考勤范围内！");
+    //     return;
+    //   }
+    // },
     /**
      * 签到
      */
-    // signin() {
-    //   var _this = this;
-    //   var information = _this.getAttendanceRecord(1);
-    //   var url =
-    //     "http://" +
-    //     this.getSERVER_HOST_MAIN() +
-    //     ":" +
-    //     this.getSERVER_PORT_MAIN() +
-    //     "/" +
-    //     this.getPROJECT_MAIN() +
-    //     "/user/addAttendanceRecord.do";
-    //   _this.$ajax
-    //     .post(url, information, {
-    //       headers: { "Content-type": "multipart/form-data" }
-    //     })
-    //     .then(function(response) {
-    //       if (response.data.code == 1001) {
-    //         location.reload();
-    //         alert("签到成功！");
-    //       } else {
-    //         alert("签到失败，请检查网络！");
-    //         location.reload();
-    //       }
-    //     });
-    // },
+    signin() {
+      var _this = this;
+      var information = _this.getAttendanceRecord(1);
+      var url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/addAttendanceRecord.do";
+      _this.$ajax
+        .post(url, information, {
+          headers: { "Content-type": "multipart/form-data" }
+        })
+        .then(function(response) {
+          if (response.data.code == 1001) {
+            alert("签到成功！");
+            _this.getLocations();
+          } else {
+            alert("签到失败，请检查网络！");
+            return
+          }
+        });
+    },
     /**
      * 签退
      */
-    // signout() {
-    //   var _this = this;
-    //   var information = _this.getAttendanceRecord(2);
-    //   var url =
-    //     "http://" +
-    //     this.getSERVER_HOST_MAIN() +
-    //     ":" +
-    //     this.getSERVER_PORT_MAIN() +
-    //     "/" +
-    //     this.getPROJECT_MAIN() +
-    //     "/user/addAttendanceRecord.do";
-    //   _this.$http
-    //     .post(url, information, {
-    //       headers: { "Content-type": "multipart/form-data" }
-    //     })
-    //     .then(function(response) {
-    //       if (response.data.code == 1001) {
-    //         location.reload();
-    //         alert("签退成功！");
-    //       } else {
-    //         alert("签退失败，请检查网络！");
-    //         location.reload();
-    //       }
-    //     });
-    // },
+    signout() {
+      var _this = this;
+      var information = _this.getAttendanceRecord(2);
+      var url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/addAttendanceRecord.do";
+      _this.$http
+        .post(url, information, {
+          headers: { "Content-type": "multipart/form-data" }
+        })
+        .then(function(response) {
+          if (response.data.code == 1001) {
+            _this.getLocations();
+            alert("签退成功！");
+          } else {
+            alert("签退失败，请检查网络！");
+            return
+          }
+        });
+    },
 
     /**
      * 外勤
@@ -595,7 +834,7 @@ export default {
       let signWords = {
         user_id: parseInt(this.userId),
         user_name: this.userName,
-        // attendance_type: type,
+        attendance_type: type,
         attendance_longitude: parseFloat(this.attendance_longitude),
         attendance_latitude: parseFloat(this.attendance_latitude),
         attendance_address: this.attendance_address,
@@ -607,6 +846,12 @@ export default {
       let fileFormData = new FormData();
       fileFormData.append("information", JSON.stringify(signWords));
       return fileFormData;
+    },
+    /**
+     * 查看今日详情
+     */
+    detailsToday(){
+      this.$router.push("/punchRecord");
     },
     /**
      * 查看签到规则
@@ -628,16 +873,16 @@ export default {
       _this.nowtime = new Date(); //修改数据date
     }, 1000);
     // 获取浏览器可视区域高度
-    this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
+    // this.clientHeight = `${document.documentElement.clientHeight}`; //document.body.clientWidth;
     //console.log(self.clientHeight);
     // window.onresize = function temp() {
     //   this.clientHeight = `${document.documentElement.clientHeight}`;
     // };
     //  this.changeFixed(this.clientHeight)
-    this.totalHeight = this.$refs.sign_page.offsetHeight;
-    if (this.totalHeight > this.clientHeight) {
-      this.clientHeight = this.totalHeight + 20;
-    }
+    // this.totalHeight = this.$refs.sign_page.offsetHeight;
+    // if (this.totalHeight > this.clientHeight) {
+    //   this.clientHeight = this.totalHeight + 20;
+    // }
     this.changeFixed(this.clientHeight);
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL);
@@ -649,13 +894,13 @@ export default {
   },
   watch: {
     // 如果 `clientHeight` 发生改变，这个函数就会运行
-    totalHeight: function() {
-      this.totalHeight = this.$refs.sign_page.offsetHeight;
-      if (this.totalHeight > this.clientHeight) {
-        this.clientHeight = this.totalHeight + 20;
-      }
-      this.changeFixed(this.clientHeight);
-    }
+    // totalHeight: function() {
+    //   this.totalHeight = this.$refs.sign_page.offsetHeight;
+    //   if (this.totalHeight > this.clientHeight) {
+    //     this.clientHeight = this.totalHeight + 20;
+    //   }
+    //   this.changeFixed(this.clientHeight);
+    // }
   },
   created: function() {
     // console.log("开始");
@@ -685,7 +930,7 @@ export default {
   position: relative;
   /* height: 560px; */
   background-image: url("../../../assets/bigimg/bg_attendance.jpeg");
-  background-size: 100% 100%;
+  background-size: 100% 100vh;
 }
 
 .top {

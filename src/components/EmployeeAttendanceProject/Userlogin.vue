@@ -1,26 +1,31 @@
 
 <template>
-  <div v-show="ifShow">
-    <div class="userlogin">
-      <img class="inner_label login_logo" src="../../assets/logo.png" />
-    </div>
-    <div class="login_form">
-      <input type="text" class="qxs-ic_user qxs-icon" placeholder="用户名" v-model="userId" />
-      <input type="password" class="qxs-ic_password qxs-icon" placeholder="密码" v-model="password" />
-      <!-- <button class="login_btn el-button el-button&#45;&#45;primary is-round" type="primary" round>登录</button> -->
-      <button
-        class="login_btn"
-        @click="login"
-        type="primary"
-        round
-        :loading="isBtnLoading"
-      >{{isBtnLoadingText}}</button>
-      <div style="margin-top: 10px">
-        <span style="color: #000099;">注册</span>
-        <span>&nbsp; &nbsp;</span>
-        <span style="color: #A9A9AB">忘记密码？</span>
+  <div class="userlogin">
+    <template v-if="ifShow">
+      <div>
+        <img class="inner_label login_logo" src="../../assets/logo.png" />
       </div>
-    </div>
+      <div class="login_form">
+        <input type="text" class="qxs-ic_user qxs-icon" placeholder="用户名" v-model="userId" />
+        <input type="password" class="qxs-ic_password qxs-icon" placeholder="密码" v-model="password" />
+        <!-- <button class="login_btn el-button el-button&#45;&#45;primary is-round" type="primary" round>登录</button> -->
+        <button
+          class="login_btn"
+          @click="login"
+          type="primary"
+          round
+          :loading="isBtnLoading"
+        >{{isBtnLoadingText}}</button>
+        <div style="margin-top: 10px">
+          <span style="color: #000099;">注册</span>
+          <span>&nbsp; &nbsp;</span>
+          <span style="color: #A9A9AB">忘记密码？</span>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <img class="yong" src="../../assets/imge/yong.png" />
+    </template>
   </div>
 </template>
 <script>
@@ -43,29 +48,35 @@ export default {
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
       isBtnLoading: false,
       isBtnLoadingText: "登录",
-      ifShow:false
+      ifShow: false
     };
   },
   created() {
-    var _this = this;
-     _this.appPrivateKey = this.getPrivatekey();
-    
+
+     if (this.$route.query.pagename == "userChange"){
+       this.ifShow=true
+
+     }else{
+        var _this = this;
+    _this.appPrivateKey = this.getPrivatekey();
+
     if (typeof this.$route.query.code == "undefined") {
       _this.getServerPublicKey().then(function(response) {
-       localStorage.setItem("serverPublicKey", response);
-    });
-     
+        localStorage.setItem("serverPublicKey", response);
+      });
+
       let url = "www.zhongbenshuo.com/dist";
-      // let url = "nnpqz2.natappfree.cc/static";
+      // let url = "f33824.natappfree.cc/static";
 
       window.location.href =
         "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbd38640dfe24b6d5&redirect_uri=http%3A%2F%2F" +
         url +
         "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
     } else {
+      debugger;
       var content = {
         code: this.$route.query.code,
-        type:"staff"
+        type: "staff"
       };
 
       var contentData = JSON.stringify(content);
@@ -129,19 +140,22 @@ export default {
                 "department",
                 returnData.data.userInfo[0].department
               );
+              localStorage.setItem("openid", returnData.data.openId);
               this.$router.push("/homepage");
+            } else {
+              this.openid = returnData.data.openId;
+              localStorage.setItem("openid", this.openid);
+              this.ifShow = true;
             }
-            else{
-              this.openid = returnData.data.openId
-              this.ifShow = true
-            }
-
           }
         })
         .catch(function(error) {
           console.log(error);
         });
     }
+
+     }
+   
 
     // console.log(localStorage.getItem('WXInfo'))
     // let test = encrypt("abc",num,this.getIV())
@@ -219,7 +233,7 @@ export default {
         .then(response => {
           var returnKey = this.RSAdecrypt(
             response.headers.serverencryptedkey,
-            this.appPrivateKey
+            _this.getPrivatekey()
           );
           let returnResponseData = response.data;
           let encrypt = returnResponseData.replace(/[\r\n]/g, "");
@@ -229,9 +243,9 @@ export default {
           var returnData = JSON.parse(returnData);
 
           if (returnData.code == 1001) {
-            if (_this.openid != "" && typeof _this.openid != undefined) {
+            if (localStorage.getItem("openid") != "" && typeof localStorage.getItem("openid") != undefined) {
               var content = {
-                openId: _this.openid,
+                openId: localStorage.getItem("openid"),
                 userId: _this.userId
               };
               var contentData = JSON.stringify(content);
@@ -339,6 +353,10 @@ export default {
   padding-left: 20%;
   border: 0;
   border-bottom: solid 1px lavender;
+}
+.yong{
+  width: 100%;
+  height: 100vh;
 }
 .outer_label {
   position: relative;

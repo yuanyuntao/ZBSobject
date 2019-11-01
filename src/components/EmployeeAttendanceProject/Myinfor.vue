@@ -52,9 +52,9 @@
         <div class="words">版本更新</div>
         <img class="icon_img" src="../../assets/littleimg/iconfont.png" alt="">
       </div>
-      <div class="languageSetting" style="vertical-align:middle;display:flex;background-color: #fff;margin-bottom:50px">
+      <div class="userChange" @click="userChange"  style="vertical-align:middle;display:flex;background-color: #fff;margin-bottom:50px">
         <img class="img" src="../../assets/littleimg/fenxiang.png" alt="">
-        <div class="words">分享给他人</div>
+        <div class="words">切换账号</div>
         <img class="icon_img" src="../../assets/littleimg/iconfont.png" alt="">
       </div>
     </div>
@@ -87,6 +87,15 @@ export default {
         userId: this.userId,
         isAdministrator: this.isAdministrator,
         userName: this.userName,
+        }
+      });
+    },
+    userChange(){
+       this.$router.push({
+        path: "/",
+        query: {
+        pagename: "userChange",
+      
         }
       });
     }

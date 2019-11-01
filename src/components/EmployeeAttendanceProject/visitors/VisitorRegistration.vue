@@ -1,6 +1,10 @@
 <template>
-  <div class="visitorRegistration" ref="visitorRegistration" v-show="ifShow">
-    <template v-if="isResquest">
+  <div class="visitorRegistration" ref="visitorRegistration">
+    <template v-if="!ifShow">
+     子曰：有朋自远方来，不亦乐乎！
+      </template>
+        <template v-else>
+          <template v-if="isResquest">
       <div
         type="primary"
         round
@@ -75,6 +79,10 @@
       </div>
     </template>
     <template v-else>申请提交成功，请耐心等待审核！</template>
+          </template>
+
+
+    
   </div>
 </template>
 <script>

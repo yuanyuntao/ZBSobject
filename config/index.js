@@ -12,23 +12,23 @@ module.exports = {
     // assetsPublicPath: '/dist/',
     assetsPublicPath: '/',
     proxyTable: {
-        '/api': {
-         target: 'https://api.weixin.qq.com',
-       changeOrigin: true,
-        pathRewrite: {
-         '^/api': ''
-         }
-       }
+      //   '/api': {
+      //    target: 'https://api.weixin.qq.com',
+      //  changeOrigin: true,
+      //   pathRewrite: {
+      //    '^/api': ''
+      //    }
+      //  }
     },
 
     // Various Dev Server settings
     // host: 'localhost', // can be overwritten by process.env.HOST
     // host: '172.20.10.12',
     // host: '106.12.55.177',
-    host: '192.168.2.188',
+    host: '192.168.0.118',
     // host: '192.168.50.73',
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
