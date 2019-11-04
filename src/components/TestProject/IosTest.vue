@@ -1,12 +1,14 @@
 <template>
 <div id="isios">
-    <button @click="getLocation">测试</button>
+    <button @click="getLocationNow">测试</button>
     <div id="allmap" class="allmap" style=" width: 20px;height: 20px;"></div>
 </div>   
 
 </template>
 <script>
 import { MP,AMP,location } from "../js/Map.js";
+import { wxUtils,getLocation } from "../js/wxUntil.js";
+
 export default {
   name: "iosTest",
   components: {},
@@ -15,7 +17,15 @@ export default {
      
     };
   },
-  mounted() {},
+  mounted() {
+    // wxUtils
+      let url =
+    "http://" +
+    this.getSERVER_HOST_MAIN() + ":" +
+    this.getSERVER_PORT_MAIN() + "/" +
+    this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
+           wxUtils(url,this)
+  },
   created: function() {
   },
 
@@ -59,23 +69,26 @@ export default {
 			}
       },
        /**gaode获取地图定位*/
-       getLocation() {
+       getLocationNow() {
            debugger
-      var _this = this;
-      if (typeof AMap != "undefined") {
-        AMP().then(AMap => {
-          debugger
-          _this.qwe();
-          return;
-        });
-        _this.qwe();
-      } else {
-        AMP().then(AMap => {
-            debugger
-            alert("haha")
-          _this.qwe();
-        });
-      }
+         
+          getLocation()
+           
+      // var _this = this;
+      // if (typeof AMap != "undefined") {
+      //   AMP().then(AMap => {
+      //     debugger
+      //     _this.qwe();
+      //     return;
+      //   });
+      //   _this.qwe();
+      // } else {
+      //   AMP().then(AMap => {
+      //       debugger
+      //       alert("haha")
+      //     _this.qwe();
+      //   });
+      // }
     },
      qwe(){
          debugger
