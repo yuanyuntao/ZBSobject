@@ -99,6 +99,8 @@ export default {
   methods: {
     //监听返回按钮
     goBack() {
+      debugger
+      window.close()
       
       return
     },

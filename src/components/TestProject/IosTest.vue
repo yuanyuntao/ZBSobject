@@ -7,7 +7,7 @@
 </template>
 <script>
 import { MP,AMP,location } from "../js/Map.js";
-import { wxUtils,getLocation } from "../js/wxUntil.js";
+// import { wxUtils,getLocation } from "../js/wxUntil.js";
 
 export default {
   name: "iosTest",
@@ -19,12 +19,12 @@ export default {
   },
   mounted() {
     // wxUtils
-      let url =
-    "http://" +
-    this.getSERVER_HOST_MAIN() + ":" +
-    this.getSERVER_PORT_MAIN() + "/" +
-    this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
-           wxUtils(url,this)
+    //   let url =
+    // "http://" +
+    // this.getSERVER_HOST_MAIN() + ":" +
+    // this.getSERVER_PORT_MAIN() + "/" +
+    // this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
+    //        wxUtils(url,this)
   },
   created: function() {
   },
@@ -72,7 +72,7 @@ export default {
        getLocationNow() {
            debugger
          
-          getLocation()
+          // getLocation()
            
       // var _this = this;
       // if (typeof AMap != "undefined") {

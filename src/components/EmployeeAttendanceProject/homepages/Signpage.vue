@@ -155,6 +155,7 @@
 <script>
 import { MP,AMP,location } from "../../js/Map.js";
 import { encrypt, decrypt } from "../../js/utils.js";
+import { wxUtils } from "../../js/WXUntil.js";
 export default {
   name: "signpage",
   components: {},
@@ -888,6 +889,14 @@ export default {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
+     let url =
+    "http://" +
+    this.getSERVER_HOST_MAIN() + ":" +
+    this.getSERVER_PORT_MAIN() + "/" +
+    this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
+           wxUtils(url,this)
+
+
   },
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);

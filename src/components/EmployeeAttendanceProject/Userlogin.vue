@@ -31,7 +31,6 @@
 <script>
 import { encrypt, decrypt } from "../js/utils.js";
 import { getOpenID } from "../js/wx-getOpendID.js";
-import { wxUtils,getLocation } from "../js/wxUntil.js";
 
 export default {
   name: "userlogin",
@@ -193,12 +192,7 @@ export default {
     _this.getServerPublicKey().then(function(response) {
       _this.serverPublicKey = response;
     });
-     let url =
-    "http://" +
-    this.getSERVER_HOST_MAIN() + ":" +
-    this.getSERVER_PORT_MAIN() + "/" +
-    this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
-           wxUtils(url,this)
+    
   },
   methods: {
     login() {
