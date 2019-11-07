@@ -26,15 +26,15 @@
       <br />
       <span style="font-size:12px;color:#91918c">注：默认使用距离您最近的考勤点</span>
     </div>
-        <div class="signbutton">
+    <div class="signbutton">
       <div style="display: flex;width: 100% ">
         <div style=" width: 80%;text-align: left">
-          <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt>
-          <br>
+          <img class="signimg" src="../../../assets/littleimg/icon_sun.png" alt />
+          <br />
           <span style="color:#000">上班打卡</span>
-          <br>
+          <br />
           <span style="color:#91918c">{{work}}</span>
-          <br>
+          <br />
           <template v-if="isIn">
             <template v-if="isInNormal">
               <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psIn}}</span>
@@ -54,8 +54,8 @@
           </template>
           <template v-else>
             <button
-                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
-              >签到</button>
+              style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+            >签到</button>
             <!-- <template v-if="isIn">
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
@@ -65,19 +65,18 @@
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >签到</button>
-            </template> -->
+            </template>-->
           </template>
         </div>
-        
       </div>
       <div style="display: flex;padding-top:20px;width: 100%">
         <div style="width: 80%;text-align: left">
-          <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt>
-          <br>
+          <img class="signimg" src="../../../assets/littleimg/icon_moon.png" alt />
+          <br />
           <span style="color:#000">下班打卡</span>
-          <br>
+          <br />
           <span style="color:#91918c">{{offDuty}}</span>
-          <br>
+          <br />
           <template v-if="isOut">
             <template v-if="isOutNormal">
               <span style="color:#68e948;font-weight: normal;font-size: 15px">{{psOut}}</span>
@@ -95,9 +94,9 @@
             >签退</button>
           </template>
           <template v-else>
-             <button
-                style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
-              >签退</button>
+            <button
+              style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
+            >签退</button>
             <!-- <template v-if="isOut">
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
@@ -107,18 +106,18 @@
               <button
                 style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
               >签退</button>
-            </template> -->
+            </template>-->
           </template>
         </div>
       </div>
-      <div style="font-size:12px;color:rgb(37, 175, 100);text-align: right; padding: 5px;margin: 10px;">
+      <div
+        style="font-size:12px;color:rgb(37, 175, 100);text-align: right; padding: 5px;margin: 10px;"
+      >
         <span @click="detailsToday">今日详情</span>
-        </div>
-      
       </div>
+    </div>
 
-    
-      <!-- <div>
+    <!-- <div>
           <template v-if="isSignOk">
             <button
               style="width: 80px;height: 80px;background-color: #2f9625;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
@@ -130,11 +129,11 @@
               style="width: 80px;height: 80px;background-color: #6b6869;border-radius:50%;color:#fff;font-size: 18px;font-weight: bold;float:right"
             >打卡</button>
           </template>
-      </div>-->
-  
-      <!-- </div> -->
+    </div>-->
 
-      <!-- <div style="font-size:14px;margin-top: 20px;margin-bottom: 20px">
+    <!-- </div> -->
+
+    <!-- <div style="font-size:14px;margin-top: 20px;margin-bottom: 20px">
         <div style="border-bottom: 1px solid rgb(240, 240, 240);">{{psIn}}&ensp;{{psInAddress}}</div>
         <div>{{psOut}}&ensp;{{psOutAddress}}</div>
       </div>
@@ -142,7 +141,7 @@
       <div style="display: flex;">
         <div style="font-size:12px;color:#91918c">注：记录只显示当天最早和最晚的信息</div>&ensp;&ensp;
         <div style="font-size:12px;color:rgb(37, 175, 100)">详细记录</div>
-      </div>-->
+    </div>-->
 
     <div class="out" @click="outSign" aria-disabled="true">
       <img class="out_attendance" src="../../../assets/littleimg/add_out_attendance.png" alt />
@@ -153,7 +152,7 @@
   </div>
 </template>
 <script>
-import { MP,AMP,location } from "../../js/Map.js";
+import { MP, AMP, location } from "../../js/Map.js";
 import { encrypt, decrypt } from "../../js/utils.js";
 import { wxUtils } from "../../js/WXUntil.js";
 export default {
@@ -186,6 +185,8 @@ export default {
       isInNormal: true, //是否签到正常
       isOutNormal: true, //是否签退正常
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
+
+      isIOS: false,
 
       signWords: {
         user_id: "",
@@ -229,7 +230,7 @@ export default {
         }
       });
     },
-    /**baidu获取地图定位*/
+    /**baidu获取地图定位,ios用*/
     getLocations() {
       var _this = this;
       if (typeof BMap != "undefined") {
@@ -245,24 +246,35 @@ export default {
       }
     },
 
-    /**gaode获取地图定位*/
-       getLocation() {
+    /**安卓用获取地图定位*/
+    getLocation() {
       var _this = this;
-      if (typeof AMap != "undefined") {
-        AMP().then(AMap => {
-          _this.getmap(_this);
+      if (typeof BMap != "undefined") {
+        MP(_this.ak).then(BMap => {
+          _this.getLocationData(
+            _this,
+            parseFloat(localStorage.getItem("latitude")),
+            parseFloat(localStorage.getItem("longitude"))
+          );
           return;
         });
-        _this.getmap(_this);
+        _this.getLocationData(
+          _this,
+          parseFloat(localStorage.getItem("latitude")),
+          parseFloat(localStorage.getItem("longitude"))
+        );
       } else {
-        AMP(_this.ak).then(AMP => {
-          _this.getmap(_this);
+        MP(_this.ak).then(BMap => {
+          _this.getLocationData(
+            _this,
+            parseFloat(localStorage.getItem("latitude")),
+            parseFloat(localStorage.getItem("longitude"))
+          );
         });
       }
+      //  this.getLocationData(this,parseFloat(localStorage.getItem("latitude")),parseFloat(localStorage.getItem("longitude")))
     },
 
-
-    
     /**
      * 百度地图定位
      */
@@ -313,144 +325,6 @@ export default {
             "/" +
             _this.getPROJECT_MAIN() +
             "/user/searchAttendanceRulesAndRecord.do";
-          // _this.$ajax
-          //   .post(url, headerAndBody.contentDataByKey, {
-          //     headers: {
-          //       appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
-          //       appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
-          //       appPublicKey: headerAndBody.appPublicKey,
-          //       serverPublicKey: headerAndBody.serverPublicKey
-          //     }
-          //   })
-          //   .then(function(response) {
-          //     var returnKey = _this.RSAdecrypt(
-          //       response.headers.serverencryptedkey,
-          //       _this.appPrivateKey
-          //     );
-          //     let returnResponseData = response.data;
-          //     let encrypt = returnResponseData.replace(/[\r\n]/g, "");
-          //     var returnData = decrypt(encrypt, returnKey, _this.getIV());
-          //     var returnData = JSON.parse(returnData);
-          //     debugger
-          //     if (returnData.code != 1001) {
-          //       alert("连接错误，请检查网络！");
-          //       return;
-          //     }
-          //     _this.ruledata = returnData.data.attendanceRule;
-          //     var record = returnData.data.attendanceRecord;
-          //     if (record.length > 0) {
-          //       var date = record[0].attendance_time.toString().substr(11, 5);
-          //       _this.psIn = date;
-          //       _this.psInAddress = record[0].attendance_address;
-          //       var date = record[record.length - 1].attendance_time
-          //         .toString()
-          //         .substr(11, 5);
-          //       _this.psOut = date;
-          //       _this.psOutAddress =
-          //         record[record.length - 1].attendance_address;
-          //       _this.isInOk = false;
-          //       _this.isIn = true;
-          //       _this.canInField = false;
-          //       debugger
-          //       if (record[0].result_id == 3) {
-          //         _this.isInNormal = false;
-          //       } else {
-          //         _this.isInNormal = true;
-          //       }
-
-          //       _this.isOutOk = false;
-          //       _this.isOut = true;
-          //       if (record[i].result_id == 4) {
-          //         _this.isOutNormal = false;
-          //       } else {
-          //         _this.isOutNormal = true;
-          //       }
-          //     }
-          //     var longitude;
-          //     var latitude;
-          //     var minimumdistance = 1000000000;
-          //     var marking;
-          //     for (let i = 0; i < _this.ruledata.length; i++) {
-          //       longitude = _this.ruledata[i].rule_longitude;
-          //       latitude = _this.ruledata[i].rule_latitude;
-          //       var pointB = new BMap.Point(
-          //         parseFloat(longitude),
-          //         parseFloat(latitude)
-          //       );
-          //       var distance =
-          //         map.getDistance(r.point, pointB) -
-          //         _this.ruledata[i].rule_radius; // 保留小数点后两位
-          //       if (distance < 0) {
-          //         _this.nowRule = _this.ruledata[i].rule_address;
-          //         _this.rule_id = _this.ruledata[i].id;
-          //         _this.work = _this.ruledata[i].rule_time_work;
-          //         _this.offDuty = _this.ruledata[i].rule_time_off_work;
-          //         _this.ps = "（您已进入考勤范围）";
-          //         _this.isSignOk = true;
-          //         var timeNow = new Date();
-          //         var hours =
-          //           timeNow.getHours() < 10
-          //             ? "0" + timeNow.getHours()
-          //             : timeNow.getHours();
-          //         var minutes =
-          //           timeNow.getMinutes() < 10
-          //             ? "0" + timeNow.getMinutes()
-          //             : timeNow.getMinutes();
-          //         timeNow = hours + ":" + minutes;
-          //         timeNow = new Date(timeNow).getTime();
-          //         var timeruleIn = new Date(_this.offDuty).getTime();
-          //         if (timeNow < timeruleIn) {
-          //           _this.isInOk = false;
-          //         }
-          //         var timeruleOut = new Date(_this.work).getTime();
-          //         if (timeNow > timeruleOut) {
-          //           _this.isOutOk = false;
-          //         }
-          //         if (_this.isInOk == true) {
-          //           _this.ifInOk = true;
-          //         } else {
-          //           _this.ifInOk = false;
-          //         }
-          //         if (_this.isOutOk == true) {
-          //           _this.ifOutOk = true;
-          //         } else {
-          //           _this.ifOutOk = false;
-          //         }
-          //         return;
-          //       } else {
-          //         if (minimumdistance > distance) {
-          //           minimumdistance = distance;
-          //           marking = i;
-          //         }
-          //       }
-          //     }
-          //     _this.nowRule = _this.ruledata[marking].rule_address;
-          //     _this.rule_id = _this.ruledata[marking].id;
-          //     _this.work = _this.ruledata[marking].rule_time_work;
-          //     _this.offDuty = _this.ruledata[marking].rule_time_off_work;
-          //     if (minimumdistance > 1000) {
-          //       _this.ps =
-          //         "（您距离最近的考勤范围" +
-          //         (minimumdistance / 1000).toFixed(3) +
-          //         "km）";
-          //     } else {
-          //       _this.ps =
-          //         "（您距离最近的考勤范围" + minimumdistance.toFixed(0) + "m）";
-          //     }
-          //     _this.isSignOk = false;
-          //     _this.isInOk = false;
-          //     _this.isOutOk = false;
-          //     if (_this.isInOk == true) {
-          //       _this.ifInOk = true;
-          //     } else {
-          //       _this.ifInOk = false;
-          //     }
-          //     if (_this.isOutOk == true) {
-          //       _this.ifOutOk = true;
-          //     } else {
-          //       _this.ifOutOk = false;
-          //     }
-          //   });
           _this.$ajax
             .post(url, headerAndBody.contentDataByKey, {
               headers: {
@@ -470,19 +344,22 @@ export default {
               var returnData = decrypt(encrypt, returnKey, _this.getIV());
               var returnData = JSON.parse(returnData);
               if (returnData.code != 1001) {
-                alert("连接错误，请检查网络！")
-                return
+                alert("连接错误，请检查网络！");
+                return;
               }
 
               _this.ruledata = returnData.data.attendanceRule;
               var record = returnData.data.attendanceRecord;
+
               if (record.length > 0) {
-                for (let i = record.length; i < 0; i--) {
+                for (let i = 0; i < record.length; i--) {
+                  console.log(record[i]);
                   if (record[i].attendance_type == 1) {
                     var date = record[i].attendance_time
                       .toString()
                       .substr(11, 5);
                     _this.psIn = record[i].result + " " + date;
+                    console.log(_this.psIn);
                     _this.isInOk = false;
 
                     _this.isIn = true;
@@ -492,19 +369,25 @@ export default {
                     } else {
                       _this.isInNormal = true;
                     }
-                  } else if (record[i].attendance_type == 2) {
-                    var date = record[i].attendance_time
-                      .toString()
-                      .substr(11, 5);
-                    _this.psOut = record[i].result + " " + date;
-                    _this.isOutOk = false;
-                    _this.isOut = true;
-                    if (record[i].result_id == 4) {
-                      _this.isOutNormal = false;
-                    } else {
-                      _this.isOutNormal = true;
-                    }
+                    break;
                   }
+                }
+                  for (let i = record.length; i >0 ; i++) {
+                    if (record[i-1].attendance_type == 2) {
+                      var date = record[i-1].attendance_time
+                        .toString()
+                        .substr(11, 5);
+                      _this.psOut = record[i-1].result + " " + date;
+                      _this.isOutOk = false;
+                      _this.isOut = true;
+                      if (record[i-1].result_id == 4) {
+                        _this.isOutNormal = false;
+                      } else {
+                        _this.isOutNormal = true;
+                      }
+                      break;
+                    }
+                  
                 }
               }
 
@@ -512,6 +395,7 @@ export default {
               var latitude;
               var minimumdistance = 1000000000;
               var marking;
+
               for (let i = 0; i < _this.ruledata.length; i++) {
                 longitude = _this.ruledata[i].rule_longitude;
                 latitude = _this.ruledata[i].rule_latitude;
@@ -531,39 +415,6 @@ export default {
 
                   _this.isInOk = true;
                   _this.isOutOk = true;
-
-                  // var timeNow = new Date();
-                  // var hours =
-                  //   timeNow.getHours() < 10
-                  //     ? "0" + timeNow.getHours()
-                  //     : timeNow.getHours();
-                  // var minutes =
-                  //   timeNow.getMinutes() < 10
-                  //     ? "0" + timeNow.getMinutes()
-                  //     : timeNow.getMinutes();
-                  // timeNow = hours + ":" + minutes;
-                  // timeNow = new Date(timeNow).getTime();
-                  // var timeruleIn = new Date(_this.offDuty).getTime();
-
-                  // if (timeNow < timeruleIn) {
-                  //   _this.isInOk = false;
-                  // }
-
-                  // var timeruleOut = new Date(_this.work).getTime();
-
-                  // if (timeNow > timeruleOut) {
-                  //   _this.isOutOk = false;
-                  // }
-                  // if (_this.isInOk == true) {
-                  //   _this.ifInOk = true;
-                  // } else {
-                  //   _this.ifInOk = false;
-                  // }
-                  // if (_this.isOutOk == true) {
-                  //   _this.ifOutOk = true;
-                  // } else {
-                  //   _this.ifOutOk = false;
-                  // }
                   console.log("_this.isInOk111:" + _this.isInOk);
 
                   return;
@@ -607,66 +458,172 @@ export default {
       });
     },
 
-    getGodeMap(){
-      let _that = this;      
-      let geolocation = location.initMap("allmap"); //定位      
-      AMap.event.addListener(geolocation, "complete", result => {        
-        _that.lat = result.position.lat;        
-        _that.lng = result.position.lng;        
-        _that.province = result.addressComponent.province;        
-        _that.city = result.addressComponent.city;        
-        _that.district = result.addressComponent.district;      
-        });
+    getLocationData(_this, lng, lat) {
+      alert("我来啦");
+      var map = new BMap.Map("allmap");
+      var point = new BMap.Point(120.54406, 31.281494);
+      map.centerAndZoom(point, 12);
+      const myGeo = new BMap.Geocoder();
+      myGeo.getLocation(new BMap.Point(lng, lat), data => {
+        if (data.addressComponents) {
+          _this.attendance_address = data.address;
+          // const location = {
+          //   creditLongitude: r.point.lat, // 经度
+          //   creditLatitude: r.point.lng, // 纬度
+          //   creditProvince: result.province || '', // 省
+          //   creditCity: result.city || '', // 市
+          //   creditArea: result.district || '', // 区
+          //   creditStreet: (result.street || '') + (result.streetNumber || '') // 街道
+          // }
+          // _this.location = location
+        }
+      });
+      var content = {
+        userId: _this.userId,
+        startTime: _this.getTIME(_this.nowtime, 4),
+        endTime: _this.getTIME(_this.nowtime, 4),
+        companyId: _this.company_id
+      };
+      var contentData = JSON.stringify(content);
+      var headerAndBody = _this.getHeaderAndBody(
+        contentData,
+        _this.serverPublicKey
+      );
+      let url =
+        "http://" +
+        _this.getSERVER_HOST_MAIN() +
+        ":" +
+        _this.getSERVER_PORT_MAIN() +
+        "/" +
+        _this.getPROJECT_MAIN() +
+        "/user/searchAttendanceRulesAndRecord.do";
+      _this.$ajax
+        .post(url, headerAndBody.contentDataByKey, {
+          headers: {
+            appEncryptedKey: headerAndBody.appEncryptedKey, //使用服务器RSA公钥加密后的AES密钥
+            appSignature: headerAndBody.appSignature, //APP使用RSA密钥对请求体的签名
+            appPublicKey: headerAndBody.appPublicKey,
+            serverPublicKey: headerAndBody.serverPublicKey
+          }
+        })
+        .then(function(response) {
+          var returnKey = _this.RSAdecrypt(
+            response.headers.serverencryptedkey,
+            _this.appPrivateKey
+          );
+          let returnResponseData = response.data;
+          let encrypt = returnResponseData.replace(/[\r\n]/g, "");
+          var returnData = decrypt(encrypt, returnKey, _this.getIV());
+          var returnData = JSON.parse(returnData);
+          if (returnData.code != 1001) {
+            alert("连接错误，请检查网络！");
+            return;
+          }
 
-    },
-    qwe(){
-        let that = this
-        var map = new AMap.Map('allmap', {
-            resizeEnable: true
-        });
-        AMap.plugin('AMap.Geolocation', function() {
-            var geolocation = new AMap.Geolocation({
-                enableHighAccuracy: true,//是否使用高精度定位，默认:true
-                timeout: 10000,          //超过10秒后停止定位，默认：5s
-                buttonPosition:'RB',    //定位按钮的停靠位置
-                buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-                zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+          _this.ruledata = returnData.data.attendanceRule;
+          var record = returnData.data.attendanceRecord;
+          if (record.length > 0) {
+                for (let i = 0; i < record.length; i--) {
+                  console.log(record[i]);
+                  if (record[i].attendance_type == 1) {
+                    var date = record[i].attendance_time
+                      .toString()
+                      .substr(11, 5);
+                    _this.psIn = record[i].result + " " + date;
+                    console.log(_this.psIn);
+                    _this.isInOk = false;
 
-            });
-            map.addControl(geolocation);
-            geolocation.getCurrentPosition(function(status,result){
-                if(status=='complete'){
-                  debugger
-                    that.onComplete(result)
-                }else{
-                    that.onError(result)
+                    _this.isIn = true;
+                    _this.canInField = false;
+                    if (record[i].result_id == 3) {
+                      _this.isInNormal = false;
+                    } else {
+                      _this.isInNormal = true;
+                    }
+                    break;
+                  }
                 }
-            });
+                  for (let i = record.length; i >0 ; i++) {
+                    if (record[i-1].attendance_type == 2) {
+                      var date = record[i-1].attendance_time
+                        .toString()
+                        .substr(11, 5);
+                      _this.psOut = record[i-1].result + " " + date;
+                      _this.isOutOk = false;
+                      _this.isOut = true;
+                      if (record[i-1].result_id == 4) {
+                        _this.isOutNormal = false;
+                      } else {
+                        _this.isOutNormal = true;
+                      }
+                      break;
+                    }
+                  
+                }
+              }
+
+          var longitude;
+          var latitude;
+          var minimumdistance = 1000000000;
+          var marking;
+          var pointA = new BMap.Point(parseFloat(lng), parseFloat(lat));
+          for (let i = 0; i < _this.ruledata.length; i++) {
+            longitude = _this.ruledata[i].rule_longitude;
+            latitude = _this.ruledata[i].rule_latitude;
+            var pointB = new BMap.Point(
+              parseFloat(longitude),
+              parseFloat(latitude)
+            );
+            var distance =
+              map.getDistance(pointA, pointB) - _this.ruledata[i].rule_radius; // 保留小数点后两位
+            if (distance < 0) {
+              _this.nowRule = _this.ruledata[i].rule_address;
+              _this.rule_id = _this.ruledata[i].id;
+              _this.work = _this.ruledata[i].rule_time_work;
+              _this.offDuty = _this.ruledata[i].rule_time_off_work;
+              _this.ps = "（您已进入考勤范围）";
+
+              _this.isInOk = true;
+              _this.isOutOk = true;
+              console.log("_this.isInOk111:" + _this.isInOk);
+
+              return;
+            } else {
+              if (minimumdistance > distance) {
+                minimumdistance = distance;
+                marking = i;
+              }
+            }
+          }
+
+          _this.nowRule = _this.ruledata[marking].rule_address;
+          _this.rule_id = _this.ruledata[marking].id;
+          _this.work = _this.ruledata[marking].rule_time_work;
+          _this.offDuty = _this.ruledata[marking].rule_time_off_work;
+          if (minimumdistance > 1000) {
+            _this.ps =
+              "（您距离最近的考勤范围" +
+              (minimumdistance / 1000).toFixed(3) +
+              "km）";
+          } else {
+            _this.ps =
+              "（您距离最近的考勤范围" + minimumdistance.toFixed(0) + "m）";
+          }
+          _this.isInOk = false;
+          _this.isOutOk = false;
+          if (_this.isInOk == true) {
+            _this.ifInOk = true;
+          } else {
+            _this.ifInOk = false;
+          }
+          if (_this.isOutOk == true) {
+            _this.ifOutOk = true;
+          } else {
+            _this.ifOutOk = false;
+          }
         });
-      },
-      
-      //解析定位结果
-      onComplete(data) {
-          // document.getElementById('status').innerHTML='定位成功'
-          var str = [];
-          str.push('定位结果：' + data.position);
-          str.push('定位类别：' + data.location_type);
-          if(data.accuracy){
-              str.push('精度：' + data.accuracy + ' 米');
-          }//如为IP精确定位结果则没有精度信息
-          str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-          console.log(str)
-          alert('定位成功'+str)
-          // document.getElementById('result').innerHTML = str.join('<br>');
-      },
-      //解析定位错误信息
-      onError(data) {
-        console.log('定位失败')
-        console.log(data.message)
-        alert('定位失败'+data.message)
-          // document.getElementById('status').innerHTML='定位失败'
-          // document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
-      },
+    },
+
     /**
      * 打卡
      */
@@ -720,11 +677,15 @@ export default {
         })
         .then(function(response) {
           if (response.data.code == 1001) {
+            if (_this.isIOS) {
+              _this.getLocations();
+            } else {
+              _this.getLocation();
+            }
             alert("签到成功！");
-            _this.getLocations();
           } else {
             alert("签到失败，请检查网络！");
-            return
+            return;
           }
         });
     },
@@ -748,11 +709,15 @@ export default {
         })
         .then(function(response) {
           if (response.data.code == 1001) {
-            _this.getLocations();
+            if (_this.isIOS) {
+              _this.getLocations();
+            } else {
+              _this.getLocation();
+            }
             alert("签退成功！");
           } else {
             alert("签退失败，请检查网络！");
-            return
+            return;
           }
         });
     },
@@ -851,7 +816,7 @@ export default {
     /**
      * 查看今日详情
      */
-    detailsToday(){
+    detailsToday() {
       this.$router.push("/punchRecord");
     },
     /**
@@ -889,14 +854,6 @@ export default {
       history.pushState(null, null, document.URL);
       window.addEventListener("popstate", this.goBack, false);
     }
-     let url =
-    "http://" +
-    this.getSERVER_HOST_MAIN() + ":" +
-    this.getSERVER_PORT_MAIN() + "/" +
-    this.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
-           wxUtils(url,this)
-
-
   },
   destroyed() {
     window.removeEventListener("popstate", this.goBack, false);
@@ -920,7 +877,25 @@ export default {
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
     _this.appPrivateKey = this.getPrivatekey();
-    this.getLocations();
+
+    const u = navigator.userAgent;
+    const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    if (isiOS) {
+      this.isIOS = true;
+      this.getLocations();
+    } else {
+      let url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/jssdkConfig.do"; //获取jssdk前端配置信息
+      wxUtils(url, this);
+
+      this.getLocation();
+    }
   },
   beforeDestroy() {
     if (this.timer) {
