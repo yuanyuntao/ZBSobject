@@ -186,8 +186,6 @@ export default {
       isOutNormal: true, //是否签退正常
       serverPublicKey: "", //服务端的RSA公钥，提供给服务器判断有没有过期
 
-      isIOS: false,
-
       signWords: {
         user_id: "",
         user_name: "",
@@ -350,16 +348,19 @@ export default {
 
               _this.ruledata = returnData.data.attendanceRule;
               var record = returnData.data.attendanceRecord;
+              // console.log("ruledata"+_this.ruledata)
+              // console.log("record"+record)
 
               if (record.length > 0) {
-                for (let i = 0; i < record.length; i--) {
-                  console.log(record[i]);
+                for (let i = 0; i < record.length; i++) {
+                  // console.log("attendance_type"+record[i]);
+
                   if (record[i].attendance_type == 1) {
                     var date = record[i].attendance_time
                       .toString()
                       .substr(11, 5);
                     _this.psIn = record[i].result + " " + date;
-                    console.log(_this.psIn);
+                    // console.log(_this.psIn);
                     _this.isInOk = false;
 
                     _this.isIn = true;
@@ -372,7 +373,7 @@ export default {
                     break;
                   }
                 }
-                  for (let i = record.length; i >0 ; i++) {
+                  for (let i = record.length; i > 0 ; i--) {
                     if (record[i-1].attendance_type == 2) {
                       var date = record[i-1].attendance_time
                         .toString()
@@ -454,12 +455,12 @@ export default {
             });
         } else {
           alert("failed" + this.getStatus());
+          _this.getmap(_this)
         }
       });
     },
 
     getLocationData(_this, lng, lat) {
-      alert("我来啦");
       var map = new BMap.Map("allmap");
       var point = new BMap.Point(120.54406, 31.281494);
       map.centerAndZoom(point, 12);
@@ -523,7 +524,7 @@ export default {
           _this.ruledata = returnData.data.attendanceRule;
           var record = returnData.data.attendanceRecord;
           if (record.length > 0) {
-                for (let i = 0; i < record.length; i--) {
+                for (let i = 0; i < record.length; i++) {
                   console.log(record[i]);
                   if (record[i].attendance_type == 1) {
                     var date = record[i].attendance_time
@@ -543,7 +544,7 @@ export default {
                     break;
                   }
                 }
-                  for (let i = record.length; i >0 ; i++) {
+                  for (let i = record.length; i >0 ; i--) {
                     if (record[i-1].attendance_type == 2) {
                       var date = record[i-1].attendance_time
                         .toString()
@@ -677,7 +678,7 @@ export default {
         })
         .then(function(response) {
           if (response.data.code == 1001) {
-            if (_this.isIOS) {
+            if (localStorage.getItem("phoneType")==="ios") {
               _this.getLocations();
             } else {
               _this.getLocation();
@@ -877,13 +878,11 @@ export default {
     _this.company_id = localStorage.getItem("company_id");
     _this.serverPublicKey = localStorage.getItem("serverPublicKey");
     _this.appPrivateKey = this.getPrivatekey();
-
-    const u = navigator.userAgent;
-    const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     if (isiOS) {
-      this.isIOS = true;
       this.getLocations();
-    } else {
+    }else{
       let url =
         "http://" +
         this.getSERVER_HOST_MAIN() +
@@ -893,7 +892,6 @@ export default {
         this.getPROJECT_MAIN() +
         "/user/jssdkConfig.do"; //获取jssdk前端配置信息
       wxUtils(url, this);
-
       this.getLocation();
     }
   },

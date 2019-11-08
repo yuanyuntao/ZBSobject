@@ -79,6 +79,7 @@
 import Tabbarhome from "./tabbars/Tabbarhome.vue";
 import Slide from "./toolsComponent/Slide.vue";
 import { MP } from "../js/Map.js";
+import { wxUtils } from "../js/WXUntil.js";
 export default {
   name: "homepage",
   components: {
@@ -133,6 +134,31 @@ export default {
     _this.isAdministrator = localStorage.getItem("isAdministrator")
     _this.company_id = localStorage.getItem("company_id")
     _this.serverPublicKey = localStorage.getItem("serverPublicKey")
+
+
+
+
+
+     var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    if (isiOS) {
+      // console.log("我是苹果")
+      // alert("ios")
+      localStorage.setItem("phoneType","ios")
+    }else{
+      // console.log("我是安卓")
+      // alert("andorid")
+      localStorage.setItem("phoneType","andorid")
+      let url =
+        "http://" +
+        this.getSERVER_HOST_MAIN() +
+        ":" +
+        this.getSERVER_PORT_MAIN() +
+        "/" +
+        this.getPROJECT_MAIN() +
+        "/user/jssdkConfig.do"; //获取jssdk前端配置信息
+      wxUtils(url, this);
+    }
 
   },
   destroyed() {

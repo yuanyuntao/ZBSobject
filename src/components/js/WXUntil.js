@@ -8,7 +8,7 @@ export function wxUtils(url,that) {
     // that.getSERVER_HOST_MAIN() + ":" +
     // that.getSERVER_PORT_MAIN() + "/" +
     // that.getPROJECT_MAIN() + "/user/jssdkConfig.do"//获取jssdk前端配置信息
-    alert(location.href.split('#')[0]);
+    // alert(location.href.split('#')[0]);
     var urls = location.href.split('#')[0];
     that.$http
         .get(url, {
@@ -18,8 +18,8 @@ export function wxUtils(url,that) {
     })
         .then(res => {
           debugger
-          alert(JSON.stringify(res));
-          alert(res.data.appId+"--"+res.data.timestamp+"--"+res.data.nonceStr+"--"+res.data.signature)
+          // alert(JSON.stringify(res));
+          // alert(res.data.appId+"--"+res.data.timestamp+"--"+res.data.nonceStr+"--"+res.data.signature)
             //初始化微信前端配置
          　wx.config({
         　　　　debug: false, // 开启调试模式,
@@ -33,17 +33,17 @@ export function wxUtils(url,that) {
               wx.getLocation({
                 type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                 success: function (res) {
-                  alert(JSON.stringify(res));
+                  // alert(JSON.stringify(res));
                   var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
                   var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                   var speed = res.speed; // 速度，以米/每秒计
                   var accuracy = res.accuracy; // 位置精度
-                  alert("lat:"+latitude+";lng:"+longitude);
+                  // alert("lat:"+latitude+";lng:"+longitude);
                   var bdLogAndLat = gcj02tobd09(longitude,latitude);//火星坐标转换成百度坐标
-                  alert(JSON.stringify(bdLogAndLat));
+                  // alert(JSON.stringify(bdLogAndLat));
                   localStorage.setItem("latitude",bdLogAndLat[0]);
                   localStorage.setItem("longitude",bdLogAndLat[1]);
-                  alert("经度"+localStorage.setItem("latitude"))
+                  // alert("经度"+localStorage.setItem("latitude"))
 
                 }
               }).catch(error => {
